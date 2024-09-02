@@ -20,13 +20,7 @@ In a WAN testing scenario, the throughput remains nearly constant across differe
 
 The throughput calculation formula in such scenarios simplifies to:
 
-$$
-tpmTOTAL ≈ 60 × \frac{1}{N e t w o r k \  L a t e n c y} = 60 × \frac{1}{0 . 0 1} = 6000
-$$
-
-$$
-tpmC≈tpmTOTAL×0.45=6000×0.45=2700
-$$
+![image-20240902000000001](media/image-20240902000000001.png)
 
 This closely matches the test results above, where 0.45 is an empirical factor derived from extensive testing that represents the ratio of tpmC to tpmTOTAL. The tests indicate that, under a 10ms network latency with no additional bottlenecks, throughput remains consistent across different concurrency levels. This consistency is due to the serial nature of Paxos communication, as batching and pipelining are not employed. Confirmation of these findings is supported by packet capture analysis.
 
