@@ -62,7 +62,7 @@ Meta's case study demonstrates that the new solution based on the Raft protocol 
 
 With the transaction isolation level set to Read Committed, simulations based on Group Replication were conducted under various network latency conditions.
 
-The deployment setup of Group Replication is illustrated as follows: On machine A, two MySQL instances are deployed—one serving as the primary and the other as the secondary. These two instances form the majority and communicate via localhost. Machine B hosts a third instance deployed as a member of the cluster, with a network latency of X milliseconds.
+The deployment setup of Group Replication is illustrated as follows: On machine A, two MySQL instances are deployedâ€”one serving as the primary and the other as the secondary. These two instances form the majority and communicate via localhost. Machine B hosts a third instance deployed as a member of the cluster, with a network latency of X milliseconds.
 
 ![](media/792556dcff5f267dcc5aefeb5ef0d035.png)
 
