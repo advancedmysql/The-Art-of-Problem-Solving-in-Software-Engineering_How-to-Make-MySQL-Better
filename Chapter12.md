@@ -75,4 +75,4 @@ We firmly believe that high availability solutions based on Paxos log persistenc
 
 Although MySQL optimization is a long and winding process, we are confident that MySQL will continue to improve over time.
 
-​                                                                  [Next](References.md)
+[Next](References.md)

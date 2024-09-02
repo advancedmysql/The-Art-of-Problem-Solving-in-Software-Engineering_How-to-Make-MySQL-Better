@@ -126,4 +126,4 @@
 
 [63] Jelena Antic, Georgios Chatzopoulos, Rachid Guerraoui, and Vasileios Trigonakis. 2016. Locking made easy. In Proceedings of the International Middleware Conference (Middleware). 1--14.
 
-​                                                                  [Next](Appendix.md)
+[Next](Appendix.md)

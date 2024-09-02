@@ -118,4 +118,4 @@ This chapter analyzed how users approach solving MySQL problems. MySQL 8.0 has m
 
 The next chapter will demonstrate the considerable challenge of solving obscure MySQL problems through various case studies. It necessitates a broad knowledge base and extensive logical reasoning to pinpoint the root causes of these problems.
 
-​                                                                  [Next](Chapter2.md)
+[Next](Chapter2.md)

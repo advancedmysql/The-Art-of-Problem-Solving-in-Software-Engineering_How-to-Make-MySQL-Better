@@ -479,4 +479,4 @@ Notably, maximum replay speed is directly correlated with concurrency. At 150 co
 
 With better hardware, further improvements in maximum replay speed might be possible, but the test results are already very close to the achievable maximum.
 
-​                                                                  [Next](Part4.md)
+[Next](Part4.md)

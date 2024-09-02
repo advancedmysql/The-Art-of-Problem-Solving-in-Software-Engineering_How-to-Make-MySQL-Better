@@ -684,4 +684,4 @@ It is worth noting that the main basis for performance testing and comparison in
 
 In this book, BenchmarkSQL is predominantly used for TPC-C testing. This choice is based not only on BenchmarkSQL's representative TPC-C testing capabilities but also on its higher alignment with real-world online environments.
 
-​                                                                  [Next](Chapter6.md)
+ [Next](Chapter6.md)

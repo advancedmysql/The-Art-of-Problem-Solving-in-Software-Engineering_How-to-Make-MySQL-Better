@@ -216,4 +216,4 @@ Figure 3-6. A general framework for solving program problems.
 
 The figure integrates logical reasoning and information retrieval. Maintaining logical thinking ensures each step's reliability. Without it, one risks falling into traps that hinder effective software problem-solving.
 
-​                                                                  [Next](Chapter4.md)
+[Next](Chapter4.md)

@@ -96,4 +96,4 @@ Several individuals have been crucial in the writing of this book by reviewing d
 
 Finally, my deepest gratitude to my family, whose unwavering support has been indispensable throughout this nearly two-month writing journey. You are the best.
 
-​                                                                  [Next](Part1.md)
+[Next](Part1.md)

@@ -2,4 +2,4 @@
 
 This Part provides the concluding summary, outlines future directions for MySQL improvements, and wraps up the book.
 
-​                                                                  [Next](Chapter12.md)
+[Next](Chapter12.md)

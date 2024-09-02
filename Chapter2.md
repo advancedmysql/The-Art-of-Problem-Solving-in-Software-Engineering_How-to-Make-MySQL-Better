@@ -243,4 +243,4 @@ The figure reveals that disabling NUMA at the BIOS level results in a balanced r
 
 This chapter delves into classic and intricate MySQL problems, which pose significant challenges for analysis. The resolution of these problems begins with a detailed logical analysis, as outlined in the following chapter. Addressing and solving these problems necessitates a profound understanding of computer fundamentals and MySQL internals. Computer fundamentals encompass a broad range of topics including computer architecture, data structures, algorithms, operating systems, computer networks, compilers, queueing theory, and distributed systems theory, among others. These topics will be thoroughly explored in Chapter 4. Chapter 5 will focus specifically on MySQL internals.
 
-​                                                                  [Next](Part2.md)
+[Next](Part2.md)

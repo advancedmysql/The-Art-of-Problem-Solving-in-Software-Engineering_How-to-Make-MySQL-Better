@@ -665,4 +665,4 @@ However, transaction throttling is not a panacea and has its limitations:
 
 It's worth noting that the specifics of how transaction throttling is implemented, and its flexibility, are areas where AI can demonstrate its usefulness.
 
-​                                                                  [Next](Chapter9.md)
+[Next](Chapter9.md)

@@ -1758,4 +1758,4 @@ In MySQL, a common strategy involves taking a MySQL secondary instance offline f
 
 Testing serves not only to verify known problems but also to uncover new ones. Verification of problems is the initial step to ensure that the software behaves as expected. Subsequently, the focus shifts to actively discovering potential problems within the program, preempting their discovery by testers. Adopting this strategy during the process of improving MySQL fundamentally ensures the quality of MySQL modifications. Practical experience has validated this approach as highly effective. Where possible, replicating online traffic for testing provides a robust means to identify potential problems within the software, further enhancing its overall quality.
 
-​                                                                  [Next](Chapter5.md)
+[Next](Chapter5.md)
