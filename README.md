@@ -3,6 +3,9 @@
 ###  Introduction
 This book delves into various MySQL low-level optimization techniques, including storage engines, binlog group commit, execution plans, Group Replication, and secondary server replay optimizations. By analyzing a wide range of complex cases, it uncovers the underlying causes of problems, applies logical reasoning for analysis, and employs data structures and algorithms for optimization, achieving significant improvements.
 
+### Access the Book on GitHub Pages
+[The Art of Problem-Solving in Software Engineering:How to Make MySQL Better](https://advancedmysql.github.io/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/)
+
 ### Table of Contents
 [Preface](Preface.md)
 
