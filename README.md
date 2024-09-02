@@ -47,6 +47,10 @@ This book delves into various MySQL low-level optimization techniques, including
 ### Errata
 If you find any errata in the book, [please open a new issue](https://github.com/advancedmysql/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/issues).
 
+### Access the Book on GitHub Pages
+
+[Online URL] (https://advancedmysql.github.io/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/)
+
 ### Copyright 
 
 Copyright © wangbin579 2024. All rights reserved.
