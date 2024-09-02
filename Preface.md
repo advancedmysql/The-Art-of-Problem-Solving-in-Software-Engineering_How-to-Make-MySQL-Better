@@ -94,4 +94,4 @@ This book meticulously organizes a wealth of ideas and knowledge contributed by 
 
 Several individuals have been crucial in the writing of this book by reviewing drafts and offering feedback. I am especially grateful for the contributions of Hongshen Wang, Jinrong Ye, Riyao Gao, and Haitao Gao. Naturally, I take full responsibility for any remaining errors or contentious opinions in this book.
 
-Finally, my deepest gratitude to my family, whose unwavering support has been indispensable throughout this nearly two-month writing journey. You¡¯re the best.
+Finally, my deepest gratitude to my family, whose unwavering support has been indispensable throughout this nearly two-month writing journey. You are the best.
