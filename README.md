@@ -49,8 +49,9 @@ If you find any errata in the book, [please open a new issue](https://github.com
 
 ### Access the Book on GitHub Pages
 
-[Online URL] (https://advancedmysql.github.io/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/)
+[Online URL](https://advancedmysql.github.io/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/)
 
 ### Copyright 
 
 Copyright © wangbin579 2024. All rights reserved.
+
