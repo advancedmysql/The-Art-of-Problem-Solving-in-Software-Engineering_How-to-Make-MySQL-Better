@@ -117,3 +117,5 @@ From these logs, warnings indicating 'has become unreachable' are evident. Under
 This chapter analyzed how users approach solving MySQL problems. MySQL 8.0 has made strides in improvement, notably in mitigating scalability problems and introducing support for hash joins, which is a positive development. However, there remain numerous unsolved problems, both longstanding and newly emerging. Effectively addressing MySQL problems demands a thorough understanding of the problems and relevant theories; otherwise, the understanding may be incomplete.
 
 The next chapter will demonstrate the considerable challenge of solving obscure MySQL problems through various case studies. It necessitates a broad knowledge base and extensive logical reasoning to pinpoint the root causes of these problems.
+
+​                                                                  [Next](Chapter2.md)

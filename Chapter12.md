@@ -74,3 +74,5 @@ MySQL performance optimization heavily relies on mitigating scalability problems
 We firmly believe that high availability solutions based on Paxos log persistence will be the future trend. Our extensive experience in the long-term transformation of Group Replication has laid a solid foundation for achieving true high availability. The speed of MySQL secondary replay determines the quality of MySQL's high availability. Achieving replay speeds in the range of millions of tpmC is possible but requires persistent effort.
 
 Although MySQL optimization is a long and winding process, we are confident that MySQL will continue to improve over time.
+
+​                                                                  [Next](References.md)

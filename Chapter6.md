@@ -209,3 +209,5 @@ The following figure illustrates the mechanism of replicating MySQL traffic from
 Figure 6-7. Mechanism for replicating MySQL traffic from production to testing systems.
 
 Testing real-world online traffic is crucial for MySQL, as it effectively reveals potential problems such as performance stability, memory leaks, and the robustness of new MySQL versions.
+
+​                                                                  [Next](Part3.md)

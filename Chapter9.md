@@ -877,3 +877,5 @@ How does Group Replication's scalability fare with increasing numbers of nodes? 
 Figure 9-36. Scalability of Group Replication across different node configurations.
 
 From the figure, it can be seen that the throughput of the 7-node cluster is still acceptable, but there is a significant drop in throughput with 9 nodes compared to 7 nodes. These tests were conducted in the same data center environment, which may not represent all scenarios. However, it highlights a concern: as the number of nodes increases, the scalability of Group Replication may be affected.
+
+​                                                                  [Next](Chapter10.md)

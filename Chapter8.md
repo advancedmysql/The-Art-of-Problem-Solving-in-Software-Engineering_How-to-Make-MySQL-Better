@@ -664,3 +664,5 @@ However, transaction throttling is not a panacea and has its limitations:
 -   When the maximum number of transactions are executing concurrently, new transactions must wait until existing transactions are completed. If all concurrent transactions consist of long-running queries, it may appear as if the MySQL system is stalled [31].
 
 It's worth noting that the specifics of how transaction throttling is implemented, and its flexibility, are areas where AI can demonstrate its usefulness.
+
+​                                                                  [Next](Chapter9.md)

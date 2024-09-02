@@ -478,3 +478,5 @@ The figure illustrates the throughput of the MySQL primary at concurrency levels
 Notably, maximum replay speed is directly correlated with concurrency. At 150 concurrency, throughput is high with nearly zero delay, whereas at 200 concurrency, throughput is slightly reduced with a 2-second delay.
 
 With better hardware, further improvements in maximum replay speed might be possible, but the test results are already very close to the achievable maximum.
+
+​                                                                  [Next](Part4.md)

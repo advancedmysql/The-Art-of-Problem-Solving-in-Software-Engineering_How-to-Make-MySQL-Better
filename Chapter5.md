@@ -683,3 +683,5 @@ It is worth noting that the main basis for performance testing and comparison in
 *TPC benchmark C also known as TPC-C which is the leading online transaction processing (OLTP) benchmark has been used to perform the comparison.*
 
 In this book, BenchmarkSQL is predominantly used for TPC-C testing. This choice is based not only on BenchmarkSQL's representative TPC-C testing capabilities but also on its higher alignment with real-world online environments.
+
+​                                                                  [Next](Chapter6.md)

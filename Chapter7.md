@@ -557,3 +557,5 @@ Figure 7-30. Effects of *binlog_row_image=minimal* after BenchmarkSQL testing.
 From the figure, it can be seen that setting *binlog_row_image=minimal* can also significantly reduce the size of binlogs.
 
 Overall, MySQL 8.0 offers effective solutions to address the problem of binlogs consuming substantial I/O space. Users can leverage binlog compression and, where feasible, further reduce binlog size by using *binlog_row_image=minimal* to save on storage costs. It's important to note that the compression ratio can vary across different applications.
+
+​                                                                  [Next](Chapter8.md)
