@@ -309,7 +309,7 @@ Comparative analysis shows that the CATS algorithm significantly reduces deadloc
 
 The above test results align closely with MySQL's official findings. The following two figures, based on official tests [57], demonstrate the significant effectiveness of the CATS algorithm.
 
-![](media/853d21533f748c1c56a4151869a82a27.png)
+![](media/853d21533f748c1c56a4151869a82a27.gif)
 
 Figure 7-13. Comparison of CATS and FIFO in TPS and mean latency: insights from the MySQL blog.
 

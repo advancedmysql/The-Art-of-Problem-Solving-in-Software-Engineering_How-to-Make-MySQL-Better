@@ -65,7 +65,7 @@ From the figure, it can be seen that the number of rows is still large, indicati
 
 Two different debug versions of MySQL were compiled: one with anomalies and one normal. Debug versions were used to capture useful function call relationships through debug traces. When executing the problematic SQL statement on the version with anomalies, the relevant debug trace information is as follows:
 
-![](media/149ca62fd014bd12b60c77573a49757d.png)
+![](media/149ca62fd014bd12b60c77573a49757d.gif)
 
 Figure 8-6. Debug trace information for the abnormal version.
 

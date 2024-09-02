@@ -198,7 +198,7 @@ When there are no theoretical problems with the Mencius algorithm, introducing a
 
 First, let's investigate the performance problems of the MySQL Mencius algorithm implementation. The following figure illustrates the network interaction status when the Mencius algorithm operates stably with a network delay of 10ms:
 
-![](media/77d0c0bdc5ce8574c6ad319864abb032.png)
+![](media/77d0c0bdc5ce8574c6ad319864abb032.gif)
 
 Figure 9-6. Insights into the Mencius protocol from packet capture data.
 

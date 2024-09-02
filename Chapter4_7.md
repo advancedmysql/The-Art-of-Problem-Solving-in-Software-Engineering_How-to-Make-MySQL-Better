@@ -45,7 +45,7 @@ To address these problems, additional tools like packet capture can help determi
 
 The following figure depicts the classic TCP state machine used for transitions between TCP states.
 
-![](media/ff831787f6acc1e38a7f70dc47925ee0.png)
+![](media/ff831787f6acc1e38a7f70dc47925ee0.gif)
 
 Figure 4-35. Classic TCP state machine overview.
 
@@ -112,7 +112,7 @@ From the figure, it is evident that the delay between two Paxos instances is aro
 
 In general, the test conclusions of pipelining and batching are consistent with the conclusions in the following paper [48]:
 
-![](media/73dfb3c0a76ecd9d6faa62c025ace5e4.png)
+![](media/73dfb3c0a76ecd9d6faa62c025ace5e4.gif)
 
 Figure 4-42. Impact of pipelining and batching on Paxos performance.
 
@@ -168,7 +168,7 @@ For more advanced features, refer to the *tcpdump* documentation for detailed co
 
 Many software professionals lack in-depth knowledge of TCP/IP logic reasoning, which often leads to misidentifying problems as mysterious problems. Some are discouraged by the complexity of TCP/IP networking literature, while others are misled by confusing details in Wireshark. For instance, a DBA facing performance problems might misinterpret packet capture data in Wireshark, erroneously concluding that TCP retransmissions are the cause.
 
-![](media/3a5d10caf25003e7ea4dcace59a181f6.png)
+![](media/3a5d10caf25003e7ea4dcace59a181f6.gif)
 
 Figure 4-45. Packet capture screenshot provided by DBA suspecting retransmission problems.
 

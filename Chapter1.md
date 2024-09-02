@@ -52,7 +52,7 @@ The Paxos protocol relies on a majority-based mechanism rooted in set theory to 
 
 Raft, another widely used protocol, is essentially a simplified version of the Paxos protocol. The following section describes Meta's implementation of MySQL high availability using the Raft protocol [38], which simplifies traditional high availability processes.
 
-<img src="media/91bc13de07d658b009ae498b5afa4ac1.png" style="zoom: 50%;" />
+<img src="media/91bc13de07d658b009ae498b5afa4ac1.gif" style="zoom: 50%;" />
 
 Figure 1-5. Reasons Meta uses raft.
 
@@ -100,13 +100,13 @@ During TPC-C data loading tests with BenchmarkSQL under normal pressure, the MyS
 
 Here is a partial screenshot of the error log from the MySQL primary:
 
-![](media/4f558a475444869186a0641f934db534.png)
+![](media/4f558a475444869186a0641f934db534.gif)
 
 Figure 1-10. A partial screenshot of the error log from the MySQL primary.
 
 Here is a partial screenshot of the error log from the MySQL secondary:
 
-![](media/974f0f1b091afaba18ea375a73d87441.png)
+![](media/974f0f1b091afaba18ea375a73d87441.gif)
 
 Figure 1-11. A partial screenshot of the error log from the MySQL secondary.
 

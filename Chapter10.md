@@ -155,7 +155,7 @@ In MySQL asynchronous replication, the secondary has two threads: the IO thread 
 
 For example, during Group Replication secondary replay, one of the main bottlenecks captured is the SQL thread, specifically seen in the *rpl_rca_sql-0* thread as shown in the figure below.
 
-![](media/3b54c6545f0c49be73fd3afd9c6ffe79.png)
+![](media/3b54c6545f0c49be73fd3afd9c6ffe79.gif)
 
 Figure 10-7. Top two CPU-consuming threads in Group Replication secondary replay.
 
@@ -312,7 +312,7 @@ If two transactions occurring close together in time modify the same data in MyS
 
 To better understand this problem, consider the following case:
 
-![](media/9aa41ee1e12bb8a72dd240dc42b44ba5.png)
+![](media/9aa41ee1e12bb8a72dd240dc42b44ba5.gif)
 
 Figure 10-15. Typical examples of *sequence_number* and *last_committed*.
 
@@ -352,13 +352,13 @@ The decision to disable NUMA should be made based on a thorough analysis. Testin
 
 Based on MySQL's Performance Schema, statistics on latch operations are gathered. See the results in the following figure:
 
-![](media/08fb8a25d9542121b1e5b5ccb3cbdf6f.png)
+![](media/08fb8a25d9542121b1e5b5ccb3cbdf6f.gif)
 
 Figure 10-19. The bottleneck of pending_jobs_lock has been exposed in the Performance Schema.
 
 From the figure, it can be seen that in a NUMA environment, *Relay_log_info::pending_jobs_lock* ranks fifth in importance in relation to replay. Binding the MySQL secondary instance to NUMA node 0, the test evaluates whether the Performance Schema statistics change under an SMP environment. The specific test results are shown in the following figure:
 
-![](media/28708a58742f84033b84ff551cda3b1b.png)
+![](media/28708a58742f84033b84ff551cda3b1b.gif)
 
 Figure 10-20. The bottleneck of pending_jobs_lock has been alleviated in an SMP environment.
 

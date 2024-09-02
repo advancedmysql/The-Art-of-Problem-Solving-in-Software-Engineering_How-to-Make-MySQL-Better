@@ -119,7 +119,7 @@ Figure 3-3. Description of the official worklog for redo log optimization.
 
 To address the scalability problems of redo log, developers have subdivided this problem into the following sub-problems:
 
-![](media/5502725fcc5648f2f6d18aaf68832505.png)
+![](media/5502725fcc5648f2f6d18aaf68832505.gif)
 
 Figure 3-4. Requirements of the official worklog for redo log optimization.
 
