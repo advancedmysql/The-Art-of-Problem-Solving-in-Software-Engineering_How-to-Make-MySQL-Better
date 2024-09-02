@@ -10,7 +10,7 @@ Whether using asynchronous replication, semisynchronous replication, or Group Re
 
 ### 10.1.1 Ensuring Replay Correctness
 
-To ensure correct replay, it is necessary to establish dependencies between transactions. If there are conflicts between two transactions, the replay order must be determined—specifically, which transaction should be replayed first and which should follow. These dependencies are based on the transaction order in the binlog or relay log files.
+To ensure correct replay, it is necessary to establish dependencies between transactions. If there are conflicts between two transactions, the replay order must be determinedâ€”specifically, which transaction should be replayed first and which should follow. These dependencies are based on the transaction order in the binlog or relay log files.
 
 Once the dependencies are established, ensuring the idempotence of replay is crucial. This property is essential, especially in scenarios like crash recovery, to guarantee that transactions can be replayed correctly and consistently without unintended side effects.
 
@@ -125,7 +125,7 @@ In terms of performance, the queue model for MySQL secondary replay can be simpl
 
 Figure 10-5. The queue model for MySQL secondary replay.
 
-In MySQL secondary replay, multi-queue stages—such as for relay log flushing, transaction event replay (including reading, parsing, and queueing events), and commit operations—restrict the theoretical maximum replay speed. These serialized processes create inherent limits on how quickly the replay can proceed.
+In MySQL secondary replay, multi-queue stagesâ€”such as for relay log flushing, transaction event replay (including reading, parsing, and queueing events), and commit operationsâ€”restrict the theoretical maximum replay speed. These serialized processes create inherent limits on how quickly the replay can proceed.
 
 ## 10.2 Root Cause Analysis of Slow MySQL Replay
 
@@ -248,7 +248,7 @@ bool Mts_submode_logical_clock::wait_for_last_committed_trx(
 }
 ```
 
-The code describes a mechanism where the SQL thread waits if the recorded low-water-mark (LWM)—which signifies that a transaction and all prior transactions have been committed—is less than the last committed value of the transaction being replayed. In MySQL, it is the SQL thread that waits, rather than the worker threads. This waiting mechanism significantly restricts the replay speed.
+The code describes a mechanism where the SQL thread waits if the recorded low-water-mark (LWM)â€”which signifies that a transaction and all prior transactions have been committedâ€”is less than the last committed value of the transaction being replayed. In MySQL, it is the SQL thread that waits, rather than the worker threads. This waiting mechanism significantly restricts the replay speed.
 
 Finally, let's examine the problems related to MySQL secondary replay in a NUMA environment. The following figure shows the test results of MySQL secondary replay:
 
@@ -453,7 +453,7 @@ Reducing the size of the binlog theoretically helps improve MySQL replay speed. 
 
 Figure 10-23. Achieve better replay speed with binlog_row_image=minimal.
 
-When using full mode for binlog, MySQL achieves a balanced replay speed of just over 790,000 tpmC. Switching to minimal mode, however, increases this speed to over 890,000 tpmC, representing a significant 13% improvement. This improvement highlights that setting *binlog_row_image=minimal*—which substantially reduces the binlog size—boosts the replay speed of MySQL secondaries. However, it's important to note that this setting may also pose a risk of incomplete data restoration in certain scenarios.
+When using full mode for binlog, MySQL achieves a balanced replay speed of just over 790,000 tpmC. Switching to minimal mode, however, increases this speed to over 890,000 tpmC, representing a significant 13% improvement. This improvement highlights that setting *binlog_row_image=minimal*â€”which substantially reduces the binlog sizeâ€”boosts the replay speed of MySQL secondaries. However, it's important to note that this setting may also pose a risk of incomplete data restoration in certain scenarios.
 
 ### 10.3.8 Impact of Performance Schema on Replay Performance
 
