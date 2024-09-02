@@ -429,7 +429,7 @@ From the figure, it is evident that the new Group Replication single-primary mod
 
 Accurately detecting node failure is challenging due to the FLP impossibility result, which states that consensus is impossible in a purely asynchronous system if even one process can fail. The difficulty arises because a server can't distinguish if another server has failed or is just "very slow" when it receives no messages [32]. Fortunately, most practical systems are not purely asynchronous, so the FLP result doesn't apply. To circumvent this, additional assumptions about system synchrony are made, allowing for the design of protocols that maintain safety and provide liveness under certain conditions. One common method is to use an inaccurate local failure detector.
 
-![](media/e2554f0ea244f337c0e66ea34bf53edf.png)
+![](media/e2554f0ea244f337c0e66ea34bf53edf.gif)
 
 Figure 9-18. The asynchronous message passing model borrowed from the Mencius paper.
 

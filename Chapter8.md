@@ -564,7 +564,7 @@ Figure 8-27. Performance improvement after eliminating the double latch bottlene
 
 From the figure, it is evident that the modifications significantly improved scalability under high-concurrency conditions. To understand the reasons for this improvement, let's use the *perf* tool for further investigation. Below is the *perf* screenshot at 2000 concurrency before the modifications:
 
-![](media/ccb771014f600402fee72ca7134aea10.png)
+![](media/ccb771014f600402fee72ca7134aea10.gif)
 
 Figure 8-28. Latch-related bottleneck observed in *perf* screenshot.
 

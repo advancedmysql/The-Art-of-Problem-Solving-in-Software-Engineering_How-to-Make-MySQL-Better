@@ -169,7 +169,7 @@ From the graph, it can be observed that the SQL thread encounters two major bott
 
 After switching to jemalloc 4.5 as the memory allocation tool, not only did the MySQL secondary replay speed increase, but also the CPU overhead of the SQL thread itself decreased. Please refer to the figure below for details.
 
-![](media/c7ef66e1ace9b544ba85d64f3f4ed1c4.png)
+![](media/c7ef66e1ace9b544ba85d64f3f4ed1c4.gif)
 
 Figure 10-9. Reduced CPU overhead for the SQL thread with improved jemalloc.
 
@@ -274,7 +274,7 @@ In MySQL, the SQL thread for secondary replay is divided into six threads: one f
 
 Below is the *'top'* screenshot of the MySQL secondary running process.
 
-![](media/dccad19c5a07ffcd2477a9030d9337e7.png)
+![](media/dccad19c5a07ffcd2477a9030d9337e7.gif)
 
 Figure 10-13. SQL thread appears as six separate threads in *'top'* display.
 

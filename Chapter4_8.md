@@ -75,7 +75,7 @@ Figure 4-54. The *perf* statistics before optimizing the MVCC ReadView data stru
 
 *Perf* analysis reveals that the first and second bottlenecks together account for about 33% of the total. After optimizing the MVCC ReadView, this percentage drops to approximately 5.7%, reflecting a reduction of about 28%, or up to 30% considering measurement fluctuations. According to Amdahl's Law, theoretical performance improvement could be up to around 43%. However, actual throughput has increased by 53%.
 
-![](media/440f78c946a7e68fece427a41d414a2d.png)
+![](media/440f78c946a7e68fece427a41d414a2d.gif)
 
 ![](media/d06602b60d3af269409eb5633f8387c5.png)
 
@@ -212,7 +212,7 @@ Date:   Fri Nov 8 20:58:48 2013 +0100
 
 Removing these cache padding optimizations, as shown in the figure below, serves as the version before cache optimization.
 
-![](media/9a737b0274b3fad6b6d2570bba64996a.png)
+![](media/9a737b0274b3fad6b6d2570bba64996a.gif)
 
 Figure 4-62. Partial reversion of cache padding optimizations.
 

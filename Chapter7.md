@@ -321,7 +321,7 @@ Figure 7-14. Requirements of the official worklog for CATS.
 
 Therefore, with the adoption of the CATS algorithm, performance degradation should be absent in all scenarios. It seems like things end here, but the summary in the CATS algorithm's paper [24] raises some doubts. Details are provided in the following figure:
 
-![](media/4cc389ee95fbae485f1e014aad393aa8.png)
+![](media/4cc389ee95fbae485f1e014aad393aa8.gif)
 
 Figure 7-15. Doubts about the CATS paper.
 
