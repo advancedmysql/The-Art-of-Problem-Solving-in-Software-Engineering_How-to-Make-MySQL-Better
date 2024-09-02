@@ -1,7 +1,7 @@
 ### The Art of Problem-Solving in Software Engineering:How to Make MySQL Better
 
 ###  Introduction
-Building on the goal of enhancing MySQL scalability, this book explores various optimization strategies to increase throughput, reduce response times, and ensure that MySQL secondaries closely match the performance of the primary server, thereby achieving high availability failover with very little delay in most scenarios.
+This book delves into various MySQL low-level optimization techniques, including storage engines, binlog group commit, execution plans, Group Replication, and secondary server replay optimizations. By analyzing a wide range of complex cases, it uncovers the underlying causes of problems, applies logical reasoning for analysis, and employs data structures and algorithms for optimization, achieving significant improvements.
 
 ### Table of Contents
 [Preface](Preface.md)
