@@ -1,7 +1,3 @@
-# Part3 Analyzing and Addressing MySQL Problems
-
-This part focuses on analyzing and addressing specific problems. Chapter 7 highlights notable optimizations in MySQL 8.0, while Chapter 8 examines improvements for solving problems specific to MySQL 8.0. Chapter 9 discusses enhancements in MySQL Group Replication, and Chapter 10 covers improvements in MySQL secondary replay. Together, these chapters enhance MySQL performance and lay the groundwork for achieving a high-availability cluster.
-
 # Chapter 7: Key Improvements of MySQL 8.0 Over MySQL 5.7
 
 MySQL 8.0 has introduced substantial improvements over MySQL 5.7. It not only enhances functionality and adds support for hash joins in execution plans but, more importantly, greatly improves scalability. These advancements lay a solid foundation for future improvements.

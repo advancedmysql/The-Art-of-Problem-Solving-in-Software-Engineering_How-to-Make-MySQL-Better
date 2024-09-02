@@ -1,7 +1,3 @@
-# Part 4 Tuning
-
-This part primarily analyzes performance improvements from the perspective of MySQL users.
-
 # Chapter 11: Performance Tuning
 
 This chapter primarily addresses methods for improving MySQL application performance without altering the MySQL source code.
