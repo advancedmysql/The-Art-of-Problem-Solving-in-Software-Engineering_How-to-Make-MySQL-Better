@@ -14,13 +14,13 @@ Here are some classic problems listed, along with typical resolutions in real-wo
 
 The following figure illustrates the relationship between TPC-C throughput and concurrency in MySQL 5.7.39 under a specific configuration. This includes setting the transaction isolation level to Read Committed and adjusting the *innodb_spin_wait_delay* parameter to mitigate throughput degradation.
 
-<img src="media\image-20240829080057376.png" alt="image-20240829080057376" style="zoom:150%;" />
+<img src="media/image-20240829080057376.png" alt="image-20240829080057376" style="zoom:150%;" />
 
 Figure 1-1. Scalability problems in MySQL 5.7.39 during BenchmarkSQL testing.
 
 From the figure, it is evident that scalability problems significantly limit the increase in MySQL throughput. For example, after 100 concurrency, the throughput begins to decline. Due to MySQL's historical scalability challenges, Percona even open-sourced a thread pool to address these problems. The following figure illustrates the relationship between TPC-C throughput and concurrency after configuring the Percona thread pool.
 
-<img src="media\image-20240829080659528.png" alt="image-20240829080659528" style="zoom:150%;" />
+<img src="media/image-20240829080659528.png" alt="image-20240829080659528" style="zoom:150%;" />
 
 Figure 1-2. Percona thread pool mitigates scalability problems in MySQL 5.7.39.
 
@@ -62,7 +62,7 @@ Meta's case study demonstrates that the new solution based on the Raft protocol 
 
 With the transaction isolation level set to Read Committed, simulations based on Group Replication were conducted under various network latency conditions.
 
-The deployment setup of Group Replication is illustrated as follows: On machine A, two MySQL instances are deployed¡ªone serving as the primary and the other as the secondary. These two instances form the majority and communicate via localhost. Machine B hosts a third instance deployed as a member of the cluster, with a network latency of X milliseconds.
+The deployment setup of Group Replication is illustrated as follows: On machine A, two MySQL instances are deployed—one serving as the primary and the other as the secondary. These two instances form the majority and communicate via localhost. Machine B hosts a third instance deployed as a member of the cluster, with a network latency of X milliseconds.
 
 ![](media/792556dcff5f267dcc5aefeb5ef0d035.png)
 
@@ -72,7 +72,7 @@ In theory, with a majority-based mechanism, a cluster of 3 nodes only needs resp
 
 Throughput comparisons over time have been conducted for machine B in scenarios within the same data center and across data centers with latencies of 10ms, 100ms, and 1000ms. Specific results are illustrated in the following figure.
 
-<img src="media\image-20240829081015123.png" alt="image-20240829081015123" style="zoom:150%;" />
+<img src="media/image-20240829081015123.png" alt="image-20240829081015123" style="zoom:150%;" />
 
 Figure 1-7. Performance testing results of the default multi-leader Paxos algorithm.
 
@@ -80,7 +80,7 @@ From the figure, it is evident that under the default mode of Group Replication,
 
 After configuring Group Replication to use the single leader Paxos algorithm, tests were conducted under the same conditions using the SysBench testing tool. The test results are as follows.
 
-<img src="media\image-20240829081049988.png" alt="image-20240829081049988" style="zoom:150%;" />
+<img src="media/image-20240829081049988.png" alt="image-20240829081049988" style="zoom:150%;" />
 
 Figure 1-8. Performance testing results of the single-leader Paxos algorithm.
 

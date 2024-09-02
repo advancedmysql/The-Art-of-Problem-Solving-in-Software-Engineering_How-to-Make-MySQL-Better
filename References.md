@@ -6,13 +6,13 @@
 
 [3] Johnson, R., et al. Scalability of write-ahead logging on multicore and multisocket hardware. VLDBJ, pp. 239--263, 2012.
 
-[4] Collin McCurdy and Jeffrey Vetter. 2010. Memphis: Finding and fixing NUMA-related performance problems on multi-core platforms. In IEEE International Symposium on Performance Analysis of Systems 8 Software (ISPASS¡¯10). 87--96.
+[4] Collin McCurdy and Jeffrey Vetter. 2010. Memphis: Finding and fixing NUMA-related performance problems on multi-core platforms. In IEEE International Symposium on Performance Analysis of Systems 8 Software (ISPASS'10). 87--96.
 
 [5] T. Kiefer, B. Schlegel, and W. Lehner. Experimental evaluation of NUMA effects on database management systems. In BTW, 2013.
 
 [6] A. Alquraan, H. Takruri, M. Alfatafta, and S. Al-Kiswany. An analysis of network-partitioning failures in cloud systems. In Proceedings of the 13th USENIX Conference on Operating Systems Design and Implementation, OSDI'18, pages 51--68, Carlsbad, CA, USA, 2018. USENIX Association.
 
-[7] Adnan Alhomssi and Viktor Leis. 2023. Scalable and Robust Snapshot Isolation for High-Performance Storage Engines. Proc. VLDB Endow. 16, 6 (2023), 1426¨C1438.
+[7] Adnan Alhomssi and Viktor Leis. 2023. Scalable and Robust Snapshot Isolation for High-Performance Storage Engines. Proc. VLDB Endow. 16, 6 (2023), 1426â€“1438.
 
 [8] Y. Wang, M. Yu, Y. Hui, F. Zhou, Y. Huang, R. Zhu, et al.. 2022. A study of database performance sensitivity to experiment settings, Proceedings of the VLDB Endowment, vol. 15, no. 7.
 
@@ -20,7 +20,7 @@
 
 [10] M. Harchol-Balter. Performance Modeling and Design of Computer Systems: Queueing Theory in Action. Cambridge University Press, New York, NY, USA, 1st edition, 2013.
 
-[11] Hao Xu, Qingsen Wang, Shuang Song, Lizy Kurian John, and Xu Liu. 2019. Can we trust profiling results? Understanding and fixing the inaccuracy in modern profilers. In Proceedings of the ACM International Conference on Supercomputing. 284¨C295.
+[11] Hao Xu, Qingsen Wang, Shuang Song, Lizy Kurian John, and Xu Liu. 2019. Can we trust profiling results? Understanding and fixing the inaccuracy in modern profilers. In Proceedings of the ACM International Conference on Supercomputing. 284â€“295.
 
 [12] T. Mytkowicz, A. Diwan, M. Hauswirth, and P. F. Sweeney. Evaluating the accuracy of Java profilers. In PLDI, pages 187--197. ACM, 2010.
 
@@ -38,7 +38,7 @@
 
 [19] H. Jung, H. Han, A. D. Fekete, G. Heiser, and H. Y. Yeom. A scalable lock manager for multicores. In SIGMOD, 2013.
 
-[20] Simon, S.: Brewer¡¯s CAP Theorem. CS341 Distributed Information Systems, University of Basel (HS2012).
+[20] Simon, S.: Brewer's CAP Theorem. CS341 Distributed Information Systems, University of Basel (HS2012).
 
 [21] Harizopoulos, S. and Ailamaki, A. 2003. A case for staged database systems. In Proceedings of the Conference on Innovative Data Systems Research (CIDR). Asilomar, CA. Harizopoulos, S. and Ailamaki, A. 2003. A case for staged database systems. In Proceedings of the Conference on Innovative Data Systems Research (CIDR). Asilomar, CA.
 
@@ -52,13 +52,13 @@
 
 [26] J. Rao, E. J. Shekita, and S. Tata. Using paxos to build a scalable, consistent, and highly available datastore. VLDB, 2011.
 
-[27] [Pawe? Olchawa](https://dev.mysql.com/blog-archive/?author=Pawe%C5%82%20Olchawa). 2018. MySQL 8.0: New Lock free, scalable WAL design. dev.mysql.com/blog-archive.
+[27] [PaweÅ‚ Olchawa](https://dev.mysql.com/blog-archive/?author=Pawe%C5%82%20Olchawa). 2018. MySQL 8.0: New Lock free, scalable WAL design. dev.mysql.com/blog-archive.
 
-[28] Martin Kleppmann. Designing Data-Intensive Applications. English. 1 edition. O¡¯Reilly Media, Jan. 2017. ISBN: 978-1-4493-7332-0.
+[28] Martin Kleppmann. Designing Data-Intensive Applications. English. 1 edition. O'Reilly Media, Jan. 2017. ISBN: 978-1-4493-7332-0.
 
 [29] Heidi Howard. Distributed consensus revised. PhD thesis, University of Cambridge, 2019. URL: https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-935.pdf.
 
-[30] Chandra, T.D., Griesemer, R., Redstone, J.: Paxos Made Live: An Engineering Perspective. In: Proceedings of the Twenty-sixth Annual ACM Symposium on Principles of Distributed Computing, New York, USA: ACM, pp. 398¨C407, (2007).
+[30] Chandra, T.D., Griesemer, R., Redstone, J.: Paxos Made Live: An Engineering Perspective. In: Proceedings of the Twenty-sixth Annual ACM Symposium on Principles of Distributed Computing, New York, USA: ACM, pp. 398â€“407, (2007).
 
 [31] https://dev.mysql.com/blog-archive/the-new-mysql-thread-pool/.
 
@@ -66,7 +66,7 @@
 
 [33] C. Millsap. Thinking Clearly About Performance, Queue, vol. 8, no. 9, pp. 10-20, 2010.
 
-[34] Leonidas Galanis, Supiti Buranawatanachoke, Romain Colle, [Beno?t Dageville](https://dblp.org/pid/59/847.html), Karl Dias, Jonathan Klein, Stratos Papadomanolakis, Leng Leng Tan, Venkateshwaran Venkataramani, Yujun Wang, and Graham Wood. 2008. Oracle Database Replay. In Proceedings of the 2008 ACM SIGMOD International Conference on Management of Data. 1159--1170.
+[34] Leonidas Galanis, Supiti Buranawatanachoke, Romain Colle, [BenoÃ®t Dageville](https://dblp.org/pid/59/847.html), Karl Dias, Jonathan Klein, Stratos Papadomanolakis, Leng Leng Tan, Venkateshwaran Venkataramani, Yujun Wang, and Graham Wood. 2008. Oracle Database Replay. In Proceedings of the 2008 ACM SIGMOD International Conference on Management of Data. 1159--1170.
 
 [35] G. Moerkotte and T. Neumann. Dynamic programming strikes back. In Proceedings of the 2008 ACM SIGMOD international conference on Management of data, pages 539--552. ACM, 2008.
 
@@ -86,17 +86,17 @@
 
 [43] Jung-Sang Ahn, Woon-Hak Kang, Kun Ren, Guogen Zhang, and Sami Ben-Romdhane. 2019. Designing an efficient replicated log store with consensus protocol. In 11th USENIX Workshop on Hot Topics in Cloud Computing (HotCloud 19).
 
-[44] Arunprasad P. Marathe, Shu Lin, Weidong Yu, Kareem El Gebaly, Per-?ke Larson, and Calvin Sun. 2022. Integrating the Orca Optimizer into MySQL. In Proceedings of the 25th International Conference on Extending Database Technology, EDBT 2022, Edinburgh, UK, March 29 - April 1, 2022. OpenProceedings.org, 2:511--2:523.
+[44] Arunprasad P. Marathe, Shu Lin, Weidong Yu, Kareem El Gebaly, Per-Ã…ke Larson, and Calvin Sun. 2022. Integrating the Orca Optimizer into MySQL. In Proceedings of the 25th International Conference on Extending Database Technology, EDBT 2022, Edinburgh, UK, March 29 - April 1, 2022. OpenProceedings.org, 2:511--2:523.
 
 [45] https://en.wikipedia.org/wiki/.
 
-[46] Urb¨¢n, P., D¨¦fago, X., Schiper, A.: Chasing the FLP impossibility result in a lan or how robust can a fault tolerant server be? In: 20th IEEE Symp. on Reliable Distributed Systems (SRDS), pp. 190¨C193. New Orleans, USA (2001).
+[46] UrbÃ¡n, P., DÃ©fago, X., Schiper, A.: Chasing the FLP impossibility result in a lan or how robust can a fault tolerant server be? In: 20th IEEE Symp. on Reliable Distributed Systems (SRDS), pp. 190â€“193. New Orleans, USA (2001).
 
 [47] https://www.candtsolution.com/news_events-detail/what-is-the-difference-between-arm-and-x86/.
 
 [48] N. Santos and A. Schiper. Tuning Paxos for high-throughput with batching and pipelining, in 13th International Conference on Distributed Computing and Networking (ICDCN 2012), Jan. 2012.
 
-[49] J. Ko¨½czak, N. Santos, T. Zurkowski, P. T. Wojciechowski, and A. Schiper. JPaxos: state machine replication based on the Paxos protocol. Technical report, EPFL, 2011.
+[49] J. KoÅ„czak, N. Santos, T. Zurkowski, P. T. Wojciechowski, and A. Schiper. JPaxos: state machine replication based on the Paxos protocol. Technical report, EPFL, 2011.
 
 [50] R. N. Avula and C. Zou. Performance evaluation of TPC-C benchmark on various cloud providers, Proc. 11th IEEE Annu. Ubiquitous Comput. Electron. Mobile Commun. Conf. (UEMCON), pp. 226-233, Oct. 2020.
 
@@ -122,6 +122,6 @@
 
 [61] <https://github.com/session-replay-tools/cetus>.
 
-[62] Guoliang Jin, Linhai Song, Xiaoming Shi, Joel Scherpelz, and Shan Lu. 2012. Understanding and detecting real-world performance bugs. In ACM SIGPLAN Conference on Programming Language Design and Implementation, PLDI ¡¯12, Beijing, China - June 11 - 16, 2012. 77¨C88.
+[62] Guoliang Jin, Linhai Song, Xiaoming Shi, Joel Scherpelz, and Shan Lu. 2012. Understanding and detecting real-world performance bugs. In ACM SIGPLAN Conference on Programming Language Design and Implementation, PLDI '12, Beijing, China - June 11 - 16, 2012. 77â€“88.
 
 [63] Jelena Antic, Georgios Chatzopoulos, Rachid Guerraoui, and Vasileios Trigonakis. 2016. Locking made easy. In Proceedings of the International Middleware Conference (Middleware). 1--14.

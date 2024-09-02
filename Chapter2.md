@@ -8,19 +8,19 @@ This chapter introduces nine puzzling MySQL problems or phenomena that serve as 
 
 In the MySQL 8.0.27 release version, for example, in a NUMA environment on x86 architecture, using SysBench to remotely test MySQL's read-write capabilities. The MySQL transaction isolation level is set to Read Committed. MySQL instances 1 and 2 are deployed on the same machine, with a testing duration of 60 seconds. The results of separate SysBench tests for MySQL instance 1 and instance 2 are shown in the following figure.
 
-<img src="media\image-20240829081346732.png" alt="image-20240829081346732" style="zoom:150%;" />
+<img src="media/image-20240829081346732.png" alt="image-20240829081346732" style="zoom:150%;" />
 
 Figure 2-1. Throughput of MySQL running separately.
 
 The throughput of each instance is modest, with figures of 172,781 QPS and 155,387 QPS respectively. When combined, the two instances achieve a total throughput of 328,168 QPS. When using SysBench to simultaneously test the read and write capabilities of these two instances, the obtained throughputs are 271,232 QPS and 275,197 QPS respectively.
 
-<img src="media\image-20240829204745429.png" alt="image-20240829204745429" style="zoom:150%;" />
+<img src="media/image-20240829204745429.png" alt="image-20240829204745429" style="zoom:150%;" />
 
 Figure 2-2. Throughput of MySQL running together.
 
 The combined throughput of the two MySQL instances is 546,429 QPS. This data demonstrates that when these two MySQL instances share the same machine, the combined throughput is significantly higher than the sum of their individual throughputs when run separately. For detailed statistical comparisons, please refer to the following figure.
 
-<img src="media\image-20240829081541149.png" alt="image-20240829081541149" style="zoom:150%;" />
+<img src="media/image-20240829081541149.png" alt="image-20240829081541149" style="zoom:150%;" />
 
 Figure 2-3. Total throughput of running separately vs. running together.
 
@@ -46,7 +46,7 @@ From the diagram, the Profile-Guided Optimization (PGO) mechanism involves sever
 
 The following figure illustrates the relationship between throughput and concurrency before and after applying PGO to MySQL 8.0.27.
 
-<img src="media\image-20240829081620633.png" alt="image-20240829081620633" style="zoom:150%;" />
+<img src="media/image-20240829081620633.png" alt="image-20240829081620633" style="zoom:150%;" />
 
 Figure 2-5. Performance comparison tests before and after using PGO in MySQL 8.0.27.
 
@@ -58,7 +58,7 @@ Does PGO primarily benefit low-concurrency scenarios, or are there additional fa
 
 After applying various scalability patches to MySQL 8.0.27, it's crucial to evaluate whether the Percona thread pool still effectively addresses scalability problems. The following figure depicts the results of TPC-C testing on a standalone MySQL instance using BenchmarkSQL. The deep blue line indicates the configuration with the Percona thread pool enabled (thread pool size = 128), while the deep red line represents the configuration with the thread pool disabled. The test covered concurrency levels ranging from 50 to 2000, utilizing a database with 1000 warehouses.
 
-<img src="media\image-20240829081719592.png" alt="image-20240829081719592" style="zoom:150%;" />
+<img src="media/image-20240829081719592.png" alt="image-20240829081719592" style="zoom:150%;" />
 
 Figure 2-6. Enabling the Percona thread pool resulted in a significant reduction in throughput compared to when it was disabled.
 
@@ -100,7 +100,7 @@ From the above, it can be seen that there are 1000 warehouses, with a concurrenc
 
 The following figure illustrates the throughput over time during long-term testing. The TPC-C throughput shows a decline rate that significantly surpasses expectations, nearing a 50% decrease.
 
-<img src="media\image-20240829081832578.png" alt="image-20240829081832578" style="zoom:150%;" />
+<img src="media/image-20240829081832578.png" alt="image-20240829081832578" style="zoom:150%;" />
 
 Figure 2-7. Performance degradation exposed during BenchmarkSQL testing of MySQL 8.0.27.
 
@@ -116,7 +116,7 @@ Tests were conducted across Serializable, Repeatable Read (RR), and Read Committ
 
 The figure below presents results from the SysBench uniform test, where concurrency increases from 50 to 800 in doubling increments. Given the few conflicts in this test type, there is little variation in throughput among the three transaction isolation levels at low concurrency levels. However, beyond 400 concurrency, the throughput of the Serializable isolation level exhibits a notable decline.
 
-<img src="media\image-20240829151823981.png" alt="image-20240829151823981" style="zoom:150%;" />
+<img src="media/image-20240829151823981.png" alt="image-20240829151823981" style="zoom:150%;" />
 
 Figure 2-8. SysBench read-write performance comparison with low conflicts under different isolation levels.
 
@@ -124,7 +124,7 @@ Below 400 concurrency, the differences are minor because of fewer conflicts in t
 
 Continuing with the SysBench test under pareto distribution conditions, specific comparative test results can be seen in the following figure.
 
-<img src="media\image-20240829081950365.png" alt="image-20240829081950365" style="zoom:150%;" />
+<img src="media/image-20240829081950365.png" alt="image-20240829081950365" style="zoom:150%;" />
 
 Figure 2-9. SysBench read-write performance comparison with high conflicts under different isolation levels.
 
@@ -144,7 +144,7 @@ Overall, with semisynchronous replication, the MySQL primary must wait for ackno
 
 In the scenario of a two-node cluster, TPC-C throughput comparisons based on concurrency were conducted between Group Replication and semisynchronous replication. Please refer to the following figure for details.
 
-<img src="media\image-20240829082024079.png" alt="image-20240829082024079" style="zoom:150%;" />
+<img src="media/image-20240829082024079.png" alt="image-20240829082024079" style="zoom:150%;" />
 
 Figure 2-10. Performance comparison between Group Replication and semisynchronous replication.
 
@@ -158,7 +158,7 @@ Group Replication has been extensively enhanced while addressing scalability pro
 
 The following figure shows the throughput comparison of semisynchronous replication and Group Replication with Paxos log persistence under different concurrency levels.
 
-<img src="media\image-20240829082055680.png" alt="image-20240829082055680" style="zoom:150%;" />
+<img src="media/image-20240829082055680.png" alt="image-20240829082055680" style="zoom:150%;" />
 
 Figure 2-11. Performance comparison between Group Replication with Paxos log persistence and semisynchronous replication.
 
@@ -178,7 +178,7 @@ The specifics of the lock-sys optimization in MySQL 8.0 are detailed below:
 
 ```c++
 commit 1d259b87a63defa814e19a7534380cb43ee23c48
-Author: Jakub ?opusza®Ωski <jakub.lopuszanski@oracle.com>
+Author: Jakub ≈Åopusza≈Ñski <jakub.lopuszanski@oracle.com>
 Date:   Wed Feb 5 14:12:22 2020 +0100
     WL#10314 - InnoDB: Lock-sys optimization: sharded lock_sys mutex
     
@@ -201,13 +201,13 @@ Date:   Wed Feb 5 14:12:22 2020 +0100
 
 This represents a scalability improvement in MySQL 8.0 by addressing the global latch bottleneck and optimizing lock scheduling in InnoDB. To validate the effectiveness of this lock-sys optimization, refer to the specific test results illustrated in the figure below using SysBench read-write tests.
 
-<img src="media\image-20240829082201268.png" alt="image-20240829082201268" style="zoom:150%;" />
+<img src="media/image-20240829082201268.png" alt="image-20240829082201268" style="zoom:150%;" />
 
 Figure 2-13. Comparison of SysBench read-write tests before and after lock-sys optimization.
 
 It's surprising that after implementing the lock-sys optimization, the throughput decreased, which was unexpected. To mitigate interference from NUMA compatibility problems in MySQL code, the MySQL running instance was bound to NUMA node 0 (similar to an SMP environment). The test results are as follows.
 
-<img src="media\image-20240829082231096.png" alt="image-20240829082231096" style="zoom:150%;" />
+<img src="media/image-20240829082231096.png" alt="image-20240829082231096" style="zoom:150%;" />
 
 Figure 2-14. Comparison of SysBench read-write tests before and after lock-sys optimization under SMP.
 
@@ -215,7 +215,7 @@ The figure shows that the difference before and after optimization is minimal, a
 
 Using BenchmarkSQL for TPC-C testing, the results are as follows:
 
-<img src="media\image-20240829082255780.png" alt="image-20240829082255780" style="zoom:150%;" />
+<img src="media/image-20240829082255780.png" alt="image-20240829082255780" style="zoom:150%;" />
 
 Figure 2-15. Comparison of BenchmarkSQL tests before and after lock-sys optimization.
 
@@ -225,7 +225,7 @@ The figure demonstrates a noticeable improvement from the lock-sys optimization.
 
 The impact of disabling NUMA on the MySQL primary was initially tested. The deployment setup was as follows: BenchmarkSQL high-pressure stress tests were conducted on two x86 machines with identical hardware configurations. One machine had NUMA disabled in the BIOS, while the other had NUMA enabled. The comparison of TPC-C throughput versus concurrency is illustrated in the figure below.
 
-<img src="media\image-20240829082344150.png" alt="image-20240829082344150" style="zoom:150%;" />
+<img src="media/image-20240829082344150.png" alt="image-20240829082344150" style="zoom:150%;" />
 
 Figure 2-16. Significantly improved TPC-C throughput by disabling NUMA in the BIOS.
 
@@ -233,7 +233,7 @@ The figure demonstrates that disabling NUMA on x86 machines significantly improv
 
 Now, does disabling NUMA also benefit MySQL secondary replay? Using the same machines mentioned earlier for testing, the setup details are as follows: in the environment where NUMA is disabled in the BIOS, NUMA binding cannot be utilized, allowing all memory to be utilized. Conversely, in the environment where NUMA is enabled in the BIOS, MySQL secondaries are bound to NUMA node 0. The following figure illustrates the balanced replay speeds tested in these different environments.
 
-<img src="media\image-20240829082406694.png" alt="image-20240829082406694" style="zoom:150%;" />
+<img src="media/image-20240829082406694.png" alt="image-20240829082406694" style="zoom:150%;" />
 
 Figure 2-17. Comparison of balanced replay speed before and after disabling NUMA in the BIOS.
 

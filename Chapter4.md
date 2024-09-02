@@ -36,7 +36,7 @@ Access within the same NUMA node can be compared to a specialized form of SMP ac
 
 The figure below illustrates the comparison results of TPC-C tests across different concurrency levels. The dark blue curve shows tests conducted with NUMA node 0 fixed, while the deep red curve represents tests utilizing all 4 NUMA nodes of the machine. The testing employed an improved version of MySQL, operating with 1000 warehouses and using the widely adopted Read Committed transaction isolation level.
 
-<img src="media\image-20240829082946033.png" alt="image-20240829082946033" style="zoom:150%;" />
+<img src="media/image-20240829082946033.png" alt="image-20240829082946033" style="zoom:150%;" />
 
 Figure 4-3. Performance Comparison in SMP vs. NUMA.
 
@@ -73,7 +73,7 @@ Figure 4-4. Node distances in a typical x86 architecture.
 
 From the figure, it is evident that under the x86 architecture, the access overhead is 10 units for accessing the local node and 21 units for accessing remote NUMA nodes. Below are the TPC-C test results of improved MySQL 8.0.27 with BenchmarkSQL:
 
-<img src="media\image-20240829083025561.png" alt="image-20240829083025561" style="zoom:150%;" />
+<img src="media/image-20240829083025561.png" alt="image-20240829083025561" style="zoom:150%;" />
 
 Figure 4-5. Performance comparison under different NUMA bindings in a typical x86 architecture.
 
@@ -95,7 +95,7 @@ The memory access overhead between different NUMA nodes under the ARM architectu
 
 Here are the test results on an ARM machine, using MySQL code and configuration similar to those on an x86 machine, with approximately the same settings, including 1000 warehouses.
 
-<img src="media\image-20240829083106816.png" alt="image-20240829083106816" style="zoom:150%;" />
+<img src="media/image-20240829083106816.png" alt="image-20240829083106816" style="zoom:150%;" />
 
 Figure 4-7. Performance comparison under different NUMA bindings in a typical ARM architecture.
 
@@ -212,7 +212,7 @@ To address this problem, some databases adopt centralized storage for undo histo
 
 In computer science, a queue is a collection of entities organized in a sequence, where entities can be added at one end and removed from the other. The operation of adding an element to the rear is called enqueue, while removing an element from the front is called dequeue. This makes a queue a first-in-first-out (FIFO) data structure, meaning the first element added will be the first one removed. In other words, elements are processed in the order they are added.
 
-Queues are linear data structures, or sequential collections, and are commonly used in computer programs. They can be implemented using circular buffers or linked lists. In MySQL, queues are often encapsulated with additional functionalities, such as synchronized queues and double-ended queues, for FIFO processing needs. For instance, the *incoming* member shown below uses a synchronized queue to store Group Replication¡¯s applier packets, serving as a cache for data related to Paxos network interactions and relay log disk writes. This buffering helps manage data when relay log writing lags behind.
+Queues are linear data structures, or sequential collections, and are commonly used in computer programs. They can be implemented using circular buffers or linked lists. In MySQL, queues are often encapsulated with additional functionalities, such as synchronized queues and double-ended queues, for FIFO processing needs. For instance, the *incoming* member shown below uses a synchronized queue to store Group Replication's applier packets, serving as a cache for data related to Paxos network interactions and relay log disk writes. This buffering helps manage data when relay log writing lags behind.
 
 ```c++
   /* The incoming event queue */
@@ -409,7 +409,7 @@ Regarding query efficiency, the hybrid data structure offers substantial improve
 
 In NUMA environments, as shown in the figure below, it can be seen that simply changing the data structure can significantly increase the throughput of TPC-C under high-concurrency conditions, greatly alleviating scalability problems related to MVCC ReadView.
 
-<img src="media\image-20240829083417393.png" alt="image-20240829083417393" style="zoom:150%;" />
+<img src="media/image-20240829083417393.png" alt="image-20240829083417393" style="zoom:150%;" />
 
 Figure 4-10. Performance improvement with new hybrid data structure in NUMA.
 
@@ -628,15 +628,15 @@ It is important to note that, due to potentially inaccurate cost estimation, the
 
 In computer science, amortized analysis is a method for analyzing an algorithm's complexity, specifically how much of a resource, such as time or memory, it takes to execute. The motivation for amortized analysis is that considering the worst-case runtime can be overly pessimistic. Instead, amortized analysis averages the running times of operations over a sequence [45].
 
-This section discusses applying amortized analysis to address MySQL problems. While it differs from traditional amortized analysis, the underlying principles are similar and find many practical applications in addressing MySQL performance problems. For example, during the refactoring of Group Replication, significant jitter was observed when cleaning up outdated certification database information in multi-primary scenarios. The figure below shows read-write tests in MySQL¡¯s multi-primary mode with Group Replication, using SysBench at 100 concurrency levels over 300 seconds.
+This section discusses applying amortized analysis to address MySQL problems. While it differs from traditional amortized analysis, the underlying principles are similar and find many practical applications in addressing MySQL performance problems. For example, during the refactoring of Group Replication, significant jitter was observed when cleaning up outdated certification database information in multi-primary scenarios. The figure below shows read-write tests in MySQL's multi-primary mode with Group Replication, using SysBench at 100 concurrency levels over 300 seconds.
 
-<img src="media\image-20240829083549751.png" alt="image-20240829083549751" style="zoom:150%;" />
+<img src="media/image-20240829083549751.png" alt="image-20240829083549751" style="zoom:150%;" />
 
 Figure 4-12. Performance fluctuation in MySQL Group Replication.
 
 To address this problem, an amortization strategy was adopted for cleaning up outdated certification database information. See the specific details in the following figure:
 
-<img src="media\image-20240829083610439.png" alt="image-20240829083610439" style="zoom:150%;" />
+<img src="media/image-20240829083610439.png" alt="image-20240829083610439" style="zoom:150%;" />
 
 Figure 4-13. Eliminated performance fluctuations in enhanced MySQL Group Replication.
 
@@ -665,7 +665,7 @@ Starting with MySQL 8.0.27, Group Replication incorporates two Paxos variant alg
 
 To achieve high throughput with either Mencius or Multi-Paxos, leveraging batching and pipelining technologies is essential. These optimizations, commonly used in state machine replication [49], significantly enhance performance. For instance, the figure below illustrates how batching improves Group Replication throughput in local area network scenarios.
 
-<img src="media\image-20240829083656994.png" alt="image-20240829083656994" style="zoom:150%;" />
+<img src="media/image-20240829083656994.png" alt="image-20240829083656994" style="zoom:150%;" />
 
 Figure 4-14. Effect of batching on Paxos algorithm performance in LAN environments.
 
@@ -689,7 +689,7 @@ The Linux scheduler operates as a multi-queue scheduler, meaning that each logic
 
 Migrating a virtual CPU within the same scheduling domain incurs less cost compared to moving it to a different domain due to the proximity of caches between cores. The Linux scheduler uses detailed information about migration costs between different scheduling domains or CPUs to determine if a migration is beneficial.
 
-Understanding CPU scheduling details is crucial for diagnosing MySQL performance problems. A key question is whether Linux's scheduling mechanisms can effectively manage thousands of concurrent threads in MySQL. Since MySQL operates on a thread-based model, it¡¯s important to assess how the Linux scheduler handles such a high volume of threads. Does it simply allocate CPU time evenly among them?
+Understanding CPU scheduling details is crucial for diagnosing MySQL performance problems. A key question is whether Linux's scheduling mechanisms can effectively manage thousands of concurrent threads in MySQL. Since MySQL operates on a thread-based model, it's important to assess how the Linux scheduler handles such a high volume of threads. Does it simply allocate CPU time evenly among them?
 
 Consider a scenario where there are *N* user threads and *C* CPU cores, with each core supporting dual hyper-threading. Ideally, without considering context switch overhead, each user thread should receive the following CPU execution time per second. 
 $$
@@ -701,7 +701,7 @@ As the number of user threads increases, the Linux scheduler struggles to manage
 
 At the same time, increasing the number of CPU cores ensures that each user thread receives sufficient execution time. Coupled with maintaining a minimum execution granularity, the cost of context switching can be significantly mitigated.
 
-Next, let's examine the cost of thread blocking. The disadvantage of blocking is the cost of context switching¡ªtypically 12-20 microseconds¡ªwhich must be performed twice per lock handoff (once to sleep, and again to wake) [3]. In general, under the condition of maintaining minimum execution times, the cost of context switching compared to current mainstream hardware environments is already quite minimal. Therefore, employing blocking methods has practical value.
+Next, let's examine the cost of thread blocking. The disadvantage of blocking is the cost of context switchingâ€”typically 12-20 microsecondsâ€”which must be performed twice per lock handoff (once to sleep, and again to wake) [3]. In general, under the condition of maintaining minimum execution times, the cost of context switching compared to current mainstream hardware environments is already quite minimal. Therefore, employing blocking methods has practical value.
 
 Further examining how Linux CPU schedules threads for running programs, specifics can be seen in the figure below:
 
@@ -717,7 +717,7 @@ MySQL internal threads can be in different states such as running, waiting for I
 
 Figure 4-17. Linux CPU scheduling of threads waiting for I/O.
 
-This means that these threads waiting for I/O have little impact on other active threads. In MySQL, transaction lock waits function similarly to I/O waits¡ªthreads voluntarily block themselves and wait to be activated, which is generally manageable in cases where conflicts are not severe.
+This means that these threads waiting for I/O have little impact on other active threads. In MySQL, transaction lock waits function similarly to I/O waitsâ€”threads voluntarily block themselves and wait to be activated, which is generally manageable in cases where conflicts are not severe.
 
 It is worth mentioning that it is advisable to avoid having a large number of threads waiting for the same global latch or lock, as this can lead to frequent context switches. In NUMA environments, it can also cause frequent cache migrations, thereby affecting MySQL's scalability.
 
@@ -727,7 +727,7 @@ Using principles of CPU scheduling, MySQL implements transaction throttling mech
 
 The following figure illustrates the use of transaction throttling mechanisms to limit a maximum of 512 threads entering the InnoDB storage engine, depicting MySQL's single-instance throughput from 50 to 10,000 concurrency.
 
-<img src="media\image-20240829083740371.png" alt="image-20240829083740371" style="zoom:150%;" />
+<img src="media/image-20240829083740371.png" alt="image-20240829083740371" style="zoom:150%;" />
 
 Figure 4-18. Maximum TPC-C throughput in BenchmarkSQL with transaction throttling mechanisms.
 
@@ -765,7 +765,7 @@ Despite ongoing improvements in operating systems, the thread model continues to
 
 In MySQL, a significant problem occurs when a large number of threads enter the InnoDB transaction system. This increases latch contention and extends the MVCC ReadView global active transaction list, causing frequent cache migrations. This problem is especially pronounced in ultra-high concurrency scenarios. For example, the figure below shows how Group Replication throughput varies with concurrency in a network environment with 10ms latency.
 
-<img src="media\image-20240829083807720.png" alt="image-20240829083807720" style="zoom:150%;" />
+<img src="media/image-20240829083807720.png" alt="image-20240829083807720" style="zoom:150%;" />
 
 Figure 4-19. Maximum thread scalability of Group Replication under 10ms network latency.
 
@@ -812,7 +812,7 @@ Understanding these memory management principles is crucial for diagnosing and s
 
 The figure below illustrates a comparative experiment. The deep blue curve shows the total throughput of running four MySQL instances on a NUMA system without node binding. In contrast, the deep red curve represents the total throughput when each MySQL instance is bound to different NUMA nodes. This latter setup reflects the ideal throughput, as it minimizes CPU scheduling interference between MySQL instances.
 
-<img src="media\image-20240829083858029.png" alt="image-20240829083858029" style="zoom:150%;" />
+<img src="media/image-20240829083858029.png" alt="image-20240829083858029" style="zoom:150%;" />
 
 Figure 4-21. Comparing ideal NUMA scheduling with actual Linux scheduling of multiple instances.
 
@@ -852,7 +852,7 @@ Extensive practice has shown that MySQL's large codebase is especially well-suit
 
 In summary, while MySQL 8.0's PGO capabilities can greatly improve computational performance, the actual improvement depends on the balance between computational and I/O bottlenecks in the server setup. The following figure demonstrates that with SSD hardware configuration and NUMA binding, PGO can significantly improve the performance of MySQL.
 
-<img src="media\image-20240829083941927.png" alt="image-20240829083941927" style="zoom:150%;" />
+<img src="media/image-20240829083941927.png" alt="image-20240829083941927" style="zoom:150%;" />
 
 Figure 4-22. Performance comparison tests before and after using PGO in MySQL 8.0.27 under SMP.
 
@@ -870,20 +870,20 @@ Figure 4-23. Testing architecture for Group Replication with pure Paxos protocol
 
 The cluster's Paxos algorithm employs a modified Mencius approach, removing batching and pipelining, making it similar to pure Paxos. Tests were conducted at various concurrency levels under a network latency of 10ms, as illustrated in the following figure:
 
-<img src="media\image-20240830114557281.png" alt="image-20240830114557281" style="zoom:150%;" />
+<img src="media/image-20240830114557281.png" alt="image-20240830114557281" style="zoom:150%;" />
 
 Figure 4-24. Results of testing Group Replication with pure Paxos protocol
 
-In a WAN testing scenario, the throughput remains nearly constant across different concurrency levels¡ª50, 100, or 150¡ªbecause the time MySQL takes to process TPC-C transactions is negligible compared to the network latency of 10ms. This network latency dominates the overall transaction time, making the impact of concurrency changes relatively insignificant.
+In a WAN testing scenario, the throughput remains nearly constant across different concurrency levelsâ€”50, 100, or 150â€”because the time MySQL takes to process TPC-C transactions is negligible compared to the network latency of 10ms. This network latency dominates the overall transaction time, making the impact of concurrency changes relatively insignificant.
 
 The throughput calculation formula in such scenarios simplifies to:
 
 $$
-tpmTOTAL ¡Ö 60 ¡Á \frac{1}{N e t w o r k \  L a t e n c y} = 60 ¡Á \frac{1}{0 . 0 1} = 6000
+tpmTOTAL â‰ˆ 60 Ã— \frac{1}{N e t w o r k \  L a t e n c y} = 60 Ã— \frac{1}{0 . 0 1} = 6000
 $$
 
 $$
-tpmC¡ÖtpmTOTAL¡Á0.45=6000¡Á0.45=2700
+tpmCâ‰ˆtpmTOTALÃ—0.45=6000Ã—0.45=2700
 $$
 
 This closely matches the test results above, where 0.45 is an empirical factor derived from extensive testing that represents the ratio of tpmC to tpmTOTAL. The tests indicate that, under a 10ms network latency with no additional bottlenecks, throughput remains consistent across different concurrency levels. This consistency is due to the serial nature of Paxos communication, as batching and pipelining are not employed. Confirmation of these findings is supported by packet capture analysis.
@@ -934,7 +934,7 @@ In the scenario of multi-queue bottlenecks, optimizing one bottleneck may not ne
 
 Let's review again the throughput situation under high concurrency after applying PGO:
 
-<img src="media\image-20240829084258188.png" alt="image-20240829084258188" style="zoom:150%;" />
+<img src="media/image-20240829084258188.png" alt="image-20240829084258188" style="zoom:150%;" />
 
 Figure 4-30. Performance comparison tests before and after using PGO in MySQL 8.0.27.
 
@@ -942,7 +942,7 @@ Profile-Guided Optimization (PGO) accelerates CPU computation efficiency, enabli
 
 Let's examine the performance comparison before and after redo log optimization:
 
-<img src="media\image-20240829084319943.png" alt="image-20240829084319943" style="zoom:150%;" />
+<img src="media/image-20240829084319943.png" alt="image-20240829084319943" style="zoom:150%;" />
 
 Figure 4-31. Performance comparison tests before and after redo log optimization in MySQL 8.0.
 
@@ -952,7 +952,7 @@ The figure shows that performance improves under low concurrency but decreases u
 
 According to queueing theory, as resource utilization increases, average response time also increases, and as utilization approaches 100%, average response time deteriorates sharply. The following figure shows concurrent tests on CPU resources using SysBench, displaying the relationship between average response time and CPU utilization. Initially, the average response time increases slowly. However, around 60% CPU utilization, the curve sharply rises, reaching over 13 milliseconds at 96% utilization.
 
-<img src="media\image-20240829084347280.png" alt="image-20240829084347280" style="zoom:150%;" />
+<img src="media/image-20240829084347280.png" alt="image-20240829084347280" style="zoom:150%;" />
 
 Figure 4-32. Relationship between average response time and CPU utilization.
 
@@ -971,7 +971,7 @@ A practical transaction throttling mechanism for MySQL is as follows:
 
 This approach helps maintain performance by controlling concurrency and managing resource usage effectively. The following figure illustrates the relationship between TPC-C throughput and concurrency under transaction throttling conditions, with 1000 warehouses.
 
-<img src="media\image-20240829084425105.png" alt="image-20240829084425105" style="zoom:150%;" />
+<img src="media/image-20240829084425105.png" alt="image-20240829084425105" style="zoom:150%;" />
 
 Figure 4-33. Maximum TPC-C throughput in BenchmarkSQL with transaction throttling mechanisms.
 
@@ -1031,7 +1031,7 @@ Figure 4-35. Classic TCP state machine overview.
 A flexible understanding of state transitions is crucial for troubleshooting MySQL network problems. For example:
 
 -   **CLOSE_WAIT State**: A large number of *CLOSE_WAIT* states on the server indicates that the application did not close connections promptly or failed to initiate the close process, causing connections to linger in this state.
--   **SYN_RCVD State**: Numerous *SYN_RCVD* states may suggest a SYN flood attack, where an excessive number of SYN requests overwhelm the server¡¯s capacity to handle them effectively.
+-   **SYN_RCVD State**: Numerous *SYN_RCVD* states may suggest a SYN flood attack, where an excessive number of SYN requests overwhelm the server's capacity to handle them effectively.
 
 Understanding these state transitions helps in diagnosing and addressing network-related problems more effectively.
 
@@ -1049,25 +1049,25 @@ Paxos is a widely used state machine replication protocol, and its performance c
 
 Below is a comparison test in LAN environments using BenchmarkSQL for TPC-C. There are 1000 warehouses, and concurrency ranges from 50 to 2000. Deep blue represents throughput without batching, while deep red represents throughput with batching.
 
-<img src="media\image-20240829084512423.png" alt="image-20240829084512423" style="zoom:150%;" />
+<img src="media/image-20240829084512423.png" alt="image-20240829084512423" style="zoom:150%;" />
 
 Figure 4-36. Effect of batching on Paxos algorithm performance in LAN environments.
 
 From the figure, it is clear that batching significantly increases throughput under high concurrency. In a LAN environment, does pipelining also have a similar effect? The following figure presents comparative tests conducted without batching to evaluate whether pipelining alone can also substantially boost throughput.
 
-<img src="media\image-20240829084537503.png" alt="image-20240829084537503" style="zoom:150%;" />
+<img src="media/image-20240829084537503.png" alt="image-20240829084537503" style="zoom:150%;" />
 
 Figure 4-37. Effect of pipelining on Paxos algorithm performance in LAN environments.
 
 From the figure, it is clear that while pipelining does improve TPC-C throughput in LAN environments, the improvement is relatively modest. Interestingly, in LAN environments with batching already enabled, adding pipelining offers little additional benefit, as shown in the following figure.
 
-<img src="media\image-20240829084610339.png" alt="image-20240829084610339" style="zoom:150%;" />
+<img src="media/image-20240829084610339.png" alt="image-20240829084610339" style="zoom:150%;" />
 
 Figure 4-38. Effect of pipelining on batched Paxos algorithm performance in LAN environments.
 
 How does pipelining perform in WAN environments? Let's explore its impact. The following figure shows the throughput of 1000 concurrency under different numbers of pipelining, with a network latency of 10ms and Paxos algorithm enabling batching.
 
-<img src="media\image-20240829084636349.png" alt="image-20240829084636349" style="zoom:150%;" />
+<img src="media/image-20240829084636349.png" alt="image-20240829084636349" style="zoom:150%;" />
 
 Figure 4-39. Effect of pipelining on batched Paxos algorithm performance in WAN environments.
 
@@ -1075,7 +1075,7 @@ From the figure, it is clear that with just one pipelining, throughput is relati
 
 Let's continue delving into batching in WAN environments. The following figure shows the comparison of throughput for 1000 concurrency before and after enabling batching, with pipelining disabled and a network latency of 10ms.
 
-<img src="media\image-20240829084700560.png" alt="image-20240829084700560" style="zoom:150%;" />
+<img src="media/image-20240829084700560.png" alt="image-20240829084700560" style="zoom:150%;" />
 
 Figure 4-40. Effect of batching on Paxos algorithm performance in WAN environments.
 
@@ -1099,7 +1099,7 @@ Figure 4-42. Impact of pipelining and batching on Paxos performance.
 
 Network latency critically affects MySQL performance. In a localhost test case with 1000 warehouses, the MySQL instance bound to NUMA nodes 0, 1, and 2, and BenchmarkSQL on NUMA node 3, latency's impact on throughput is examined across concurrency levels of 50, 100, and 150.
 
-<img src="media\image-20240829084730629.png" alt="image-20240829084730629" style="zoom:150%;" />
+<img src="media/image-20240829084730629.png" alt="image-20240829084730629" style="zoom:150%;" />
 
 Figure 4-43. Impact of network latency on performance.
 
@@ -1189,13 +1189,13 @@ Figure 4-47. Key packet information captured for problem resolution.
 
 From the packet capture content above (captured from the server), it appears that the SQL query was sent at 3 AM. The MySQL database middleware took 630 seconds (03:10:30.899249-03:00:00.353157) to return the SQL response to the client, indicating that the MySQL database middleware did indeed respond to the SQL query. However, just 238 microseconds later (03:10:30.899487-03:10:30.899249), the server's TCP layer received a reset packet, which is suspiciously quick. It's important to note that this reset packet cannot be immediately assumed to be from the client.
 
-Firstly, it is necessary to confirm who sent the reset packet¡ªeither it was sent by the client or by an intermediate device along the way. Since packet capture was performed only on the server side, information about the client's packet situation is not available. By analyzing the packet capture files from the server side and applying logical reasoning, the aim is to identify the root cause of the problem.
+Firstly, it is necessary to confirm who sent the reset packetâ€”either it was sent by the client or by an intermediate device along the way. Since packet capture was performed only on the server side, information about the client's packet situation is not available. By analyzing the packet capture files from the server side and applying logical reasoning, the aim is to identify the root cause of the problem.
 
-If the assumption is made that the client sent a reset, it would imply that the client's TCP layer no longer recognizes the TCP state of this connection¡ªtransitioning from an established state to a nonexistent one. This change in TCP state would notify the client application of a connection problem, causing the client script to immediately error out. However, in reality, the client script is still waiting for the response to come back. Therefore, the assumption that the client sent a reset does not hold true¡ªthe client did not send a reset. The client's connection is still active, but on the server side, the corresponding connection has been terminated by the reset.
+If the assumption is made that the client sent a reset, it would imply that the client's TCP layer no longer recognizes the TCP state of this connectionâ€”transitioning from an established state to a nonexistent one. This change in TCP state would notify the client application of a connection problem, causing the client script to immediately error out. However, in reality, the client script is still waiting for the response to come back. Therefore, the assumption that the client sent a reset does not hold trueâ€”the client did not send a reset. The client's connection is still active, but on the server side, the corresponding connection has been terminated by the reset.
 
 Who sent the reset, then? The primary suspect is Amazon's cloud environment. Based on this packet capture analysis, the DBA operations queried Amazon customer service and received the following information:
 
-![Í¼Æ¬](media/5c6f81f69eac7f61744ba3bc035b29e7.png)
+![å›¾ç‰‡](media/5c6f81f69eac7f61744ba3bc035b29e7.png)
 
 Figure 4-48. Final response from Amazon customer service.
 
@@ -1203,7 +1203,7 @@ Customer service's response aligns with the analysis results, indicating that Am
 
 With the official response obtained, the problem was considered fully solved.
 
-This specific case illustrates how online problems can be highly complex, requiring the capture of critical information¡ªin this instance, packet capture data¡ªto understand the situation as it occurred. Through logical reasoning and the application of reductio ad absurdum, the root cause was identified.
+This specific case illustrates how online problems can be highly complex, requiring the capture of critical informationâ€”in this instance, packet capture dataâ€”to understand the situation as it occurred. Through logical reasoning and the application of reductio ad absurdum, the root cause was identified.
 
 ## 4.8 Performance Optimization
 
@@ -1240,13 +1240,13 @@ These goals are contradictory: optimizing for response time requires minimizing 
 
 Analyzing the relationship between MySQL semisynchronous throughput and concurrency using the SysBench tool, as illustrated in the figure below, provides insight into how these metrics interact in testing environments.
 
-<img src="media\image-20240829084841772.png" alt="image-20240829084841772" style="zoom:150%;" />
+<img src="media/image-20240829084841772.png" alt="image-20240829084841772" style="zoom:150%;" />
 
 Figure 4-51. Semisynchronous throughput vs. concurrency relationship using SysBench.
 
 The figure shows that throughput peaks at 500 concurrency. Similarly, the subsequent figure indicates that response time also peaks at 500 concurrency.
 
-<img src="media\image-20240829084901737.png" alt="image-20240829084901737" style="zoom:150%;" />
+<img src="media/image-20240829084901737.png" alt="image-20240829084901737" style="zoom:150%;" />
 
 Figure 4-52. Semisynchronous response time vs. concurrency relationship using SysBench.
 
@@ -1262,7 +1262,7 @@ In computer architecture, Amdahl's Law provides a formula to predict the theoret
 
 Although Amdahl's Law theoretically holds, it often struggles to explain certain phenomena in the practical performance improvement process of MySQL. For instance, the same program shows a 10% improvement in SMP environments but a 50% improvement in NUMA environments. Measurements were conducted in SMP environments where the optimized portion, accounting for 20% of execution time, was improved by a factor of 2 through algorithm improvements. According to Amdahl's Law, the theoretical improvement should be calculated as follows: 
 $$
-\frac{1}{0.8 + (\frac {0.2} {2}) } = \frac{1}{0.8 + 0.1 } = \frac{1}{0.9 } ¡Ö 1.11 \ times
+\frac{1}{0.8 + (\frac {0.2} {2}) } = \frac{1}{0.8 + 0.1 } = \frac{1}{0.9 } â‰ˆ 1.11 \ times
 $$
 In practice, the 10% improvement in SMP environments aligns with theoretical expectations. However, the 50% improvement in NUMA environments significantly exceeds these predictions. This discrepancy is not due to a flaw in the theory or an error but rather because performance improvements in NUMA environments cannot be directly compared with those in SMP environments. Amdahl's Law is applicable strictly within the same environment.
 
@@ -1270,7 +1270,7 @@ Accurate measurement data is also challenging to obtain [11]. Developers typical
 
 Taking the optimization of the MVCC ReadView data structure as an example illustrates the challenges in statistical measurements by tools. As depicted in the following figure, this optimization demonstrates substantial improvements in throughput under high concurrency scenarios.
 
-<img src="media\image-20240829085005983.png" alt="image-20240829085005983" style="zoom:150%;" />
+<img src="media/image-20240829085005983.png" alt="image-20240829085005983" style="zoom:150%;" />
 
 Figure 4-53. Performance comparison before and after adopting the new hybrid data structure.
 
@@ -1304,7 +1304,7 @@ Figure 4-56. The latch queue model in MySQL 5.7.
 
 In MySQL 5.7, poor scalability is mainly due to intense global latch contention among the **trx-sys**, **lock-sys**, and **redo log** subsystems. For instance, the TPC-C performance test, illustrated in the figure below, reveals poor scalability.
 
-<img src="media\image-20240829085045336.png" alt="image-20240829085045336" style="zoom:150%;" />
+<img src="media/image-20240829085045336.png" alt="image-20240829085045336" style="zoom:150%;" />
 
 Figure 4-57. Scalability problems in MySQL 5.7.39 during BenchmarkSQL testing.
 
@@ -1339,7 +1339,7 @@ Using a hybrid data structure to improve MVCC ReadView reduces time spent in cri
 
 In MySQL 8.0, latch sharding was implemented for the lock-sys to reduce latch overhead in the lock scheduling subsystem. The figure below compares performance before and after this improvement
 
-<img src="media\image-20240829085119472.png" alt="image-20240829085119472" style="zoom:150%;" />
+<img src="media/image-20240829085119472.png" alt="image-20240829085119472" style="zoom:150%;" />
 
 Figure 4-58. Comparison of BenchmarkSQL tests before and after lock-sys optimization.
 
@@ -1349,7 +1349,7 @@ Binlog group commit adopts an inefficient activation mechanism, resulting in an 
 
 The following figure shows the throughput comparison before and after optimizing binlog group commit:
 
-<img src="media\image-20240829085146797.png" alt="image-20240829085146797" style="zoom:150%;" />
+<img src="media/image-20240829085146797.png" alt="image-20240829085146797" style="zoom:150%;" />
 
 Figure 4-59. Impact of group commit optimization with innodb_thread_concurrency=128.
 
@@ -1359,7 +1359,7 @@ From the figure, it can be seen that optimizing this activation mechanism has no
 
 MySQL redo log optimization uses latch-free processing to significantly enhance the scalability of the redo log and greatly improve the performance of concurrent writes. The following figure shows the TPC-C throughput comparison before and after redo log optimization. There is a noticeable improvement in low-concurrency scenarios. However, in high-concurrency situations, throughput decreases instead of increasing, mainly due to mutual interference among multi-queue bottlenecks.
 
-<img src="media\image-20240829085209463.png" alt="image-20240829085209463" style="zoom:150%;" />
+<img src="media/image-20240829085209463.png" alt="image-20240829085209463" style="zoom:150%;" />
 
 Figure 4-60. Comparison of BenchmarkSQL tests before and after redo log optimization.
 
@@ -1425,7 +1425,7 @@ Figure 4-62. Partial reversion of cache padding optimizations.
 
 The performance before and after cache optimization is compared to determine if there is a noticeable difference. For accurate results, MySQL should be started with the Performance Schema enabled during the tests.
 
-<img src="media\image-20240829085254141.png" alt="image-20240829085254141" style="zoom:150%;" />
+<img src="media/image-20240829085254141.png" alt="image-20240829085254141" style="zoom:150%;" />
 
 Figure 4-63. Comparison of BenchmarkSQL tests before and after cache optimization.
 
@@ -1463,19 +1463,19 @@ MySQL performs poorly in NUMA environments: transactions with the Read Committed
 
 Performance optimization is complex; the improvements from various optimizations do not simply add up. Apart from the non-additive performance case discussed in section 4.7.5, here is an additional example. The following figure shows the performance improvement of MySQL before optimizing MVCC ReadView, with the MySQL spin delay set to 20. There is a significant increase in throughput under high concurrency conditions.
 
-<img src="media\image-20240829085727776.png" alt="image-20240829085727776" style="zoom:150%;" />
+<img src="media/image-20240829085727776.png" alt="image-20240829085727776" style="zoom:150%;" />
 
 Figure 4-64. Comparison of BenchmarkSQL tests before and after spin delay optimization.
 
 Here is the improvement in MVCC ReadView optimization itself, as shown in the figure below. It can be seen that there is a more pronounced increase in throughput under high concurrency conditions.
 
-<img src="media\image-20240829085852775.png" alt="image-20240829085852775" style="zoom:150%;" />
+<img src="media/image-20240829085852775.png" alt="image-20240829085852775" style="zoom:150%;" />
 
 Figure 4-65. Comparison of BenchmarkSQL tests before and after MVCC optimization.
 
 The following figure illustrates the combined effect of these two optimizations on the TPC-C throughput as concurrency increases.
 
-<img src="media\image-20240829085935810.png" alt="image-20240829085935810" style="zoom:150%;" />
+<img src="media/image-20240829085935810.png" alt="image-20240829085935810" style="zoom:150%;" />
 
 Figure 4-66. Comparison of BenchmarkSQL tests before and after spin delay optimization with MVCC improvements.
 
@@ -1499,17 +1499,17 @@ The CAP theorem states: You can have at most two of these properties for any sha
 
 Theoretically there are three options:
 
-1.  Forfeit Partition Tolerance
+1. Forfeit Partition Tolerance
 
-    The system does not have a defined behavior in case of a network partition.
+   The system does not have a defined behavior in case of a network partition.
 
-2.  Forfeit Consistency
+2. Forfeit Consistency
 
-    In case of partition data can still be used, but since the nodes cannot communicate with each other there is no guarantee that the data is consistent.
+   In case of partition data can still be used, but since the nodes cannot communicate with each other there is no guarantee that the data is consistent.
 
-3.  Forfeit Availability
+3. Forfeit Availability
 
-    Data can only be used if its consistency is guaranteed, which implies the need for pessimistic locking. This requires locking any updated object until the update has been propagated to all nodes. In the event of a network partition, it may take a considerable amount of time for the database to return to a consistent state, thereby compromising the guarantee of high availability.
+   Data can only be used if its consistency is guaranteed, which implies the need for pessimistic locking. This requires locking any updated object until the update has been propagated to all nodes. In the event of a network partition, it may take a considerable amount of time for the database to return to a consistent state, thereby compromising the guarantee of high availability.
 
 Forfeiting Partition Tolerance is not feasible in realistic environments, as network partitions are inevitable. Therefore, it becomes necessary to make a choice between Availability and Consistency [20].
 
@@ -1529,7 +1529,7 @@ The network is allowed to lose arbitrarily many messages sent from one node to a
 
 With this definition, the theorem was proven by contradiction:
 
-Assume all three criteria (atomicity, availability and partition tolerance) are fulfilled. Since any network with at least two nodes can be divided into two disjoint, non-empty sets {G1,G2}, we define our network as such. An atomic object o has the initial value v0. We define a1 as part of an execution consisting of a single write on the atomic object to a value v1 ¡Ù v0 in G1. Assume a1 is the only client request during that time. Further, assume that no messages from G1 are received in G2, and vice versa. 
+Assume all three criteria (atomicity, availability and partition tolerance) are fulfilled. Since any network with at least two nodes can be divided into two disjoint, non-empty sets {G1,G2}, we define our network as such. An atomic object o has the initial value v0. We define a1 as part of an execution consisting of a single write on the atomic object to a value v1 â‰  v0 in G1. Assume a1 is the only client request during that time. Further, assume that no messages from G1 are received in G2, and vice versa. 
 
 Because of the availability requirement we know that a1 will complete, meaning that the object o now has value v1 in G1.
 
@@ -1618,7 +1618,7 @@ create index bmsql_oorder_index on bmsql_oorder (o_c_id);
 
 The additional indexes are created to improve TPC-C throughput. The figure below shows the relationship between TPC-C throughput and concurrency before and after index addition.
 
-<img src="media\image-20240829090305653.png" alt="image-20240829090305653" style="zoom:150%;" />
+<img src="media/image-20240829090305653.png" alt="image-20240829090305653" style="zoom:150%;" />
 
 Figure 4-68. Comparison of BenchmarkSQL tests before and after index addition.
 
@@ -1648,7 +1648,7 @@ MySQL Server interacts with the Group Replication plugin through API calls. When
 
 How is the scalability of this architecture? The following figure illustrates the relationship between Group Replication throughput and concurrency. Additionally, transaction throttling mechanisms are utilized to improve the scalability of InnoDB under scenarios with 2000+ concurrency, ensuring that too many user threads do not enter the InnoDB transaction system.
 
-<img src="media\image-20240829090434767.png" alt="image-20240829090434767" style="zoom:150%;" />
+<img src="media/image-20240829090434767.png" alt="image-20240829090434767" style="zoom:150%;" />
 
 Figure 4-70. Group Replication TPC-C throughput in BenchmarkSQL with transaction throttling mechanisms.
 
@@ -1671,19 +1671,19 @@ According to user feedback, users often utilize Group Replication multi-primary 
 
 The following figure shows SysBench's read-write performance over time, where each node accesses the same database and handles both read and write tasks.
 
-<img src="media\image-20240829090550499.png" alt="image-20240829090550499" style="zoom:150%;" />
+<img src="media/image-20240829090550499.png" alt="image-20240829090550499" style="zoom:150%;" />
 
 Figure 4-71. Group Replication throughput in SysBench read-write tests over time.
 
 From the figure, it can be seen that the read-write tests between nodes coexist relatively harmoniously. The following figure shows SysBench write-only tests over time, where the Group Replication multi-primary architecture exhibits unstable throughput.
 
-<img src="media\image-20240829090612617.png" alt="image-20240829090612617" style="zoom:150%;" />
+<img src="media/image-20240829090612617.png" alt="image-20240829090612617" style="zoom:150%;" />
 
 Figure 4-72. Group Replication throughput in SysBench write only tests over time.
 
 Next, let's continue to examine the testing scenario in the Group Replication multi-primary architecture, where transactions between nodes do not conflict. Testing is conducted on primary one for Database one and on primary two for Database two. This setup ensures that transactions executed by primary one and primary two have no possibility of conflict. The specific results are shown in the following figure:
 
-<img src="media\image-20240829090632045.png" alt="image-20240829090632045" style="zoom:150%;" />
+<img src="media/image-20240829090632045.png" alt="image-20240829090632045" style="zoom:150%;" />
 
 Figure 4-73. Group Replication throughput in SysBench write only tests: high concurrency and no conflicts over time.
 
@@ -1691,7 +1691,7 @@ From the figure, it can be seen that even without conflicts between transactions
 
 Notably, these tests were conducted with 100 concurrency. Reducing the pressure to 10 concurrency alleviates the uneven traffic skew, as shown in the figure below.
 
-<img src="media\image-20240829090658864.png" alt="image-20240829090658864" style="zoom:150%;" />
+<img src="media/image-20240829090658864.png" alt="image-20240829090658864" style="zoom:150%;" />
 
 Figure 4-74. Group Replication throughput in SysBench write only tests: low concurrency and no conflicts over time.
 
@@ -1699,7 +1699,7 @@ The tests indicate that the scalability of the Group Replication multi-primary a
 
 ### 4.11.3 Event-Driven Architecture
 
-Based on event-driven architecture, common in web servers like Nginx, Percona's thread pool can be seen as a rough approximation of event-driven systems. However, event-driven architecture isn't free¡ªit incurs overhead from system calls, and this additional overhead constitutes the cost of using a thread pool.
+Based on event-driven architecture, common in web servers like Nginx, Percona's thread pool can be seen as a rough approximation of event-driven systems. However, event-driven architecture isn't freeâ€”it incurs overhead from system calls, and this additional overhead constitutes the cost of using a thread pool.
 
 MySQL's underlying Paxos communication can also be viewed as asynchronous event-driven. This communication operates in a single-threaded mode, requiring the avoidance of any synchronous communication processes. Unfortunately, MySQL has gradually violated these principles in its ongoing feature expansion, leading to throughput problems in certain scenarios due to prolonged synchronous processes dropping to zero. For problems related to Group Replication synchronization, refer to the highlighted code snippet below.
 

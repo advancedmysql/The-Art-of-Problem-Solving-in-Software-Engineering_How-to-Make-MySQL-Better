@@ -1,7 +1,3 @@
-# Part 5 Conclusion
-
-This Part provides the concluding summary, outlines future directions for MySQL improvements, and wraps up the book.
-
 # Chapter 12: Future Directions
 
 A solid foundation is essential for advancing MySQL towards more complex objectives. Once scalability and high availability are resolved, the focus could shift to the following development areas.

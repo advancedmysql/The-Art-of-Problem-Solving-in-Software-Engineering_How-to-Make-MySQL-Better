@@ -99,7 +99,7 @@ Figure 5-3. InnoDB Architecture borrowed from the official MySQL documentation.
 1.  **Doublewrite Buffer**:
     -   An intermediate storage area where pages from the buffer pool are written before their final position in InnoDB data files.
     -   Ensures recovery from partial writes due to system crashes or unexpected shutdowns.
-    -   Efficient as it doesn¡¯t double the I/O overhead despite data being written twice.
+    -   Efficient as it doesn't double the I/O overhead despite data being written twice.
 2.  **Redo Log**:
     -   Disk-based structure used for crash recovery, correcting data from incomplete transactions.
     -   Encodes changes from SQL statements or low-level API calls; replayed automatically during initialization after a crash.
@@ -177,7 +177,7 @@ The benefits of using partitioning are as follows:
 
 MySQL partitioning not only offers these benefits but also reduces latch contention for large tables under high concurrency. The following figure shows the impact on TPC-C throughput after partitioning a large table in BenchmarkSQL.
 
-<img src="media\image-20240829091316193.png" alt="image-20240829091316193" style="zoom:150%;" />
+<img src="media/image-20240829091316193.png" alt="image-20240829091316193" style="zoom:150%;" />
 
 Figure 5-6. Comparison of BenchmarkSQL tests before and after partitioning.
 
@@ -216,7 +216,7 @@ The *is_already_logged_transaction* function is called to determine if a transac
 
 MySQL executes statements using one thread per client connection. As the number of connections increases beyond a certain threshold, performance degrades. The following figure shows the TPC-C throughput versus concurrency testing for MySQL 5.7.36.
 
-<img src="media\image-20240829091450756.png" alt="image-20240829091450756" style="zoom:150%;" />
+<img src="media/image-20240829091450756.png" alt="image-20240829091450756" style="zoom:150%;" />
 
 Figure 5-7. TPC-C throughput vs. concurrency in MySQL 5.7.36.
 
@@ -244,7 +244,7 @@ Asynchronous replication offers better write scalability but at the cost of lowe
 
 Figure 5-9. MySQL asynchronous replication borrowed from the official MySQL documentation.
 
-When asynchronous replication is used, if the primary fails and a new leader is chosen, unreplicated writes from the old leader may be lost. This can cause conflicts and durability problems. Often, the solution is to discard the old leader¡¯s unreplicated writes, which may not meet clients¡¯ durability expectations. If both leaders accept writes without conflict resolution, there¡¯s a risk of both nodes shutting down if not properly managed [28].
+When asynchronous replication is used, if the primary fails and a new leader is chosen, unreplicated writes from the old leader may be lost. This can cause conflicts and durability problems. Often, the solution is to discard the old leader's unreplicated writes, which may not meet clients' durability expectations. If both leaders accept writes without conflict resolution, there's a risk of both nodes shutting down if not properly managed [28].
 
 ### 5.17.2 Semisynchronous Replication
 
@@ -303,7 +303,7 @@ In the binlog file, a transaction consists of multiple events. For a TPC-C trans
 
 The following figure shows the TPC-C throughput versus concurrency testing for semisynchronous replication. It can be observed that the scalability of semisynchronous replication is very weak, far inferior to that of refactored Group Replication.
 
-<img src="media\image-20240829091539440.png" alt="image-20240829091539440" style="zoom:150%;" />
+<img src="media/image-20240829091539440.png" alt="image-20240829091539440" style="zoom:150%;" />
 
 Figure 5-10. Performance comparison between Group Replication with Paxos log persistence and semisynchronous replication.
 
@@ -361,7 +361,7 @@ In Group Replication's single-primary mode, consistent read operations require e
 
 The following figure illustrates SysBench's throughput for 100 concurrent read/write operations over time, with MySQL configured for strong consistency writes using the "after" mechanism.
 
-<img src="media\image-20240829091801038.png" alt="image-20240829091801038" style="zoom:150%;" />
+<img src="media/image-20240829091801038.png" alt="image-20240829091801038" style="zoom:150%;" />
 
 Figure 5-12. Performance of strong consistency writes using the "after" mechanism under single leader Paxos variant.
 
@@ -383,7 +383,7 @@ As server failures become common, replication for high availability is crucial. 
 
 ### 5.19.2 The Difference Between Replay and Transaction Execution
 
-In MySQL¡¯s row-based logging, each operation is a log event. Row changes are recorded as insert, update, or delete events. These row events, along with transaction start and end events, define transaction boundaries. Insert events log new row images, update events log both before and after row images, and delete events log deleted row images.
+In MySQL's row-based logging, each operation is a log event. Row changes are recorded as insert, update, or delete events. These row events, along with transaction start and end events, define transaction boundaries. Insert events log new row images, update events log both before and after row images, and delete events log deleted row images.
 
 During transactions, the primary writes updates to the log, which the secondary then fetches and replays. Secondaries can handle more read requests than the primary because replaying updates incurs only about half the workload of executing the original query. Additionally, read queries on the primary can conflict with update transactions, causing slowdowns, which supports dispatching read requests to secondaries [16].
 
@@ -468,31 +468,31 @@ Traditional database design relies on empirical methods and specifications, requ
 
 ### 5.20.1 Learning-based Database Configuration
 
-1.  **Knob Tuning**
+1. **Knob Tuning**
 
-    Databases have numerous knobs that need to be tuned by DBAs for different scenarios. This approach is not scalable for millions of cloud database instances. Recently, learning-based techniques have been used to automatically tune these knobs, exploring more combinations and recommending high-quality settings, often outperforming DBAs.
+   Databases have numerous knobs that need to be tuned by DBAs for different scenarios. This approach is not scalable for millions of cloud database instances. Recently, learning-based techniques have been used to automatically tune these knobs, exploring more combinations and recommending high-quality settings, often outperforming DBAs.
 
-2.  **Index/View Advisor**
+2. **Index/View Advisor**
 
-    Indexes and views are essential for high performance, traditionally managed by DBAs. Given the vast number of column/table combinations, recommending and building appropriate indexes/views is costly. Recently, learning-based approaches have emerged to automate the recommendation and maintenance of indexes and views.
+   Indexes and views are essential for high performance, traditionally managed by DBAs. Given the vast number of column/table combinations, recommending and building appropriate indexes/views is costly. Recently, learning-based approaches have emerged to automate the recommendation and maintenance of indexes and views.
 
-3.  **SQL Rewriter**
+3. **SQL Rewriter**
 
-    Many SQL programmers struggle to write high-quality queries, necessitating rewrites for performance improvement. For example, nested queries may be rewritten as joins for optimization. Existing methods use rule-based strategies, relying on predefined rules, which are limited by the quality and scalability of the rules. Deep reinforcement learning can be used to select and apply rules effectively.
+   Many SQL programmers struggle to write high-quality queries, necessitating rewrites for performance improvement. For example, nested queries may be rewritten as joins for optimization. Existing methods use rule-based strategies, relying on predefined rules, which are limited by the quality and scalability of the rules. Deep reinforcement learning can be used to select and apply rules effectively.
 
 ### 5.20.2 Learning-based Database Optimization
 
-1.  **Cardinality/Cost Estimation**
+1. **Cardinality/Cost Estimation**
 
-    Traditional database optimizers struggle to capture correlations between different columns/tables, leading to suboptimal cost and cardinality estimations. Recently, deep learning techniques have been proposed to improve these estimations by using neural networks to better capture correlations.
+   Traditional database optimizers struggle to capture correlations between different columns/tables, leading to suboptimal cost and cardinality estimations. Recently, deep learning techniques have been proposed to improve these estimations by using neural networks to better capture correlations.
 
-2.  **Join Order Selection**
+2. **Join Order Selection**
 
-    SQL queries can have millions or even billions of possible execution plans. Efficiently finding a good plan is crucial, but traditional optimizers struggle with large tables due to the high cost of exploring vast plan spaces. Deep reinforcement learning methods have been developed to automatically select efficient plans.
+   SQL queries can have millions or even billions of possible execution plans. Efficiently finding a good plan is crucial, but traditional optimizers struggle with large tables due to the high cost of exploring vast plan spaces. Deep reinforcement learning methods have been developed to automatically select efficient plans.
 
-3.  **End-to-End Optimizer**
+3. **End-to-End Optimizer**
 
-    A comprehensive optimizer must consider cost/cardinality estimation, join order, indexes, and views. Learning-based optimizers use deep neural networks to optimize SQL queries holistically, improving overall query performance.
+   A comprehensive optimizer must consider cost/cardinality estimation, join order, indexes, and views. Learning-based optimizers use deep neural networks to optimize SQL queries holistically, improving overall query performance.
 
 ### 5.20.3 Learning-based Database Design
 
@@ -534,7 +534,7 @@ Adaptability is a major challenge, including adapting to dynamic data updates, d
 -   How to adapt a model across different databases?
 -   How to support dynamic data updates?
 
-Model convergence is crucial. If a model doesn¡¯t converge, alternative solutions are needed to avoid delays and inaccuracies, such as in knob tuning where non-converged models can¡¯t provide reliable online suggestions.
+Model convergence is crucial. If a model doesn't converge, alternative solutions are needed to avoid delays and inaccuracies, such as in knob tuning where non-converged models can't provide reliable online suggestions.
 
 Traditional OLAP focuses on relational data analytics, but big data introduces new types like graph, time-series, and spatial data. New techniques are required to analyze these multi-model data types and integrate AI with DB techniques for enhanced analytics, such as image analysis.
 
@@ -546,7 +546,7 @@ Integrating AI into MySQL offers many impactful opportunities and is a primary f
 
 ## 5.21 How MySQL Internals Work in a Pipeline Fashion?
 
-Database engines like MySQL excel at medium concurrency, interleaving the execution of many transactions, most of which are idle at any given moment [3]. However, as the number of cores per chip increases with Moore¡¯s law, MySQL must exploit high parallelism to benefit from new hardware. Despite high concurrency in workloads, internal bottlenecks often prevent MySQL from achieving the needed parallelism.
+Database engines like MySQL excel at medium concurrency, interleaving the execution of many transactions, most of which are idle at any given moment [3]. However, as the number of cores per chip increases with Moore's law, MySQL must exploit high parallelism to benefit from new hardware. Despite high concurrency in workloads, internal bottlenecks often prevent MySQL from achieving the needed parallelism.
 
 MySQL's internal operations follow a pipelining approach, where each component functions methodically. To ensure correctness, MySQL uses latches and locks to prevent interference between concurrent operations. For crash-safe recovery, MySQL employs mechanisms like redo log, undo log, idempotence, and double write.
 
@@ -566,7 +566,7 @@ In high-conflict scenarios, linear scalability of throughput is unachievable. Ho
 
 Subsequently, the significance of supporting high concurrency specifically for TPC-C testing is analyzed. The figure below illustrates the relationship between throughput and concurrency for MySQL 5.7.39 under a 1ms thinking time scenario. In this context, 1ms thinking time means the user waits 1ms before sending the next request after receiving the response from the previous one.
 
-<img src="media\image-20240829092027870.png" alt="image-20240829092027870" style="zoom:150%;" />
+<img src="media/image-20240829092027870.png" alt="image-20240829092027870" style="zoom:150%;" />
 
 Figure 5-15. MySQL 5.7.39 pool scalability with 1ms thinking time.
 
@@ -574,7 +574,7 @@ From the figure, it can be observed that under a 1ms thinking time scenario, the
 
 The following figure shows the relationship between throughput and concurrency for improved MySQL 8.0.27 under the same 1ms thinking time scenario:
 
-<img src="media\image-20240829092050429.png" alt="image-20240829092050429" style="zoom:150%;" />
+<img src="media/image-20240829092050429.png" alt="image-20240829092050429" style="zoom:150%;" />
 
 Figure 5-16. Excellent scalability of improved MySQL 8.0.27 with 1ms thinking time.
 
@@ -584,7 +584,7 @@ High concurrency support in MySQL is not only crucial for scenarios with thinkin
 
 The following figure illustrates the relationship between throughput and concurrency for improved MySQL 8.0.27 under different network latency scenarios.
 
-<img src="media\image-20240829092158912.png" alt="image-20240829092158912" style="zoom:150%;" />
+<img src="media/image-20240829092158912.png" alt="image-20240829092158912" style="zoom:150%;" />
 
 Figure 5-17. Excellent scalability of improved MySQL 8.0.27 under different network latencies.
 
@@ -596,7 +596,7 @@ Therefore, enhancing MySQL's scalability is highly meaningful. In low-conflict s
 
 First, let's examine the scalability of asynchronous replication. The following figure illustrates the relationship between throughput and concurrency for both a standalone MySQL instance and asynchronous replication.
 
-<img src="media\image-20240829092329794.png" alt="image-20240829092329794" style="zoom:150%;" />
+<img src="media/image-20240829092329794.png" alt="image-20240829092329794" style="zoom:150%;" />
 
 Figure 5-18. Excellent scalability of MySQL asynchronous replication.
 
@@ -604,7 +604,7 @@ From the figure, it can be seen that with asynchronous replication, the MySQL se
 
 Let's now examine the scalability of semisynchronous replication. For example, the following figure illustrates the relationship between throughput and concurrency for semisynchronous replication.
 
-<img src="media\image-20240829092612681.png" alt="image-20240829092612681" style="zoom:150%;" />
+<img src="media/image-20240829092612681.png" alt="image-20240829092612681" style="zoom:150%;" />
 
 Figure 5-19. Poor scalability of MySQL semisynchronous replication.
 
@@ -612,13 +612,13 @@ From the figure, it is clear that the throughput of semisynchronous replication 
 
 Finally, let's examine the scalability of Group Replication. Before delving into that, it's important to understand the performance drawbacks of state machine replication [41], as explained below:
 
-*However, the communication and synchronization cost of agreement entails that state-machine replication adds a considerable overhead to the system¡¯s performance, i.e., typical state-machine replication request rates are lower than the request rates of non-replicated systems.*
+*However, the communication and synchronization cost of agreement entails that state-machine replication adds a considerable overhead to the system's performance, i.e., typical state-machine replication request rates are lower than the request rates of non-replicated systems.*
 
 Subsequently, the maximum scalability of Group Replication is tested, including the implementation of transaction throttling mechanisms to ensure that only a specified number of threads can access the transaction system.
 
 The following figure shows the relationship between Group Replication throughput and concurrency:
 
-<img src="media\image-20240829092656320.png" alt="image-20240829092656320" style="zoom:150%;" />
+<img src="media/image-20240829092656320.png" alt="image-20240829092656320" style="zoom:150%;" />
 
 Figure 5-20. Excellent scalability of improved Group Replication with transaction throttling mechanisms.
 
@@ -634,7 +634,7 @@ In addition to the commonly used GDB debugging, another approach is to use loggi
 
 Besides the methods mentioned above, MySQL itself also provides several debugging solutions, which are described as follows:
 
-1£©MySQL is compiled with debug mode enabled, and trace output can be added in the command terminal (refer to the example below).
+1ï¼‰MySQL is compiled with debug mode enabled, and trace output can be added in the command terminal (refer to the example below).
 
 ```
 set global debug= 'd:T:t:i:o,/tmp/mysql.trace';
@@ -646,7 +646,7 @@ Executing specific SQL statements will output MySQL's internal function call rel
 
 Trace information is very helpful for understanding how MySQL operates, but this method is only suitable for scenarios with very low traffic volume.
 
-2£©The Performance Schema collects statistics on various types of information, including memory usage information, locks, and statistics on condition variables, among others.
+2ï¼‰The Performance Schema collects statistics on various types of information, including memory usage information, locks, and statistics on condition variables, among others.
 
 ![](media/fcbcd21ab48a370aa550ce594ade1794.png)
 
@@ -658,7 +658,7 @@ Using the case of optimizing lock-sys as an example, this section evaluates the 
 
 First, use SysBench's standard read/write tests to evaluate the optimization of lock-sys.
 
-<img src="media\image-20240829092940314.png" alt="image-20240829092940314" style="zoom:150%;" />
+<img src="media/image-20240829092940314.png" alt="image-20240829092940314" style="zoom:150%;" />
 
 Figure 5-21. Comparison of SysBench read-write tests before and after lock-sys optimization.
 
@@ -666,7 +666,7 @@ From the figure, it can be observed that after optimization, the overall perform
 
 Next, using BenchmarkSQL to test this optimization, the results are shown in the following figure.
 
-<img src="media\image-20240829092959775.png" alt="image-20240829092959775" style="zoom:150%;" />
+<img src="media/image-20240829092959775.png" alt="image-20240829092959775" style="zoom:150%;" />
 
 Figure 5-22. Comparison of BenchmarkSQL tests before and after lock-sys optimization.
 

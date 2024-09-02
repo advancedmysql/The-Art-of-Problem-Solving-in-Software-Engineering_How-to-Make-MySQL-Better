@@ -16,18 +16,19 @@ These design flaws are typically only effectively discovered through exposure to
 
 Below is Meta company engineers' view on Group Replication [42]:
 
-*Another significant and deliberate choice was to not use Group Replication offered by MySQL 5.7 onwards. While there are significant advancements offered by the protocol (such as the multi-primary mode), using Group Replication in our deployment presented significant challenges. It is based on a variant of Paxos which does not use a persistent log. Entries are written to the log only after they are considered committed via in-memory consensus rounds. The leader election algorithm is local and deterministic. It also doesn¡¯t consider lag when choosing a new leader and brief network blips trigger a computationally expensive recovery algorithm. This option could have worked but not without excessive engineering effort to fix the drawbacks.*
+*Another significant and deliberate choice was to not use Group Replication offered by MySQL 5.7 onwards. While there are significant advancements offered by the protocol (such as the multi-primary mode), using Group Replication in our deployment presented significant challenges. It is based on a variant of Paxos which does not use a persistent log. Entries are written to the log only after they are considered committed via in-memory consensus rounds. The leader election algorithm is local and deterministic. It also doesn't consider lag when choosing a new leader and brief network blips trigger a computationally expensive recovery algorithm. This option could have worked but not without excessive engineering effort to fix the drawbacks.*
 
 The main problem with Group Replication, as outlined in the above content, is the lack of persistence in Paxos messages. The initial design background includes:
 
-1.  Suboptimal SSD hardware performance.
-2.  Paxos log persistence not meeting the requirements for Group Replication with multiple primaries.
+1. Suboptimal SSD hardware performance.
 
-    Without persistent storage in certification databases, Group Replication cannot use Paxos message persistence for crash recovery. After MySQL restarts, there is no corresponding certification database, making continued processing of persisted Paxos messages prone to inconsistent states.
+2. Paxos log persistence not meeting the requirements for Group Replication with multiple primaries.
+
+   Without persistent storage in certification databases, Group Replication cannot use Paxos message persistence for crash recovery. After MySQL restarts, there is no corresponding certification database, making continued processing of persisted Paxos messages prone to inconsistent states.
 
 Based on Group Replication single-primary mode using SSDs, SysBench write-only tests were used to examine the impact of adding Paxos persistence on throughput. Please refer to the specific figure below:
 
-<img src="media\image-20240829105418671.png" alt="image-20240829105418671" style="zoom:150%;" />
+<img src="media/image-20240829105418671.png" alt="image-20240829105418671" style="zoom:150%;" />
 
 Figure 9-1. Performance overhead of Paxos log persistence in SysBench write-only tests.
 
@@ -35,13 +36,13 @@ From the figure, it can be seen that after adding Paxos persistence, there is a 
 
 Next, let's examine the comparative response times.
 
-<img src="media\image-20240829105441723.png" alt="image-20240829105441723" style="zoom:150%;" />
+<img src="media/image-20240829105441723.png" alt="image-20240829105441723" style="zoom:150%;" />
 
 Figure 9-2. After adding Paxos log persistence, the average response time in SysBench write-only tests increased.
 
 The figure shows response times for 50 to 200 concurrent scenarios. The increase in average response time with Paxos log persistence is acceptable. SysBench write-only tests stress Group Replication significantly, while TPC-C tests, due to their read operations, reduce the write pressure on Group Replication. For comparisons based on Group Replication in single-primary mode, using SSDs, and BenchmarkSQL for TPC-C throughput at various concurrency levels, please refer to the figure below.
 
-<img src="media\image-20240829105506722.png" alt="image-20240829105506722" style="zoom:150%;" />
+<img src="media/image-20240829105506722.png" alt="image-20240829105506722" style="zoom:150%;" />
 
 Figure 9-3. Performance overhead of Paxos log persistence in BenchmarkSQL tests.
 
@@ -106,7 +107,7 @@ Figure 9-4. A bottleneck revealed in hash table operations.
 
 The figure reveals a bottleneck in operating the hash table. Cleaning the certification database is akin to garbage collection; transactions must wait while this cleaning occurs, involving extensive memory deallocation. Queueing theory indicates that this latency significantly impacts transaction processing speed. The figure below illustrates the relationship between throughput and concurrency for Group Replication and semisynchronous replication.
 
-<img src="media\image-20240829105659262.png" alt="image-20240829105659262" style="zoom:150%;" />
+<img src="media/image-20240829105659262.png" alt="image-20240829105659262" style="zoom:150%;" />
 
 Figure 9-5. Performance comparison between semisynchronous replication and Group Replication.
 
@@ -191,11 +192,11 @@ When there are no theoretical problems with the Mencius algorithm, introducing a
 
 1.  **High Maintenance Cost**: Maintaining and testing two sets of codebases doubles the workload for this part.
 2.  **Regression Testing Challenges**: In practice, the new algorithm has led to several regression problems, some of which are difficult to address.
-3.  **Partial Problem-Solving**: The new algorithm may only partially address the requirements. In Group Replication¡¯s single-primary mode, it might not be universally applicable, as consistent read and write operations require all nodes to continuously communicate information.
+3.  **Partial Problem-Solving**: The new algorithm may only partially address the requirements. In Group Replication's single-primary mode, it might not be universally applicable, as consistent read and write operations require all nodes to continuously communicate information.
 
 ## 9.3 The Specific Implementation of Paxos Skip Optimization
 
-First, let¡¯s investigate the performance problems of the MySQL Mencius algorithm implementation. The following figure illustrates the network interaction status when the Mencius algorithm operates stably with a network delay of 10ms:
+First, let's investigate the performance problems of the MySQL Mencius algorithm implementation. The following figure illustrates the network interaction status when the Mencius algorithm operates stably with a network delay of 10ms:
 
 ![](media/77d0c0bdc5ce8574c6ad319864abb032.png)
 
@@ -203,11 +204,11 @@ Figure 9-6. Insights into the Mencius protocol from packet capture data.
 
 The green box in the figure indicates that the time interval between two consecutive Paxos instances reached 24ms. This suggests that the Mencius algorithm in MySQL is not aligned with a single Round-trip Time (RTT) in its implementation.
 
-Next, let¡¯s refer to the Mencius algorithm paper *"State Machine Replication for Wide Area Networks"* [54]. The specific details of the network testing environment are as follows:
+Next, let's refer to the Mencius algorithm paper *"State Machine Replication for Wide Area Networks"* [54]. The specific details of the network testing environment are as follows:
 
 ![](media/185beb2c6e0524d93abde3b25ecedc61.png)
 
-From the green box, it is evident that the network latency tested in the paper is RTT=100ms. Let¡¯s now examine the relevant information on Paxos processing provided in the paper.
+From the green box, it is evident that the network latency tested in the paper is RTT=100ms. Let's now examine the relevant information on Paxos processing provided in the paper.
 
 ![](media/f67a3249ad8b040417f195c3ca11f795.png)
 
@@ -231,11 +232,11 @@ In the specific implementation, the impact of pipelining must also be considered
 
 Finally, under a network delay scenario of 10ms, evaluating the effectiveness of Paxos skip optimization shows significant benefits. Here is a comparison of TPC-C throughput at different concurrency levels before and after Paxos skip optimization:
 
-<img src="media\image-20240829110009589.png" alt="image-20240829110009589" style="zoom:150%;" />
+<img src="media/image-20240829110009589.png" alt="image-20240829110009589" style="zoom:150%;" />
 
 Figure 9-9. Impact of Paxos skip optimization on BenchmarkSQL tests with 10ms latency.
 
-From the figure, it¡¯s clear that Paxos skip optimization significantly improves performance with a 10ms network latency. Extensive TPC-C testing confirms that this optimization improves performance for Group Replication, whether using a single primary or multiple primaries, and supports consistent reads and writes.
+From the figure, it's clear that Paxos skip optimization significantly improves performance with a 10ms network latency. Extensive TPC-C testing confirms that this optimization improves performance for Group Replication, whether using a single primary or multiple primaries, and supports consistent reads and writes.
 
 Paxos skip optimization reduces code complexity by an order of magnitude compared to Multi-Paxos implementations with a single leader. It also minimizes regression testing problems and simplifies maintenance.
 
@@ -416,7 +417,7 @@ The batch write mechanism, tested with TPC-C benchmarks, initially improved disk
 
 The figure below compares TPC-C throughput against concurrency levels in different modes. The deployment setup is as follows: Both MySQL primary and secondary are deployed on the same machine, with NUMA binding isolation to prevent computational interference. Separate SSDs are used for the primary and secondary to ensure no I/O operation interference.
 
-<img src="media\image-20240829110334937.png" alt="image-20240829110334937" style="zoom:150%;" />
+<img src="media/image-20240829110334937.png" alt="image-20240829110334937" style="zoom:150%;" />
 
 Figure 9-17. Effects of the new Group Replication single-primary mode design.
 
@@ -438,21 +439,21 @@ Group Replication's failure detection mechanism identifies and expels non-commun
 
 After understanding the above content, let's analyze common types of view change events:
 
-1.  **Node is Killed**
+1. **Node is Killed**
 
-    In a Linux system, when a node is killed, the TCP layer typically sends a reset (RST) packet to notify other nodes of the connection problem. Paxos communication can use this RST packet to identify the node¡¯s termination. However, MySQL does not handle this specifically and relies on the standard timeout mechanism.
+   In a Linux system, when a node is killed, the TCP layer typically sends a reset (RST) packet to notify other nodes of the connection problem. Paxos communication can use this RST packet to identify the node's termination. However, MySQL does not handle this specifically and relies on the standard timeout mechanism.
 
-2.  **Node is Network-Partitioned**
+2. **Node is Network-Partitioned**
 
-    Detecting whether a node is network-partitioned or simply slow is challenging. In such cases, timeout mechanisms are used, as it is difficult to definitively distinguish between these situations.
+   Detecting whether a node is network-partitioned or simply slow is challenging. In such cases, timeout mechanisms are used, as it is difficult to definitively distinguish between these situations.
 
-3.  **Node is Gracefully Taken Offline**
+3. **Node is Gracefully Taken Offline**
 
-    Normally, informing other nodes by sending a command should be straightforward. However, MySQL has not managed this aspect well.
+   Normally, informing other nodes by sending a command should be straightforward. However, MySQL has not managed this aspect well.
 
-4.  **Adding a new node to the cluster**
+4. **Adding a new node to the cluster**
 
-    Adding a new node requires consensus and involves a final installation view synchronization. Although some performance fluctuations are expected, severe fluctuations indicate poor handling of the node addition process.
+   Adding a new node requires consensus and involves a final installation view synchronization. Although some performance fluctuations are expected, severe fluctuations indicate poor handling of the node addition process.
 
 Whenever a change that needs replication occurs, the group must achieve consensus. This applies to regular transactions, group membership changes, and certain internal messaging to maintain group consistency. Consensus requires a majority of group members to agree on a decision. Without a majority, the group cannot progress and blocks because it cannot secure a quorum.
 
@@ -464,7 +465,7 @@ After understanding the working mechanism of view change, one can then examine h
 
 In cases of node failure or network partitioning, MySQL's handling approach is similar. Testing was conducted with one MySQL secondary killed. Details of the test can be seen in the following figure.
 
-<img src="media\image-20240829110513812.png" alt="image-20240829110513812" style="zoom:150%;" />
+<img src="media/image-20240829110513812.png" alt="image-20240829110513812" style="zoom:150%;" />
 
 Figure 9-19. Significant throughput fluctuations when a node is killed.
 
@@ -472,7 +473,7 @@ From the figure, it is evident that when the MySQL secondary is killed, the MySQ
 
 When a MySQL secondary is gracefully taken offline, the throughput typically behaves as follows:
 
-<img src="media\image-20240829110533157.png" alt="image-20240829110533157" style="zoom:150%;" />
+<img src="media/image-20240829110533157.png" alt="image-20240829110533157" style="zoom:150%;" />
 
 Figure 9-20. Throughput drops to zero at intervals when a node is shut down.
 
@@ -480,7 +481,7 @@ The figure shows that allowing a MySQL node to be gracefully taken offline cause
 
 What will happen when adding a MySQL node in Group Replication?
 
-<img src="media\image-20240829110551420.png" alt="image-20240829110551420" style="zoom:150%;" />
+<img src="media/image-20240829110551420.png" alt="image-20240829110551420" style="zoom:150%;" />
 
 Figure 9-21. Throughput drop of approximately 10 seconds when a node is added.
 
@@ -490,11 +491,11 @@ To address these problems in Group Replication, improving the probing mechanism 
 
 Regarding the probe mechanism, the following improvements have been made.
 
-1.  **Ensure Fair Execution for Probe Coroutines**
+1. **Ensure Fair Execution for Probe Coroutines**
 
-    During the processing of large transactions, the Paxos protocol handles substantial writeset data, monopolizing the processing resources of the single-threaded coroutine model. This leaves limited opportunities for the probe detection coroutine to update critical information. As a result, outdated probe data can lead to incorrect judgments, as observed in section 1.2.5.
+   During the processing of large transactions, the Paxos protocol handles substantial writeset data, monopolizing the processing resources of the single-threaded coroutine model. This leaves limited opportunities for the probe detection coroutine to update critical information. As a result, outdated probe data can lead to incorrect judgments, as observed in section 1.2.5.
 
-    To address this, the solution is to amortize data processing by splitting large transactions into multiple stages. This approach ensures that the probe detection coroutine gets more equitable opportunities to execute and update information promptly, enhancing the accuracy of fault detection.
+   To address this, the solution is to amortize data processing by splitting large transactions into multiple stages. This approach ensures that the probe detection coroutine gets more equitable opportunities to execute and update information promptly, enhancing the accuracy of fault detection.
 
 2. **Improved Wakeup Delay Function**
 
@@ -542,9 +543,9 @@ Regarding the probe mechanism, the following improvements have been made.
            TIMED_TASK_WAIT(&ep->p->rv, ep->delay = wakeup_delay(ep->delay));
            ...
    ```
-   
+
    In the function *get_xcom_message*, the *wakeup_delay_for_perf* function is used, as shown in the code below:
-   
+
    ```c++
      DECL_ENV
      ...
@@ -566,16 +567,16 @@ Regarding the probe mechanism, the following improvements have been made.
      TASK_END;
    }
    ```
-   
+
    In the *wakeup_delay_for_perf* function, a more aggressive strategy can be employed, such as reducing the waiting time further.
-   
-4.  Incorporate the Round-trip time (RTT) from the network into the wakeup_delay.
 
-    The purpose of this is to enhance the accuracy of network probing activities.
+4. Incorporate the Round-trip time (RTT) from the network into the wakeup_delay.
 
-5.  Distinguish between node being killed and network partition.
+   The purpose of this is to enhance the accuracy of network probing activities.
 
-    In Linux systems, when a node is killed, TCP sends reset packets to the other nodes in the cluster, helping distinguish between node terminations and network partition faults. Integrating information about abnormal node terminations into Paxos' decision-making logic allows for more accurate judgments, addressing the problem of prolonged throughput drops experienced during abrupt node terminations.
+5. Distinguish between node being killed and network partition.
+
+   In Linux systems, when a node is killed, TCP sends reset packets to the other nodes in the cluster, helping distinguish between node terminations and network partition faults. Integrating information about abnormal node terminations into Paxos' decision-making logic allows for more accurate judgments, addressing the problem of prolonged throughput drops experienced during abrupt node terminations.
 
 With the implementation of the above mechanism, probing accuracy has been significantly enhanced. Combined with the forthcoming degradation mechanism, this ensures relatively stable throughput even under abnormal conditions.
 
@@ -587,23 +588,23 @@ One drawback of the degradation mechanism is that it increases network interacti
 
 The following figure compares the throughput of SysBench read-write tests before and after improvements, following node being killed.
 
-<img src="media\image-20240829110903709.png" alt="image-20240829110903709" style="zoom:150%;" />
+<img src="media/image-20240829110903709.png" alt="image-20240829110903709" style="zoom:150%;" />
 
 Figure 9-22. Significant throughput improvement observed when a node is killed.
 
-From the figure, it¡¯s evident that the native Group Replication experiences prolonged throughput drops, which are unacceptable to users. In the improved Group Replication, throughput decreases from 20,000 to 14,000 transactions per second due to the degradation process. Although this decrease is noticeable, users consider it acceptable as it represents a significant improvement over the native Group Replication.
+From the figure, it's evident that the native Group Replication experiences prolonged throughput drops, which are unacceptable to users. In the improved Group Replication, throughput decreases from 20,000 to 14,000 transactions per second due to the degradation process. Although this decrease is noticeable, users consider it acceptable as it represents a significant improvement over the native Group Replication.
 
-Let¡¯s continue to examine the throughput comparison over time before and after improvements following the normal shutdown of a particular node, as shown in the following figure:
+Let's continue to examine the throughput comparison over time before and after improvements following the normal shutdown of a particular node, as shown in the following figure:
 
-<img src="media\image-20240829110922449.png" alt="image-20240829110922449" style="zoom:150%;" />
+<img src="media/image-20240829110922449.png" alt="image-20240829110922449" style="zoom:150%;" />
 
 Figure 9-23. Significant throughput improvement observed when a node is closed.
 
-From the figure, it¡¯s clear that the improved Group Replication provides much more stable throughput compared to the native version. Although minor fluctuations occur during view changes due to internal synchronization, the improved Group Replication's throughput performance is deemed acceptable by users. In contrast, the frequent throughput drops in the native Group Replication are considered unacceptable.
+From the figure, it's clear that the improved Group Replication provides much more stable throughput compared to the native version. Although minor fluctuations occur during view changes due to internal synchronization, the improved Group Replication's throughput performance is deemed acceptable by users. In contrast, the frequent throughput drops in the native Group Replication are considered unacceptable.
 
 Once again, comparing the throughput over time before and after improvements in the scenario of adding a MySQL secondary to the cluster, as shown in the following figure:
 
-<img src="media\image-20240829110943245.png" alt="image-20240829110943245" style="zoom:150%;" />
+<img src="media/image-20240829110943245.png" alt="image-20240829110943245" style="zoom:150%;" />
 
 Figure 9-24. Significant throughput improvement observed when adding a node to cluster.
 
@@ -619,7 +620,7 @@ XCom, the group communication engine for Group Replication, includes a cache for
 
 MySQL uses dynamic memory allocation to adjust the XCom cache size. While this approach appears advantageous, testing revealed that the XCom cache led to performance fluctuations.
 
-Let¡¯s examine the expand_lru function responsible for XCom cache memory allocation, as detailed in the code below:
+Let's examine the expand_lru function responsible for XCom cache memory allocation, as detailed in the code below:
 
 ```c++
 static void expand_lru() {
@@ -634,7 +635,7 @@ static void expand_lru() {
 }
 ```
 
-The *expand_lru* function allocates memory based on the number of *BUCKETS*. A large number of *BUCKETS* can lead to significant overhead. Next, let¡¯s determine the specific size of *BUCKETS*.
+The *expand_lru* function allocates memory based on the number of *BUCKETS*. A large number of *BUCKETS* can lead to significant overhead. Next, let's determine the specific size of *BUCKETS*.
 
 The definition of *BUCKETS* is as follows.
 
@@ -674,7 +675,7 @@ Figure 9-25. Overhead of 250,000 memory allocation calls on a typical machine.
 
 The 250,000 memory allocation calls took 112ms. Additionally, the XCom cache experiences batch memory release problems, which can also cause performance delays. While the duration of these delays varies with machine performance, delays of tens of milliseconds are typical. Such fluctuations can lead to unexpected blocking of many user commits for tens of milliseconds, significantly impacting the user experience.
 
-To address this problem, various configuration options¡ªhigh-end, mid-range, and low-end¡ªhave been provided. These options involve selecting appropriate sizes for fixed static arrays, which eliminate the problems associated with batch memory allocation and release. The benefits of this new mechanism include:
+To address this problem, various configuration optionsï¿½high-end, mid-range, and low-endï¿½have been provided. These options involve selecting appropriate sizes for fixed static arrays, which eliminate the problems associated with batch memory allocation and release. The benefits of this new mechanism include:
 
 1.  Cache-friendly with high performance.
 2.  Elimination of performance fluctuations on the XCom cache side.
@@ -685,7 +686,7 @@ In Group Replication's single-primary mode, a mechanism was implemented to quick
 
 The following figure shows the relationship between the throughput of SysBench read/write tests over time in a Group Replication multi-primary scenario.
 
-<img src="media\image-20240829111514798.png" alt="image-20240829111514798" style="zoom:150%;" />
+<img src="media/image-20240829111514798.png" alt="image-20240829111514798" style="zoom:150%;" />
 
 Figure 9-26. Performance fluctuation in Group Replication.
 
@@ -701,7 +702,7 @@ Based on extensive practice and experience, addressing the problem effectively i
 
 By implementing these steps, it becomes feasible to reduce the cleaning cycle from 60 seconds to sub-second intervals. This approach enables each cleaning operation to manage smaller data volumes, thereby reducing sudden performance drops and stabilizing throughput. The following figure shows the relationship between SysBench read/write test throughput over time after applying the amortization approach.
 
-<img src="media\image-20240829111542163.png" alt="image-20240829111542163" style="zoom:150%;" />
+<img src="media/image-20240829111542163.png" alt="image-20240829111542163" style="zoom:150%;" />
 
 Figure 9-27. Eliminated performance fluctuations in improved Group Replication.
 
@@ -793,7 +794,7 @@ In practical applications, it is not recommended to use strong consistency write
 
 This book prefers and recommends mechanisms based on Paxos log persistence. These mechanisms not only offer lower and more predictable response times but also far surpass the scalability of the 'after' mechanism. The following figure compares the throughput of TPC-C with concurrency levels between the strong synchronization mechanism based on 'after' and the Paxos log persistence mechanism.
 
-<img src="media\image-20240829111619905.png" alt="image-20240829111619905" style="zoom:150%;" />
+<img src="media/image-20240829111619905.png" alt="image-20240829111619905" style="zoom:150%;" />
 
 Figure 9-29. Group Replication with Paxos Log Persistence vs. Strong Synchronization Mechanism.
 
@@ -807,7 +808,7 @@ A MySQL cluster can be deployed in various environments, and understanding the p
 
 The following figure compares the throughput of SysBench read/write tests with varying concurrency levels under different replication schemes in a 1ms network latency scenario:
 
-<img src="media\image-20240829111645952.png" alt="image-20240829111645952" style="zoom:150%;" />
+<img src="media/image-20240829111645952.png" alt="image-20240829111645952" style="zoom:150%;" />
 
 Figure 9-30. Throughput comparison of SysBench Read/Write tests with varying concurrency levels under different replication schemes at 1ms network latency.
 
@@ -817,7 +818,7 @@ Semisynchronous replication, on the other hand, processes events sequentially. S
 
 The following figure illustrates the comparison of response times for the 4 solutions across different concurrency levels.
 
-<img src="media\image-20240829111711642.png" alt="image-20240829111711642" style="zoom:150%;" />
+<img src="media/image-20240829111711642.png" alt="image-20240829111711642" style="zoom:150%;" />
 
 Figure 9-31. Response time comparison of SysBench Read/Write tests with varying concurrency levels under different replication schemes at 1ms network latency.
 
@@ -825,7 +826,7 @@ From the figure, it is clear that semisynchronous replication exhibits the worst
 
 When network latency is increased to 10ms, the following figure illustrates the specific performance comparisons:
 
-<img src="media\image-20240829111732678.png" alt="image-20240829111732678" style="zoom:150%;" />
+<img src="media/image-20240829111732678.png" alt="image-20240829111732678" style="zoom:150%;" />
 
 Figure 9-32. Throughput comparison of SysBench Read/Write tests with varying concurrency levels under different replication schemes at 10ms network latency.
 
@@ -835,7 +836,7 @@ In scenarios with long network latencies (10ms), the processing delay of MySQL s
 
 At the same time, a comparison was made among the 4 different solutions in terms of response time.
 
-<img src="media\image-20240829111753566.png" alt="image-20240829111753566" style="zoom:150%;" />
+<img src="media/image-20240829111753566.png" alt="image-20240829111753566" style="zoom:150%;" />
 
 Figure 9-33. Response time comparison of SysBench Read/Write tests with varying concurrency levels under different replication schemes at 10ms network latency.
 
@@ -845,7 +846,7 @@ From the figure, it is clear that at low concurrency levels, asynchronous replic
 
 In the same data center environment, TPC-C tests using BenchmarkSQL were performed to compare the throughput against concurrency levels for semisynchronous replication, Group Replication with Paxos log persistence, and asynchronous replication. Specific details are illustrated in the following figure:
 
-<img src="media\image-20240829111911455.png" alt="image-20240829111911455" style="zoom:150%;" />
+<img src="media/image-20240829111911455.png" alt="image-20240829111911455" style="zoom:150%;" />
 
 Figure 9-34. Throughput comparison of BenchmarkSQL tests with varying concurrency levels under different replication schemes.
 
@@ -859,7 +860,7 @@ The Paxos algorithm's dependence on majority agreement slows decision-making, as
 
 After reviewing the content, use the modified tpcc-mysql tool to compare the throughput between a standalone server and a Group Replication setup. This comparison will help assess the limits of Group Replication's capabilities.
 
-<img src="media\image-20240829111935904.png" alt="image-20240829111935904" style="zoom:150%;" />
+<img src="media/image-20240829111935904.png" alt="image-20240829111935904" style="zoom:150%;" />
 
 Figure 9-35. The limits of Group Replication's capabilities.
 
@@ -871,7 +872,7 @@ Involving most participants in each decision places a high load on the network b
 
 How does Group Replication's scalability fare with increasing numbers of nodes? Due to the underlying Paxos communication being based on a single-threaded model, adding more nodes theoretically weakens processing capability. In the same data center environment, cluster tests were conducted with 3 nodes, 5 nodes, 7 nodes, and 9 nodes as shown in the figure below:
 
-<img src="media\image-20240829111959287.png" alt="image-20240829111959287" style="zoom:150%;" />
+<img src="media/image-20240829111959287.png" alt="image-20240829111959287" style="zoom:150%;" />
 
 Figure 9-36. Scalability of Group Replication across different node configurations.
 

@@ -29,7 +29,7 @@ This improvement completely changed the previous mechanism and laid a solid foun
 
 ```c++
 commit 6be2fa0bdbbadc52cc8478b52b69db02b0eaff40
-Author: Pawe? Olchawa <pawel.olchawa@oracle.com>
+Author: Pawe≈Ç Olchawa <pawel.olchawa@oracle.com>
 Date:   Wed Feb 14 09:33:42 2018 +0100
     
     WL#10310 Redo log optimization: dedicated threads and concurrent log buffer.
@@ -75,7 +75,7 @@ The new mechanism employs dedicated threads to flush redo log files, supports co
 
 A test comparing TPC-C throughput with different levels of concurrency before and after optimization was conducted. Specific details are shown in the following figure:
 
-<img src="media\image-20240829094221268.png" alt="image-20240829094221268" style="zoom:150%;" />
+<img src="media/image-20240829094221268.png" alt="image-20240829094221268" style="zoom:150%;" />
 
 Figure 7-1. Impact of redo log optimization under different concurrency levels.
 
@@ -90,7 +90,7 @@ Implementing redo log optimization is highly challenging, and without it, achiev
 
 Extensive testing revealed that the optimizations performed well under low concurrency conditions and significantly accelerated the TPC-C data loading process. Specific details are shown in the following figure:
 
-<img src="media\image-20240829095452552.png" alt="image-20240829095452552" style="zoom:150%;" />
+<img src="media/image-20240829095452552.png" alt="image-20240829095452552" style="zoom:150%;" />
 
 Figure 7-2. Impact of redo log optimization for TPC-C data loading time.
 
@@ -98,7 +98,7 @@ The TPC-C data loading process involves large transactions of up to 100MB. Previ
 
 To assess the true value of this optimization, scalability enhancements were applied to MySQL 5.7.36. This process involved first applying the trx-sys patch, followed by the lock-sys patch, to evaluate the extent of throughput improvement. Specific details are shown in the following figure:
 
-<img src="media\image-20240829100209917.png" alt="image-20240829100209917" style="zoom:150%;" />
+<img src="media/image-20240829100209917.png" alt="image-20240829100209917" style="zoom:150%;" />
 
 Figure 7-3. Indirect impact of redo log optimization.
 
@@ -142,7 +142,7 @@ The figure clearly shows that the bottleneck lies in redo log writing. Without t
 
 Does redo log optimization currently have any side effects? Test data indicates that under low concurrency conditions, the number of flush operations increases significantly. Using SysBench read-write tests, the relationship between the average number of I/O flushes per transaction and concurrency was statistically analyzed. Specific details are shown in the following figure:
 
-<img src="media\image-20240829100245272.png" alt="image-20240829100245272" style="zoom:150%;" />
+<img src="media/image-20240829100245272.png" alt="image-20240829100245272" style="zoom:150%;" />
 
 Figure 7-6. Side effects of redo log optimization at low concurrency: more I/O flushes.
 
@@ -156,7 +156,7 @@ Lock-sys optimization is the second major improvement made in MySQL 8.0. The fol
 
 ```c++
 commit 1d259b87a63defa814e19a7534380cb43ee23c48
-Author: Jakub ?opusza®Ωski <jakub.lopuszanski@oracle.com>
+Author: Jakub ≈Åopusza≈Ñski <jakub.lopuszanski@oracle.com>
 Date:   Wed Feb 5 14:12:22 2020 +0100
     
     WL#10314 - InnoDB: Lock-sys optimization: sharded lock_sys mutex
@@ -184,7 +184,7 @@ Date:   Wed Feb 5 14:12:22 2020 +0100
 
 Sharding the global latch theoretically can significantly improve scalability under high concurrency situations. Based on the program before and after optimizing with lock-sys, using BenchmarkSQL to compare TPC-C throughput with concurrency, the specific results are as shown in the following figure:
 
-<img src="media\image-20240829100432417.png" alt="image-20240829100432417" style="zoom:150%;" />
+<img src="media/image-20240829100432417.png" alt="image-20240829100432417" style="zoom:150%;" />
 
 Figure 7-7. Impact of lock-sys optimization under different concurrency levels.
 
@@ -200,7 +200,7 @@ In MySQL 8.0, the global latch was initially split. A new latch was introduced f
 
 ```c++
 commit e66d48b0c73d5fec278f81784bd5697502990263
-Author: Pawe? Olchawa <pawel.olchawa@oracle.com>
+Author: Pawe≈Ç Olchawa <pawel.olchawa@oracle.com>
 Date:   Mon Mar 1 15:52:30 2021 +0100
     
     BUG#27933068 USE DIFFERENT MUTEX TO PROTECT TRX_SYS->SERIALISATION_LIST
@@ -227,7 +227,7 @@ Date:   Mon Mar 1 15:52:30 2021 +0100
 
 Based on this optimization before and after, using BenchmarkSQL to compare TPC-C throughput with concurrency, the specific results are shown in the following figure:
 
-<img src="media\image-20240829100937477.png" alt="image-20240829100937477" style="zoom:150%;" />
+<img src="media/image-20240829100937477.png" alt="image-20240829100937477" style="zoom:150%;" />
 
 Figure 7-8. Impact of latch splitting in trx-sys under different concurrency levels.
 
@@ -239,7 +239,7 @@ In MySQL 8.0, further scalability improvements are made to the trx-sys subsystem
 
 ```c++
 commit bc95476c0156070fd5cedcfd354fa68ce3c95bdb
-Author: Pawe? Olchawa <pawel.olchawa@oracle.com>
+Author: Pawe≈Ç Olchawa <pawel.olchawa@oracle.com>
 Date:   Tue May 25 18:12:20 2021 +0200
     
     BUG#32832196 SINGLE RW_TRX_SET LEADS TO CONTENTION ON TRX_SYS MUTEX
@@ -254,12 +254,12 @@ Date:   Tue May 25 18:12:20 2021 +0200
        to do so (to show there is no possible race condition).
     
     RB: 26314
-    Reviewed-by: Jakub ?opusza®Ωski jakub.lopuszanski@oracle.com
+    Reviewed-by: Jakub ≈Åopusza≈Ñski jakub.lopuszanski@oracle.com
 ```
 
 Based on these optimizations before and after, using BenchmarkSQL to compare TPC-C throughput with concurrency, the specific results are as shown in the following figure:
 
-<img src="media\image-20240829101111288.png" alt="image-20240829101111288" style="zoom:150%;" />
+<img src="media/image-20240829101111288.png" alt="image-20240829101111288" style="zoom:150%;" />
 
 Figure 7-9. Impact of latch sharding in trx-sys under different concurrency levels.
 
@@ -285,13 +285,13 @@ This WL improves the implementation of CATS to the point where the FCFS will be 
 
 Based on the above prompt, restoring the FIFO lock scheduling algorithm in MySQL is straightforward. Subsequently, throughput was tested using SysBench Pareto distribution scenarios with varying concurrency levels in the improved MySQL 8.0.32. Details are provided in the following figure.
 
-<img src="media\image-20240829101222447.png" alt="image-20240829101222447" style="zoom:150%;" />
+<img src="media/image-20240829101222447.png" alt="image-20240829101222447" style="zoom:150%;" />
 
 Figure 7-10. Impact of CATS on throughput at various concurrency levels.
 
 From the figure, it can be seen that the throughput of the CATS algorithm significantly exceeds that of the FIFO algorithm. To compare these two algorithms in terms of user response time, refer to the following figure.
 
-<img src="media\image-20240829101254601.png" alt="image-20240829101254601" style="zoom:150%;" />
+<img src="media/image-20240829101254601.png" alt="image-20240829101254601" style="zoom:150%;" />
 
 Figure 7-11. Impact of CATS on response time at various concurrency levels.
 
@@ -299,7 +299,7 @@ From the figure, it can be seen that the CATS algorithm provides significantly b
 
 Furthermore, comparing deadlock error statistics during the Pareto distribution test process, details can be found in the following figure.
 
-<img src="media\image-20240829101332034.png" alt="image-20240829101332034" style="zoom:150%;" />
+<img src="media/image-20240829101332034.png" alt="image-20240829101332034" style="zoom:150%;" />
 
 Figure 7-12. Impact of CATS on ignored errors at various concurrency levels.
 
@@ -375,7 +375,7 @@ void Deadlock_notifier::notify(const ut::vector<const trx_t *> &trxs_on_cycle,
 }
 ```
 
-From the code analysis, it°Øs clear that deadlocks lead to a substantial amount of log output. The ignored errors observed during testing are connected to these deadlocks. The CATS algorithm helps reduce the number of ignored errors, resulting in fewer log outputs. This problem can be consistently reproduced.
+From the code analysis, it's clear that deadlocks lead to a substantial amount of log output. The ignored errors observed during testing are connected to these deadlocks. The CATS algorithm helps reduce the number of ignored errors, resulting in fewer log outputs. This problem can be consistently reproduced.
 
 Given this context, several considerations emerge:
 
@@ -384,7 +384,7 @@ Given this context, several considerations emerge:
 
 Remove all logs from the **Deadlock_notifier::notify** function, recompile MySQL, and perform SysBench read-write tests under Pareto distribution. Details are provided in the following figure:
 
-<img src="media\image-20240829101534550.png" alt="image-20240829101534550" style="zoom:150%;" />
+<img src="media/image-20240829101534550.png" alt="image-20240829101534550" style="zoom:150%;" />
 
 Figure 7-18. Impact of CATS on throughput at various concurrency levels for improved MySQL 8.0.27 after eliminating interference.
 
@@ -392,7 +392,7 @@ From the figure, it is evident that there has been a significant change in throu
 
 Let's conduct performance comparison tests on the improved MySQL 8.0.32, with deadlock log interference removed, using Pareto distribution.
 
-<img src="media\image-20240829101612063.png" alt="image-20240829101612063" style="zoom:150%;" />
+<img src="media/image-20240829101612063.png" alt="image-20240829101612063" style="zoom:150%;" />
 
 Figure 7-19. Impact of CATS on throughput at various concurrency levels for improved MySQL 8.0.32 after eliminating interference.
 
@@ -400,13 +400,13 @@ From the figure, it is evident that removing the interference results in only a 
 
 Using the same 32 warehouses as in the CATS algorithm paper, TPC-C tests were conducted at various concurrency levels. MySQL was based on the improved MySQL 8.0.27, and BenchmarkSQL was modified to support 100 concurrent transactions per warehouse.
 
-<img src="media\image-20240829101632142.png" alt="image-20240829101632142" style="zoom:150%;" />
+<img src="media/image-20240829101632142.png" alt="image-20240829101632142" style="zoom:150%;" />
 
 Figure 7-20. Impact of CATS on throughput at different concurrency levels under NUMA after eliminating interference, according to the CATS paper.
 
-From the figure, it°Øs evident that the CATS algorithm performs worse than the FIFO algorithm. To avoid NUMA-related interference, MySQL was bound to NUMA node 0 for a new round of throughput versus concurrency tests.
+From the figure, it's evident that the CATS algorithm performs worse than the FIFO algorithm. To avoid NUMA-related interference, MySQL was bound to NUMA node 0 for a new round of throughput versus concurrency tests.
 
-<img src="media\image-20240829101650730.png" alt="image-20240829101650730" style="zoom:150%;" />
+<img src="media/image-20240829101650730.png" alt="image-20240829101650730" style="zoom:150%;" />
 
 Figure 7-21. Impact of CATS on throughput at different concurrency levels under SMP after eliminating interference, according to the CATS paper.
 
@@ -419,7 +419,7 @@ In this round of testing, the FIFO algorithm continued to outperform the CATS al
 
 Finally, standard TPC-C testing was performed again with 1000 warehouses at varying concurrency levels. Specific details are shown in the following figure:
 
-<img src="media\image-20240829101712694.png" alt="image-20240829101712694" style="zoom:150%;" />
+<img src="media/image-20240829101712694.png" alt="image-20240829101712694" style="zoom:150%;" />
 
 Figure 7-22. Impact of CATS on BenchmarkSQL throughput after eliminating interference.
 
@@ -477,10 +477,10 @@ Date:   Wed May 6 16:32:13 2020 +0200
     and B1/B2, A1 and A2 will both be seen before A, which will in turn be seen
     before S. However, there is no guarantee that B1 or B2 is seen before A.)
     
-    The algorithm is described in the paper °∞Dynamic Programming Strikes Back°± by
+    The algorithm is described in the paper "Dynamic Programming Strikes Back" by
     Neumann and Moerkotte. There is a somewhat extended version of the paper
-    (that also contains a few corrections) in Moerkotte's treatise °∞Building Query
-    Compilers°±. Some critical details are still missing, which we've had to fill in
+    (that also contains a few corrections) in Moerkotte's treatise "Building Query
+    Compilers". Some critical details are still missing, which we've had to fill in
     ourselves. We don't currently implement the extension to generalized
     hypergraphs, but it should be fairly straightforward to do later.
     
@@ -530,7 +530,7 @@ Starting with MySQL 8.0.20, binlog compression is supported but disabled by defa
 
 Using a Group Replication cluster within the same data center, the impact of binlog compression on TPC-C throughput and concurrency was examined using BenchmarkSQL. Both primary and secondary nodes were configured with the *binlog_transaction_compression* parameter. Specific test results are shown in the following figure:
 
-<img src="media\image-20240829101915930.png" alt="image-20240829101915930" style="zoom:150%;" />
+<img src="media/image-20240829101915930.png" alt="image-20240829101915930" style="zoom:150%;" />
 
 Figure 7-27. Impact of binlog compression on BenchmarkSQL performance.
 
@@ -538,22 +538,22 @@ From the figure, it is evident that enabling binlog compression significantly af
 
 The next step is to compare binlog sizes before and after compression. Specific details are shown in the following figure:
 
-<img src="media\image-20240829101936734.png" alt="image-20240829101936734" style="zoom:150%;" />
+<img src="media/image-20240829101936734.png" alt="image-20240829101936734" style="zoom:150%;" />
 
 Figure 7-28. Effects of binlog compression after BenchmarkSQL testing.
 
 From the figure, it is evident that binlog compression has a notable positive effect on TPC-C testing. It's worth noting that setting *binlog_row_image=minimal* can significantly reduce binlog size, but it has less impact on performance. Specific details are shown in the following figure:
 
-<img src="media\image-20240829101956608.png" alt="image-20240829101956608" style="zoom:150%;" />
+<img src="media/image-20240829101956608.png" alt="image-20240829101956608" style="zoom:150%;" />
 
 Figure 7-29. Impact of *binlog_row_image=minimal* on BenchmarkSQL performance.
 
 Finally, let's examine the comparison of binlog sizes between *binlog_row_image=minimal* and *binlog_row_image=full*. Specific details are shown in the following figure:
 
-<img src="media\image-20240829102020166.png" alt="image-20240829102020166" style="zoom:150%;" />
+<img src="media/image-20240829102020166.png" alt="image-20240829102020166" style="zoom:150%;" />
 
 Figure 7-30. Effects of *binlog_row_image=minimal* after BenchmarkSQL testing.
 
 From the figure, it can be seen that setting *binlog_row_image=minimal* can also significantly reduce the size of binlogs.
 
-Overall, MySQL 8.0 offers effective solutions to address the problem of binlogs consuming substantial I/O space. Users can leverage binlog compression and, where feasible, further reduce binlog size by using *binlog_row_image=minimal* to save on storage costs. It°Øs important to note that the compression ratio can vary across different applications.
+Overall, MySQL 8.0 offers effective solutions to address the problem of binlogs consuming substantial I/O space. Users can leverage binlog compression and, where feasible, further reduce binlog size by using *binlog_row_image=minimal* to save on storage costs. It's important to note that the compression ratio can vary across different applications.

@@ -14,13 +14,13 @@ Only after a user reported a significant performance drop following an upgrade d
 
 Simultaneously, it was confirmed that the performance degradation problem in MySQL 8.0.27 was the same as in MySQL 8.0.29. MySQL 8.0.27 had undergone two scalability optimizations specifically for trx-sys, which theoretically should have increased throughput. Reviewing the impact of latch sharding in trx-sys on performance:
 
-<img src="media\image-20240829102323261.png" alt="image-20240829102323261" style="zoom:150%;" />
+<img src="media/image-20240829102323261.png" alt="image-20240829102323261" style="zoom:150%;" />
 
 Figure 8-1. Impact of latch sharding in trx-sys under different concurrency levels.
 
 Let's continue examining the comparison of throughput and concurrency between trx-sys latch sharding optimization and the MySQL 8.0.27 release version. Specific details are shown in the following figure:
 
-<img src="media\image-20240829102344815.png" alt="image-20240829102344815" style="zoom:150%;" />
+<img src="media/image-20240829102344815.png" alt="image-20240829102344815" style="zoom:150%;" />
 
 Figure 8-2. Performance degradation in MySQL 8.0.27 release version.
 
@@ -105,7 +105,7 @@ static SEL_TREE *get_full_func_mm_tree(THD *thd, RANGE_OPT_PARAM *param,
   ...
 ```
 
-From the code, it¡¯s evident that *param_comp* is calculated using a bitwise OR operation on three variables, followed by a bitwise NOT operation. The difference of 1 suggests that at least one of these variables differs, helping to narrow down the problem.
+From the code, it's evident that *param_comp* is calculated using a bitwise OR operation on three variables, followed by a bitwise NOT operation. The difference of 1 suggests that at least one of these variables differs, helping to narrow down the problem.
 
 The calculation involves three *table_map* variables with lengthy values, making ordinary calculators insufficient and the process too complex to detail here.
 
@@ -121,7 +121,7 @@ When calling the *test_quick_select* function, reintroduce the *const_table* and
 
 After applying the above patch to MySQL 8.0.27, the performance degradation problem was solved. A test comparing TPC-C throughput at various concurrency levels, both before and after applying the patch, was conducted. Specific details are shown in the following figure:
 
-<img src="media\image-20240829102642856.png" alt="image-20240829102642856" style="zoom:150%;" />
+<img src="media/image-20240829102642856.png" alt="image-20240829102642856" style="zoom:150%;" />
 
 Figure 8-11. Effects of the patch on solving performance degradation.
 
@@ -129,15 +129,15 @@ From the figure, it is evident that after applying the patch, throughput and pea
 
 After addressing the MVCC ReadView scalability problem, reassess the impact of this patch, as detailed in the figure below:
 
-<img src="media\image-20240829102703396.png" alt="image-20240829102703396" style="zoom:150%;" />
+<img src="media/image-20240829102703396.png" alt="image-20240829102703396" style="zoom:150%;" />
 
 Figure 8-12. Actual effects of the patch after addressing the MVCC ReadView scalability problem.
 
 From the figure, it is evident that this patch has significantly improved MySQL's throughput. This case demonstrates that scalability problems can disrupt certain optimizations. To scientifically assess the effectiveness of an optimization, it is essential to address most scalability problems beforehand to achieve a more accurate evaluation.
 
-Finally, let's examine the results of the long-term stability testing for TPC-C. The following figure shows the results of an 8-hour test under 100 concurrency, with throughput captured at various hours (where 1 ¡Ü n ¡Ü 8).
+Finally, let's examine the results of the long-term stability testing for TPC-C. The following figure shows the results of an 8-hour test under 100 concurrency, with throughput captured at various hours (where 1 â‰¤ n â‰¤ 8).
 
-<img src="media\image-20240829102722393.png" alt="image-20240829102722393" style="zoom:150%;" />
+<img src="media/image-20240829102722393.png" alt="image-20240829102722393" style="zoom:150%;" />
 
 Figure 8-13. Comparison of stability tests: MySQL 8.0.27 vs. improved MySQL 8.0.27.
 
@@ -249,7 +249,7 @@ Despite the complexity of the binlog group commit mechanism, a straightforward a
 
 During one test, additional statistics were collected on the number of times user threads entered the wait state. The details are shown in the following figure:
 
-<img src="media\image-20240829103131857.png" alt="image-20240829103131857" style="zoom:150%;" />
+<img src="media/image-20240829103131857.png" alt="image-20240829103131857" style="zoom:150%;" />
 
 Figure 8-15. Statistics of threads activated 1, 2, 3 times.
 
@@ -259,7 +259,7 @@ To solve this problem, an ideal solution would be a multicast activation mechani
 
 In this case, a point-to-point activation mechanism is used, achieving 100% efficiency but introducing significant system call overhead. The following figure illustrates the relationship between TPC-C throughput and concurrency before and after optimization.
 
-<img src="media\image-20240829103236734.png" alt="image-20240829103236734" style="zoom:150%;" />
+<img src="media/image-20240829103236734.png" alt="image-20240829103236734" style="zoom:150%;" />
 
 Figure 8-16. Impact of group commit optimization with innodb_thread_concurrency=128.
 
@@ -269,7 +269,7 @@ It's important to note that this optimization's effectiveness can vary depending
 
 Below is the comparison of TPC-C throughput and concurrency before and after optimization using standard configurations:
 
-<img src="media\image-20240829103259992.png" alt="image-20240829103259992" style="zoom:150%;" />
+<img src="media/image-20240829103259992.png" alt="image-20240829103259992" style="zoom:150%;" />
 
 Figure 8-17. Impact of group commit optimization using standard configurations.
 
@@ -450,7 +450,7 @@ During the copying process from the global active transaction list, the *short_r
 
 After implementing these modifications, performance comparison tests were conducted to evaluate the effectiveness of the MVCC ReadView optimization. The figure below shows a comparison of TPC-C throughput with varying concurrency levels, before and after modifying the MVCC ReadView data structure.
 
-<img src="media\image-20240829104222478.png" alt="image-20240829104222478" style="zoom:150%;" />
+<img src="media/image-20240829104222478.png" alt="image-20240829104222478" style="zoom:150%;" />
 
 Figure 8-20. Performance comparison before and after adopting the new hybrid data structure in NUMA.
 
@@ -476,7 +476,7 @@ The native MVCC ReadView uses a vector to store the list of active transactions.
 
 Throughput improvement under the ARM architecture is evaluated next. Details are shown in the following figure:
 
-<img src="media\image-20240829104512068.png" alt="image-20240829104512068" style="zoom:150%;" />
+<img src="media/image-20240829104512068.png" alt="image-20240829104512068" style="zoom:150%;" />
 
 Figure 8-23. Throughput improvement under the ARM architecture.
 
@@ -484,7 +484,7 @@ From the figure, it is evident that there is also a significant improvement unde
 
 How much improvement can this optimization achieve in a SMP environment?
 
-<img src="media\image-20240829104533718.png" alt="image-20240829104533718" style="zoom:150%;" />
+<img src="media/image-20240829104533718.png" alt="image-20240829104533718" style="zoom:150%;" />
 
 Figure 8-24. Performance comparison before and after adopting the new hybrid data structure in SMP.
 
@@ -492,7 +492,7 @@ From the figure, it can be observed that after binding to NUMA node 0, the impro
 
 In practical MySQL usage, preventing excessive user threads from entering the InnoDB storage engine can significantly reduce the size of the global active transaction list. This transaction throttling mechanism complements the MVCC ReadView optimization effectively, improving overall performance. Combined with double latch avoidance, discussed in the next section, the TPC-C test results in the following figure clearly demonstrate these improvements.
 
-<img src="media\image-20240829104554155.png" alt="image-20240829104554155" style="zoom:150%;" />
+<img src="media/image-20240829104554155.png" alt="image-20240829104554155" style="zoom:150%;" />
 
 Figure 8-25. Maximum TPC-C throughput in BenchmarkSQL with transaction throttling mechanisms.
 
@@ -500,7 +500,7 @@ Figure 8-25. Maximum TPC-C throughput in BenchmarkSQL with transaction throttlin
 
 During testing after the MVCC ReadView optimization, a noticeable decline in throughput was observed under extremely high concurrency conditions. The specific details are shown in the following figure:
 
-<img src="media\image-20240829104639402.png" alt="image-20240829104639402" style="zoom:150%;" />
+<img src="media/image-20240829104639402.png" alt="image-20240829104639402" style="zoom:150%;" />
 
 Figure 8-26. Performance degradation at concurrency Levels exceeding 500.
 
@@ -558,7 +558,7 @@ The other modification is shown in the code snippet below:
 
 Using the MVCC ReadView optimized version, compare TPC-C throughput before and after the modifications. Details are shown in the following figure:
 
-<img src="media\image-20240829104851205.png" alt="image-20240829104851205" style="zoom:150%;" />
+<img src="media/image-20240829104851205.png" alt="image-20240829104851205" style="zoom:150%;" />
 
 Figure 8-27. Performance improvement after eliminating the double latch bottleneck.
 
@@ -576,13 +576,13 @@ Figure 8-29. Significant alleviation of latch-related bottleneck.
 
 Even with higher concurrency, such as 3000, the bottlenecks are not pronounced. This suggests that the optimizations have effectively alleviated the latch-related performance problems, improving scalability under extreme conditions.
 
-Excluding the global latch before and after the *view_close* function call improves scalability, while including it severely degrades scalability under high concurrency. Although the *view_close* function operates efficiently within its critical section, frequent acquisition of the globally used trx-sys latch¡ªemployed throughout the trx-sys subsystem¡ªleads to significant contention and head-of-line blocking, referred to as the 'double latch' problem. Notably, removing the latch from the final stage or using a new latch can significantly mitigate this problem.
+Excluding the global latch before and after the *view_close* function call improves scalability, while including it severely degrades scalability under high concurrency. Although the *view_close* function operates efficiently within its critical section, frequent acquisition of the globally used trx-sys latchâ€”employed throughout the trx-sys subsystemâ€”leads to significant contention and head-of-line blocking, referred to as the 'double latch' problem. Notably, removing the latch from the final stage or using a new latch can significantly mitigate this problem.
 
 ### 8.2.5 Explaining the Super-Linear Performance Phenomenon
 
 Section 2.1 describes super-linear scaling in throughput observed during SysBench read-write tests in an x86 NUMA environment. Following improvements to the InnoDB storage engine, the current investigation examines whether this super-linear scaling effect remains. Tests were conducted in the same environment using the improved version of MySQL. The results of individual SysBench tests for MySQL instance 1 and MySQL instance 2 are shown in the following figure:
 
-<img src="media\image-20240829104924497.png" alt="image-20240829104924497" style="zoom:150%;" />
+<img src="media/image-20240829104924497.png" alt="image-20240829104924497" style="zoom:150%;" />
 
 Figure 8-30. Throughput of MySQL running separately after MVCC optimization.
 
@@ -590,7 +590,7 @@ The throughput for each instance has significantly improved, with MySQL instance
 
 SysBench is used to simultaneously evaluate the read-write performance of these two instances, as illustrated in the figure below.
 
-<img src="media\image-20240829104945257.png" alt="image-20240829104945257" style="zoom:150%;" />
+<img src="media/image-20240829104945257.png" alt="image-20240829104945257" style="zoom:150%;" />
 
 Figure 8-31. Throughput of MySQL running together after MVCC optimization.
 
@@ -598,7 +598,7 @@ From the figure, one instance achieves a throughput of 289,702 QPS while the oth
 
 From the data, it's evident that the total throughput of two MySQL instances running simultaneously is significantly lower than the throughput of each instance running individually. For detailed statistical comparisons, refer to the figure below:
 
-<img src="media\image-20240829105004347.png" alt="image-20240829105004347" style="zoom:150%;" />
+<img src="media/image-20240829105004347.png" alt="image-20240829105004347" style="zoom:150%;" />
 
 Figure 8-32. Total throughput of running separately vs. running together after MVCC optimization.
 
@@ -619,7 +619,7 @@ In general, a thread pool in traditional MySQL serves two main purposes:
 
 Using Percona's thread pool as a case study, let's examine the cost-effectiveness of thread pools in improving MySQL scalability. The following figure compares throughput and concurrency before and after implementing a thread pool with the improved version of MySQL.
 
-<img src="media\image-20240829105130499.png" alt="image-20240829105130499" style="zoom:150%;" />
+<img src="media/image-20240829105130499.png" alt="image-20240829105130499" style="zoom:150%;" />
 
 Figure 8-33. Enabling the Percona thread pool led to a noticeable decrease in throughput.
 
@@ -645,7 +645,7 @@ Before starting a new transaction, check if the number of concurrent transaction
 
 After implementing this transaction throttling mechanism, MySQL's scalability is validated. The following figure illustrates the relationship between TPC-C throughput and concurrency when using the throttling mechanism compared to using the Percona thread pool.
 
-<img src="media\image-20240829105242300.png" alt="image-20240829105242300" style="zoom:150%;" />
+<img src="media/image-20240829105242300.png" alt="image-20240829105242300" style="zoom:150%;" />
 
 Figure 8-35. Impact of the transaction throttling mechanism.
 
@@ -653,7 +653,7 @@ From the figure, it can be seen that the throttling approach is superior to the 
 
 The following figure depicts the TPC-C scalability stress test conducted after implementing transaction throttling. The test was performed in a scenario with NUMA BIOS disabled, limiting entry of up to 512 user threads into the transaction system.
 
-<img src="media\image-20240829105258689.png" alt="image-20240829105258689" style="zoom:150%;" />
+<img src="media/image-20240829105258689.png" alt="image-20240829105258689" style="zoom:150%;" />
 
 Figure 8-36. Maximum TPC-C throughput in BenchmarkSQL with transaction throttling mechanisms.
 

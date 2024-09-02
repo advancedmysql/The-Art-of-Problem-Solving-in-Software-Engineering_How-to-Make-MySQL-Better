@@ -35,9 +35,9 @@ For performance testing in this book, the following strategies are applied:
 7.  **Verify Consistency with Different Tools**: Use various testing tools to compare results and ensure consistency. For example, employ BenchmarkSQL and modified versions of tpcc-mysql for TPC-C testing.
 8.  **Assess Performance Under Varying Network Latency**: Examine performance effects under different network latency conditions.
 9.  **Test Performance with Different "Thinking Time" Scenarios**: Evaluate how performance varies with different "thinking time" scenarios to gauge consistency.
-10. **Perform Closed-Loop Testing**: Ensure no interference during testing by repeating the initial tests and comparing results with the first round. Small differences in test results indicate that the environment is relatively stable.
-11. **Verify Bottleneck Interference**: Confirm whether interference from other bottlenecks under high concurrency has distorted the performance comparison.
-12. **Analyze Theoretical Basis and Anomalies**: Evaluate whether the performance optimization has a theoretical basis and if any anomalies can be explained. Analyze the type of optimization, its general applicability, and which environments benefit most. Investigate anomalies to determine their causes.
+10.  **Perform Closed-Loop Testing**: Ensure no interference during testing by repeating the initial tests and comparing results with the first round. Small differences in test results indicate that the environment is relatively stable.
+11.  **Verify Bottleneck Interference**: Confirm whether interference from other bottlenecks under high concurrency has distorted the performance comparison.
+12.  **Analyze Theoretical Basis and Anomalies**: Evaluate whether the performance optimization has a theoretical basis and if any anomalies can be explained. Analyze the type of optimization, its general applicability, and which environments benefit most. Investigate anomalies to determine their causes.
 
 ### 6.1.3 Overly-specific Tuning
 
@@ -65,7 +65,7 @@ Measuring cold runs requires caution to avoid accidentally recording warm runs. 
 
 An evaluation test was conducted to assess these impacts. For instance, the following figure compares TPC-C throughput and concurrency before and after clearing the cache.
 
-<img src="media\image-20240830214738439.png" alt="image-20240830214738439" style="zoom:150%;" />
+<img src="media/image-20240830214738439.png" alt="image-20240830214738439" style="zoom:150%;" />
 
 Figure 6-1. Comparison of BenchmarkSQL tests before and after clearing the cache.
 
@@ -131,7 +131,7 @@ In high-contention settings, throughput is determined by the concurrency control
 
 The following figure shows the relationship between TPC-C throughput and concurrency for different numbers of warehouses. The dark blue curve represents 100 warehouses, while the deep red curve represents 1000 warehouses. The figure illustrates that throughput for 100 warehouses is significantly lower than for 1000 warehouses due to more severe contention in the former scenario.
 
-<img src="media\image-20240829093518737.png" alt="image-20240829093518737" style="zoom:150%;" />
+<img src="media/image-20240829093518737.png" alt="image-20240829093518737" style="zoom:150%;" />
 
 Figure 6-2. More warehouses indicate less severe contention.
 
@@ -145,7 +145,7 @@ Most research addresses contentions, necessitating the removal of wait time for 
 
 TPC-C testing with a 1ms thinking time (pause before requests) is shown in the following figure, illustrating the throughput-concurrency relationship.
 
-<img src="media\image-20240829093552414.png" alt="image-20240829093552414" style="zoom:150%;" />
+<img src="media/image-20240829093552414.png" alt="image-20240829093552414" style="zoom:150%;" />
 
 Figure 6-3. Impact of 1ms thinking time on throughput.
 
@@ -174,7 +174,7 @@ To meet these stability requirements in MySQL testing, the following measures we
 
 Following these measures, TPC-C testing was performed using BenchmarkSQL. The figure below illustrates the stability test comparison between MySQL 8.0.27 and the improved MySQL 8.0.27.
 
-<img src="media\image-20240829093722953.png" alt="image-20240829093722953" style="zoom:150%;" />
+<img src="media/image-20240829093722953.png" alt="image-20240829093722953" style="zoom:150%;" />
 
 Figure 6-4. Comparison of stability tests: MySQL 8.0.27 vs. improved MySQL 8.0.27.
 
@@ -182,7 +182,7 @@ From the figure, it is evident that although MySQL and the improved MySQL start 
 
 Additionally, comparisons were made for the improved MySQL at different concurrency levels. The figure below shows the throughput over time: the deep blue curve represents 100 concurrency, while the deep red curve represents 200 concurrency.
 
-<img src="media\image-20240829093752930.png" alt="image-20240829093752930" style="zoom:150%;" />
+<img src="media/image-20240829093752930.png" alt="image-20240829093752930" style="zoom:150%;" />
 
 Figure 6-5. Stability test comparison: 100 vs. 200 concurrency.
 
@@ -190,7 +190,7 @@ From the figure, it can be observed that throughput is more stable at 100 concur
 
 The following figure compares the size of MySQL database files after completing an 8-hour test at 100 and 200 concurrency levels.
 
-<img src="media\image-20240829093934212.png" alt="image-20240829093934212" style="zoom:150%;" />
+<img src="media/image-20240829093934212.png" alt="image-20240829093934212" style="zoom:150%;" />
 
 Figure 6-6. Database size comparison: 100 vs. 200 concurrency after 8 hours.
 

@@ -203,7 +203,7 @@ Profile-Guided Optimization (PGO) is a compiler technique that uses profiling da
 
 **24 Read Committed Isolation Level**
 
-Put simply, the Read Committed isolation level ensures that any data read during a transaction is committed at the time of reading. It prevents the reader from seeing uncommitted or 'dirty' data. However, it doesn¡¯t guarantee that if the transaction reads the same data again, it will be the same; the data can change after being read.
+Put simply, the Read Committed isolation level ensures that any data read during a transaction is committed at the time of reading. It prevents the reader from seeing uncommitted or 'dirty' data. However, it doesn't guarantee that if the transaction reads the same data again, it will be the same; the data can change after being read.
 
 **25 Replication**
 
@@ -285,7 +285,7 @@ MySQL uses the classic request-response model: clients send SQL queries to the M
 
 ![](media/f3b8490d4e41a8da5e954aabf0a4aacf.png)
 
-Here¡¯s how MySQL Server processes a SQL request with a detailed example. Suppose a user sends the following SQL statement from a MySQL client to MySQL Server:
+Here's how MySQL Server processes a SQL request with a detailed example. Suppose a user sends the following SQL statement from a MySQL client to MySQL Server:
 
 ```
 select name from student where id=1;
@@ -369,14 +369,17 @@ The execution plan for this SQL query can be viewed using the *'explain'* statem
 
 The execution process with an index is as follows:
 
-1.  The executor requests the storage engine to locate the first index record matching the query condition (e.g., name LIKE 'wang%').
-2.  The storage engine retrieves and returns the matching index record to the Server layer.
-3.  The executor checks if the record meets the additional query conditions (e.g., id \< 3).
+1. The executor requests the storage engine to locate the first index record matching the query condition (e.g., name LIKE 'wang%').
 
-    If conditions are met, the corresponding name is added to the network buffer, unless it is full. If conditions are not met, the executor skips the record and requests the next one from the storage engine.
+2. The storage engine retrieves and returns the matching index record to the Server layer.
 
-4.  This cycle continues as the executor repeatedly requests and evaluates the next index record that matches the query condition until all relevant index records are processed.
-5.  Once the storage engine indicates that all relevant index records have been processed, the executor exits the loop and sends the collected results to the client.
+3. The executor checks if the record meets the additional query conditions (e.g., id \< 3).
+
+   If conditions are met, the corresponding name is added to the network buffer, unless it is full. If conditions are not met, the executor skips the record and requests the next one from the storage engine.
+
+4. This cycle continues as the executor repeatedly requests and evaluates the next index record that matches the query condition until all relevant index records are processed.
+
+5. Once the storage engine indicates that all relevant index records have been processed, the executor exits the loop and sends the collected results to the client.
 
 Using an index allows the storage engine to quickly locate necessary records, bypassing the need to scan the entire table. In general, this significantly improves execution efficiency and speeds up the query.
 

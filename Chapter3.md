@@ -26,7 +26,7 @@ When a problem recurs, it often reveals underlying characteristics, facilitating
 
 ### 3.1.4 Strategies to Increase Reproducibility
 
-Many problems are environment-specific, often manifesting sporadically, especially under high concurrency. The challenge lies in addressing these infrequent occurrences, which may happen just once every few months. Increasing the frequency of problem reproduction¡ªfrom every few months to every few hours or minutes¡ªsignificantly simplifies their resolution.
+Many problems are environment-specific, often manifesting sporadically, especially under high concurrency. The challenge lies in addressing these infrequent occurrences, which may happen just once every few months. Increasing the frequency of problem reproduction—from every few months to every few hours or minutes—significantly simplifies their resolution.
 
 How can this be achieved? Capturing patterns in problem occurrence is crucial. For example, when addressing simultaneous failures in Group Replication that sporadically freeze views, analyzing statistical patterns reveals critical insights. These problems often cluster around specific thresholds. Adjusting lower-level communication timeout settings to align with network interruption durations enables more frequent problem reproduction. Once these critical factors are understood, the likelihood of reproducing problems increases significantly, laying a solid foundation for effective problem resolution.
 
@@ -36,7 +36,7 @@ Therefore, the ability to reproduce problems often proves crucial in solving cha
 
 Sometimes, revealing the characteristics of a problem directly is challenging; it necessitates creating conditions that fully manifest the problem. Let's revisit the figure below, using PGO as an example.
 
-<img src="media\image-20240829082635337.png" alt="image-20240829082635337" style="zoom:150%;" />
+<img src="media/image-20240829082635337.png" alt="image-20240829082635337" style="zoom:150%;" />
 
 Figure 3-1. Performance comparison tests before and after using PGO in MySQL 8.0.27.
 
@@ -44,7 +44,7 @@ PGO (Profile-Guided Optimization) is effective in improving throughput under low
 
 Based on the above analysis, binding the MySQL instance to NUMA node 0 allowed us to explore whether PGO can achieve its performance potential in an SMP environment. For specific comparative test results, please refer to the following figure:
 
-<img src="media\image-20240829082659498.png" alt="image-20240829082659498" style="zoom:150%;" />
+<img src="media/image-20240829082659498.png" alt="image-20240829082659498" style="zoom:150%;" />
 
 Figure 3-2. Performance comparison tests before and after using PGO in MySQL 8.0.27 under SMP.
 
@@ -145,7 +145,7 @@ For instance, consider the thread pool mechanism's impact on performance, partic
 
 When conducting performance comparison tests, it's crucial to eliminate human errors such as changes in the environment or configurations. To mitigate this problem, repeating the initial test and comparing its results with those of the first test can help identify significant changes. If there are no noticeable differences, it suggests that the intermediate tests are relatively reliable. For example, incorporating an additional test, depicted in the following figure, to compare its performance variance from the initial test.
 
-<img src="media\image-20240829082837729.png" alt="image-20240829082837729" style="zoom:150%;" />
+<img src="media/image-20240829082837729.png" alt="image-20240829082837729" style="zoom:150%;" />
 
 Figure 3-5. Additional test for comparing performance variance from the initial test.
 
@@ -179,7 +179,7 @@ Here are principles of logical reasoning [15], which can provide some assistance
 19.  you can make your opponent's explanation less believable by showing that there are 
      alternative explanations that haven't been ruled out,
 20.  stick to the subject,
-21.  don't draw a conclusion until you¡¯ve gotten enough evidence.
+21.  don't draw a conclusion until you've gotten enough evidence.
 ```
 
 ## 3.5 Logical Reasoning: Key to Solving Complex Problems

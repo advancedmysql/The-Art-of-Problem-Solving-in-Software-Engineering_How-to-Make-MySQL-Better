@@ -6,7 +6,7 @@ This chapter primarily addresses methods for improving MySQL application perform
 
 Profile-guided optimization (PGO) typically improves program execution efficiency. The following figure illustrates how PGO improves the throughput of a standalone MySQL instance under various concurrency levels, following the resolution of MySQL MVCC ReadView scalability problems.
 
-<img src="media\image-20240829113916829.png" alt="image-20240829113916829" style="zoom:150%;" />
+<img src="media/image-20240829113916829.png" alt="image-20240829113916829" style="zoom:150%;" />
 
 Figure 11-1. Impact of PGO after solving MVCC ReadView scalability problems.
 
@@ -14,19 +14,19 @@ From the figure, it is evident that PGO has a notable impact.
 
 For MySQL 8.0.27 with PGO, throughput decreases under high concurrency conditions. The specific details are shown in the figure below:
 
-<img src="media\image-20240829113948830.png" alt="image-20240829113948830" style="zoom:150%;" />
+<img src="media/image-20240829113948830.png" alt="image-20240829113948830" style="zoom:150%;" />
 
 Figure 11-2. Performance comparison tests before and after using PGO in MySQL 8.0.27.
 
 The test results above indicate that PGO for MySQL's improvement requires addressing scalability problems before its full potential can be realized. It should be noted that both comparative tests above were conducted in mainstream NUMA environments. When MySQL is bound to a single NUMA node, creating an SMP environment, the following figure shows the relationship between TPC-C throughput and concurrency levels before and after PGO.
 
-<img src="media\image-20240829114017540.png" alt="image-20240829114017540" style="zoom:150%;" />
+<img src="media/image-20240829114017540.png" alt="image-20240829114017540" style="zoom:150%;" />
 
 Figure 11-3. Performance comparison tests before and after using PGO in MySQL 8.0.27 under SMP.
 
 From the figure, it can be seen that PGO consistently improves throughput in SMP environments, without decreasing as concurrency levels increase. The following figure compares the performance improvement of PGO between NUMA and SMP environments.
 
-<img src="media\image-20240829114037360.png" alt="image-20240829114037360" style="zoom:150%;" />
+<img src="media/image-20240829114037360.png" alt="image-20240829114037360" style="zoom:150%;" />
 
 Figure 11-4. Performance of PGO optimization in different environments.
 
@@ -42,7 +42,7 @@ Because the network portion cannot be optimized by PGO, the MySQL primary consum
 
 The following figure compares the throughput improvement of a standalone MySQL instance and Group Replication using PGO.
 
-<img src="media\image-20240829114100020.png" alt="image-20240829114100020" style="zoom:150%;" />
+<img src="media/image-20240829114100020.png" alt="image-20240829114100020" style="zoom:150%;" />
 
 Figure 11-6. PGO Performance Improvement in Group Replication vs. Standalone MySQL.
 
@@ -111,7 +111,7 @@ This highlights that reducing the number of network interactions with MySQL duri
 
 MySQL defaults to using the jemalloc memory allocation tool, specifically version 3.6. Test data indicates that jemalloc 3.6 is not optimal for performance. The following figure shows the throughput improvements of jemalloc 4.5 compared to jemalloc 3.6 on x86 architecture.
 
-<img src="media\image-20240829114526325.png" alt="image-20240829114526325" style="zoom:150%;" />
+<img src="media/image-20240829114526325.png" alt="image-20240829114526325" style="zoom:150%;" />
 
 Figure 11-7. Jemalloc 4.5 outperforms jemalloc 3.6 in terms of performance.
 
@@ -119,7 +119,7 @@ From the figure, it is evident that jemalloc 4.5 outperforms jemalloc 3.6 in ter
 
 For MySQL secondary replay, please refer to the figure below:
 
-<img src="media\image-20240829114557565.png" alt="image-20240829114557565" style="zoom:150%;" />
+<img src="media/image-20240829114557565.png" alt="image-20240829114557565" style="zoom:150%;" />
 
 Figure 11-8. Achieve better replay speed with jemalloc 4.5.
 
@@ -159,7 +159,7 @@ It's important to note that with the improved scalability in MySQL 8.0 and optim
 
 Comparative tests were first conducted using MySQL 8.0.27. The figure below illustrates the relationship between throughput and concurrency with 'dual one' enabled and disabled.
 
-<img src="media\image-20240829114945572.png" alt="image-20240829114945572" style="zoom:150%;" />
+<img src="media/image-20240829114945572.png" alt="image-20240829114945572" style="zoom:150%;" />
 
 Figure 11-9. Achieve better performance with 'dual one' disabled.
 
@@ -167,7 +167,7 @@ Based on the figure, it is evident that with MySQL 8.0.27, disabling 'dual one' 
 
 Based on the improved version of MySQL with PGO, the performance improvement after disabling 'dual one' is less significant, as shown in the figure below:
 
-<img src="media\image-20240829115033197.png" alt="image-20240829115033197" style="zoom:150%;" />
+<img src="media/image-20240829115033197.png" alt="image-20240829115033197" style="zoom:150%;" />
 
 Figure 11-10. Less performance gain with 'dual one' disabled after addressing scalability bottlenecks in MySQL.
 
@@ -175,11 +175,11 @@ It can also be observed that the extent of performance improvement varies with t
 
 The impact of 'dual one' on MySQL secondary replay is more pronounced due to mechanisms such as the re*plica_preserve_commit_order* queueing. The figure below compares the balanced replay speeds of MySQL secondaries before and after disabling 'dual one' using an optimized MySQL version.
 
-<img src="media\image-20240829115125819.png" alt="image-20240829115125819" style="zoom:150%;" />
+<img src="media/image-20240829115125819.png" alt="image-20240829115125819" style="zoom:150%;" />
 
 Figure 11-11. Achieve better replay speed with 'dual one' closed.
 
-Under equivalent conditions, disabling  'dual one' achieved a balanced replay speed of 810,000 tpmC for MySQL secondaries, while enabling ¡®dual one¡¯ reduced this speed to approximately 700,000 tpmC. Thus, disabling 'dual one' significantly improves the replay speed of MySQL secondaries.
+Under equivalent conditions, disabling  'dual one' achieved a balanced replay speed of 810,000 tpmC for MySQL secondaries, while enabling 'dual one' reduced this speed to approximately 700,000 tpmC. Thus, disabling 'dual one' significantly improves the replay speed of MySQL secondaries.
 
 ### 11.5.2 Performance Effects of Disabling Binlog
 
@@ -187,7 +187,7 @@ With binary logging enabled, the server logs all statements that modify data to 
 
 The figure below compares TPC-C throughput at identical concurrency levels before and after disabling binlog, using BenchmarkSQL.
 
-<img src="media\image-20240829115210707.png" alt="image-20240829115210707" style="zoom:150%;" />
+<img src="media/image-20240829115210707.png" alt="image-20240829115210707" style="zoom:150%;" />
 
 Figure 11-12. Achieve better performance with binlog disabled
 
@@ -195,7 +195,7 @@ From the figure, it is evident that disabling binlog noticeably impacts performa
 
 ### 11.5.3 Understanding the Spin Delay Parameter's Effect on Performance
 
-Contending threads must wait for a lock when it¡¯s unavailable. Several waiting policies exist, with unbounded spinning (or busy waiting) being the simplest. In this approach, threads repeatedly check a memory location until the value changes. This method consumes resources and may lead to preemption in an oversubscribed system with more threads than CPUs [3].
+Contending threads must wait for a lock when it's unavailable. Several waiting policies exist, with unbounded spinning (or busy waiting) being the simplest. In this approach, threads repeatedly check a memory location until the value changes. This method consumes resources and may lead to preemption in an oversubscribed system with more threads than CPUs [3].
 
 **Advantages of Spinning:**
 
@@ -203,13 +203,13 @@ Contending threads must wait for a lock when it¡¯s unavailable. Several waiting 
 
 **Disadvantages of Spinning:**
 
--   When the system is loaded, spinning can degrade performance as it reduces the number of processors available for useful work, leading to suboptimal performance when runnable threads exceed hardware contexts. Additionally, since spinning isn¡¯t coordinated with the OS, it doesn¡¯t account for lock holders or spinners in scheduling decisions.
+-   When the system is loaded, spinning can degrade performance as it reduces the number of processors available for useful work, leading to suboptimal performance when runnable threads exceed hardware contexts. Additionally, since spinning isn't coordinated with the OS, it doesn't account for lock holders or spinners in scheduling decisions.
 
 The spin delay parameter helps address NUMA (Non-Uniform Memory Access) compatibility problems. Generally, better MySQL scalability reduces the impact of the spin delay parameter. Conversely, in cases of poor scalability, the spin delay parameter noticeably affects performance, although its effectiveness has an upper limit.
 
 Based on the MySQL 8.0.21 version with lock-sys optimization, the figure below compares TPC-C throughput at various concurrency levels.
 
-<img src="media\image-20240829115241352.png" alt="image-20240829115241352" style="zoom:150%;" />
+<img src="media/image-20240829115241352.png" alt="image-20240829115241352" style="zoom:150%;" />
 
 Figure 11-13. Achieve better performance with spin delay 20 in MySQL 8.0.21.
 
@@ -217,15 +217,15 @@ The figure shows that setting *spin_delay=20* significantly mitigates the scalab
 
 Further analysis of the spin delay parameter in MySQL versions prior to MVCC ReadView optimization, with PGO compilation, is detailed in the following figure.
 
-<img src="media\image-20240829115301443.png" alt="image-20240829115301443" style="zoom:150%;" />
+<img src="media/image-20240829115301443.png" alt="image-20240829115301443" style="zoom:150%;" />
 
 Figure 11-14. Achieve better performance with spin delay 20 before MVCC ReadView optimization.
 
 From the figure, it's evident that with the default *spin_delay* parameter set to 6, throughput sharply declines at 200 concurrency. However, setting *spin_delay=20* leads to a substantial improvement in throughput.
 
-Let¡¯s continue with MVCC ReadView optimization to further enhance MySQL scalability. The figure below shows the comparison of throughput between MVCC ReadView optimization and *spin delay=20*:
+Let's continue with MVCC ReadView optimization to further enhance MySQL scalability. The figure below shows the comparison of throughput between MVCC ReadView optimization and *spin delay=20*:
 
-<img src="media\image-20240829115320081.png" alt="image-20240829115320081" style="zoom:150%;" />
+<img src="media/image-20240829115320081.png" alt="image-20240829115320081" style="zoom:150%;" />
 
 Figure 11-15. Comparison of throughput between MVCC ReadView optimization and spin delay 20.
 
@@ -233,7 +233,7 @@ From the figure, it can be seen that while spin delay can mitigate scalability p
 
 After MVCC ReadView optimization, the impact of  *spin_delay* was tested again. See the specific results in the figure below:
 
-<img src="media\image-20240829115410814.png" alt="image-20240829115410814" style="zoom:150%;" />
+<img src="media/image-20240829115410814.png" alt="image-20240829115410814" style="zoom:150%;" />
 
 Figure 11-16. Spin delay 20 has no effect after addressing MVCC ReadView scalability problems.
 
@@ -241,7 +241,7 @@ The figure shows that after addressing MVCC ReadView scalability problems, the i
 
 ### 11.5.4 Effect of Binlog Commit Order on Performance
 
-Here¡¯s a brief introduction to the *binlog_order_commits* parameter:
+Here's a brief introduction to the *binlog_order_commits* parameter:
 
 <img src="media/d4747b5b04d0887c1a49b974d187dc6f.png" style="zoom:50%;" />
 
@@ -249,7 +249,7 @@ When this variable is enabled on a replication source server (default), transact
 
 Based on the MySQL 8.0.27 version, examining whether enabling the *binlog_order_commit* parameter affects TPC-C throughput. See the specific comparison in the figure below:
 
-<img src="media\image-20240829115454755.png" alt="image-20240829115454755" style="zoom:150%;" />
+<img src="media/image-20240829115454755.png" alt="image-20240829115454755" style="zoom:150%;" />
 
 Figure 11-17. Achieve better performance with binlog_order_commits off before binlog group commit optimization.
 
@@ -257,7 +257,7 @@ From the figure, it can be observed that disabling *binlog_order_commits* result
 
 The following figure is based on the improved MySQL version, optimized with PGO settings. Disabling *binlog_order_commits* shows less pronounced improvement in TPC-C throughput. Addressing problems like the thundering herd problem caused by binlog group commit has improved MySQL efficiency and mitigated the performance degradation observed when *binlog_order_commits* is enabled.
 
-<img src="media\image-20240901095750255.png" alt="image-20240901095750255" style="zoom:150%;" />
+<img src="media/image-20240901095750255.png" alt="image-20240901095750255" style="zoom:150%;" />
 
 Figure 11-18. Less performance gain with binlog_order_commits off after binlog group commit optimization.
 
@@ -267,7 +267,7 @@ MySQL defaults to enabling *binlog_order_commits*. Notably, disabling *binlog_or
 
 The Performance Schema helps DBAs tune performance by taking real measurements instead of making guesses. Unfortunately, in NUMA environments, enabling the Performance Schema impacts MySQL's performance, especially affecting MySQL secondary replay. The figure below compares TPC-C throughput across different concurrency levels using BenchmarkSQL to analyze this impact.
 
-<img src="media\image-20240829115606145.png" alt="image-20240829115606145" style="zoom:150%;" />
+<img src="media/image-20240829115606145.png" alt="image-20240829115606145" style="zoom:150%;" />
 
 Figure 11-19. Achieve better performance with performance_schema off.
 
@@ -305,7 +305,7 @@ When MySQL primary testing completes, the MySQL secondary also finishes replay n
 
 ### 11.5.6 Effect of Doublewrite on Performance
 
-Here¡¯s a brief introduction to the *innodb_doublewrite* parameter:
+Here's a brief introduction to the *innodb_doublewrite* parameter:
 
 <img src="media/5dc2c211205677ed7ae1528cd1911685.png" style="zoom:50%;" />
 
@@ -313,7 +313,7 @@ The doublewrite buffer is a storage area where InnoDB writes pages from the buff
 
 The impact of enabling doublewrite on performance is assessed using the improved MySQL 8.0.27 with PGO. The figure below shows the effect of disabling doublewrite on TPC-C throughput across different concurrency levels.
 
-<img src="media\image-20240829115642934.png" alt="image-20240829115642934" style="zoom:150%;" />
+<img src="media/image-20240829115642934.png" alt="image-20240829115642934" style="zoom:150%;" />
 
 Figure 11-23. Achieve higher peak throughput with doublewrite disabled.
 
@@ -321,7 +321,7 @@ From the figure, it is evident that disabling the doublewrite parameter can incr
 
 ### 11.5.7 Effect of Binlog Row Image Format on Performance
 
-Here¡¯s a brief introduction to the *binlog_row_image* parameter:
+Here's a brief introduction to the *binlog_row_image* parameter:
 
 <img src="media/90962de7267c4d56e20456f01796ac29.png" style="zoom:50%;" />
 
@@ -329,7 +329,7 @@ For MySQL row-based replication, this variable controls how row images are recor
 
 Based on the improved version of MySQL 8.0.27 with PGO, the impact of the *binlog_row_image* parameter on TPC-C throughput at various concurrency levels is analyzed. See the figure below:
 
-<img src="media\image-20240829115703081.png" alt="image-20240829115703081" style="zoom:150%;" />
+<img src="media/image-20240829115703081.png" alt="image-20240829115703081" style="zoom:150%;" />
 
 Figure 11-24. Achieve improved throughput with minimal logging.
 
@@ -337,15 +337,15 @@ From the figure, it can be observed that using *binlog_row_image=minimal* provid
 
 ### 11.5.8 Understanding the Effect of Binlog Compression Settings on Performance
 
-Here¡¯s a brief introduction to the *binlog_transaction_compression* parameter:
+Here's a brief introduction to the *binlog_transaction_compression* parameter:
 
 <img src="media/f621d8dd39147a621753b36d643cf42f.png" style="zoom:50%;" />
 
 When binary log transaction compression is enabled, transaction payloads are compressed and written to the binary log as a single event. These compressed payloads remain compressed in the replication stream and relay logs, reducing storage requirements and saving network bandwidth for both the originator and recipients of the transactions [13].
 
-In a Group Replication cluster within the same data center, with *binlog_transaction_compression* enabled for MySQL primary and secondaries, let¡¯s analyze the effect of binary log compression on TPC-C throughput. Refer to the figure below for detailed results:
+In a Group Replication cluster within the same data center, with *binlog_transaction_compression* enabled for MySQL primary and secondaries, let's analyze the effect of binary log compression on TPC-C throughput. Refer to the figure below for detailed results:
 
-<img src="media\image-20240829115724267.png" alt="image-20240829115724267" style="zoom:150%;" />
+<img src="media/image-20240829115724267.png" alt="image-20240829115724267" style="zoom:150%;" />
 
 Figure 11-25. Binlog compression may negatively impact performance in LAN environments.
 
@@ -353,7 +353,7 @@ From the figure, it is evident that enabling binlog compression results in a sig
 
 To investigate whether increasing network latency could improve throughput after compression, a simulated network latency of 10ms was used. The comparison of TPC-C throughput versus concurrency levels, before and after binlog compression, is shown in the following figure.
 
-<img src="media\image-20240901103231333.png" alt="image-20240901103231333" style="zoom:150%;" />
+<img src="media/image-20240901103231333.png" alt="image-20240901103231333" style="zoom:150%;" />
 
 Figure 11-26. Binlog compression does not affect performance in WAN environments.
 
@@ -363,7 +363,7 @@ Users should weigh the trade-off between storage cost reduction and performance 
 
 ### 11.5.9 Understanding the Effect of InnoDB Buffer Pool Size on Performance
 
-Here¡¯s a brief introduction to the *innodb_buffer_pool_size* parameter:
+Here's a brief introduction to the *innodb_buffer_pool_size* parameter:
 
 <img src="media/c649a1a7c43cffd86e55f28aeb8ff607.png" style="zoom: 40%;" />
 
@@ -371,7 +371,7 @@ The larger buffer pool retains more data in memory, reducing page evictions, I/O
 
 Based on the improved MySQL 8.0.27 version with PGO, the impact of the *innodb_buffer_pool_size* parameter on TPC-C throughput at various concurrency levels is analyzed. The results, with a warehouse count of 1000, are shown in the figure below.
 
-<img src="media\image-20240901104239714.png" alt="image-20240901104239714" style="zoom:150%;" />
+<img src="media/image-20240901104239714.png" alt="image-20240901104239714" style="zoom:150%;" />
 
 Figure 11-27. innodb_buffer_pool_size: optimal size is key to performance, not just larger.
 
@@ -384,4 +384,3 @@ Notably, the *innodb_buffer_pool_size* parameter is well-suited for dynamic adap
 This chapter focuses on optimizing MySQL application performance without modifying MySQL source code. Key methods include using PGO, minimizing network interactions, employing advanced memory allocation tools, and improving indexing and parameter configurations.
 
 The effectiveness of these optimization methods varies depending on the MySQL version, configuration parameters, hardware environment, and specific application characteristics. While a parameter might significantly impact performance in one scenario, its effectiveness may decrease in another. This variability arises from the complex interactions between multiple performance-affecting queues and potential bottlenecks, making performance testing particularly challenging.
-

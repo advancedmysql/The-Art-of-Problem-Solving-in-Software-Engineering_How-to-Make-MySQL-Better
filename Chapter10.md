@@ -10,7 +10,7 @@ Whether using asynchronous replication, semisynchronous replication, or Group Re
 
 ### 10.1.1 Ensuring Replay Correctness
 
-To ensure correct replay, it is necessary to establish dependencies between transactions. If there are conflicts between two transactions, the replay order must be determined¡ªspecifically, which transaction should be replayed first and which should follow. These dependencies are based on the transaction order in the binlog or relay log files.
+To ensure correct replay, it is necessary to establish dependencies between transactions. If there are conflicts between two transactions, the replay order must be determined—specifically, which transaction should be replayed first and which should follow. These dependencies are based on the transaction order in the binlog or relay log files.
 
 Once the dependencies are established, ensuring the idempotence of replay is crucial. This property is essential, especially in scenarios like crash recovery, to guarantee that transactions can be replayed correctly and consistently without unintended side effects.
 
@@ -58,34 +58,35 @@ The execution process for MySQL secondary replay differs from that of the primar
 
 The figure below compares CPU consumption between MySQL primary and secondary during a standard TPC-C test.
 
-<img src="media\image-20240829112229366.png" alt="image-20240829112229366" style="zoom:150%;" />
+<img src="media/image-20240829112229366.png" alt="image-20240829112229366" style="zoom:150%;" />
 
 Figure 10-1. Secondary CPU consumption significantly lower than primary.
 
 Based on the figure, the following conclusions can be drawn:
 
-1.  **CPU Consumption Comparison**:
+1. **CPU Consumption Comparison**:
 
-    MySQL secondary replay consistently consumes significantly less CPU compared to MySQL primary, regardless of concurrency levels. This is due to:
+   MySQL secondary replay consistently consumes significantly less CPU compared to MySQL primary, regardless of concurrency levels. This is due to:
 
-    -   MySQL secondary replay involves only write operations, avoiding read operations.
-    -   Event-based replay enhances execution efficiency.
-2.  **Concurrency Impact**:
+   -   MySQL secondary replay involves only write operations, avoiding read operations.
+   -   Event-based replay enhances execution efficiency.
 
-    The CPU consumption difference between the primary and secondary is smaller at low concurrency but becomes more pronounced at high concurrency. 
+2. **Concurrency Impact**:
+
+   The CPU consumption difference between the primary and secondary is smaller at low concurrency but becomes more pronounced at high concurrency. 
 
 
 The above statistics are based on standard TPC-C test results and do not include large transactions. The following figure compares time consumption during the TPC-C data loading process.
 
-<img src="media\image-20240829112250200.png" alt="image-20240829112250200" style="zoom:150%;" />
+<img src="media/image-20240829112250200.png" alt="image-20240829112250200" style="zoom:150%;" />
 
 Figure 10-2. Secondary CPU usage is much lower than primary when processing large transactions.
 
 From the figure, it is evident that CPU consumption on the MySQL primary is significantly higher than on the MySQL secondary. This indicates that for data loading, including processing large transactions, the MySQL secondary shows very high execution efficiency. In contrast, there may be further optimization opportunities for handling large transactions on the MySQL primary.
 
-Next, let¡¯s examine the time required for the MySQL primary to load TPC-C data for 1000 warehouses. Specific statistical results are shown in the following figure:
+Next, let's examine the time required for the MySQL primary to load TPC-C data for 1000 warehouses. Specific statistical results are shown in the following figure:
 
-<img src="media\image-20240829112326190.png" alt="image-20240829112326190" style="zoom:150%;" />
+<img src="media/image-20240829112326190.png" alt="image-20240829112326190" style="zoom:150%;" />
 
 Figure 10-3. Binding MySQL primary to a single NUMA node improves BenchmarkSQL data loading speed.
 
@@ -124,7 +125,7 @@ In terms of performance, the queue model for MySQL secondary replay can be simpl
 
 Figure 10-5. The queue model for MySQL secondary replay.
 
-In MySQL secondary replay, multi-queue stages¡ªsuch as for relay log flushing, transaction event replay (including reading, parsing, and queueing events), and commit operations¡ªrestrict the theoretical maximum replay speed. These serialized processes create inherent limits on how quickly the replay can proceed.
+In MySQL secondary replay, multi-queue stages—such as for relay log flushing, transaction event replay (including reading, parsing, and queueing events), and commit operations—restrict the theoretical maximum replay speed. These serialized processes create inherent limits on how quickly the replay can proceed.
 
 ## 10.2 Root Cause Analysis of Slow MySQL Replay
 
@@ -142,7 +143,7 @@ Initially, the MySQL secondary writes received transaction events to the relay l
 
 Why are these processes of writing and reading relay log events necessary instead of being skipped? If the MySQL secondary cannot keep up with replaying events, the imbalance in the queue causes the queue size to grow larger. Using relay log events on disk leverages files as a queue, avoiding problems like Out-Of-Memory (OOM) that could occur with an in-memory queue.
 
-The speed of the SQL thread needs to be flexible; if it¡¯s too slow, events cannot be replayed in time, and if it¡¯s too fast, unreplayed transactions may accumulate in the worker queues, increasing memory usage overhead. Therefore, flow control may be necessary when needed.
+The speed of the SQL thread needs to be flexible; if it's too slow, events cannot be replayed in time, and if it's too fast, unreplayed transactions may accumulate in the worker queues, increasing memory usage overhead. Therefore, flow control may be necessary when needed.
 
 Within the worker queues, MySQL imposes limits on queue sizes, which are not conducive to replaying large transactions efficiently. With modern servers having larger memory capacities, limiting the worker queue size to 16,384 is often insufficient to meet replay demands. To keep up with the pace of the MySQL primary, increasing the worker queue size is essential; otherwise, queues can fill up quickly, causing the SQL thread to wait unnecessarily.
 
@@ -247,11 +248,11 @@ bool Mts_submode_logical_clock::wait_for_last_committed_trx(
 }
 ```
 
-The code describes a mechanism where the SQL thread waits if the recorded low-water-mark (LWM)¡ªwhich signifies that a transaction and all prior transactions have been committed¡ªis less than the last committed value of the transaction being replayed. In MySQL, it is the SQL thread that waits, rather than the worker threads. This waiting mechanism significantly restricts the replay speed.
+The code describes a mechanism where the SQL thread waits if the recorded low-water-mark (LWM)—which signifies that a transaction and all prior transactions have been committed—is less than the last committed value of the transaction being replayed. In MySQL, it is the SQL thread that waits, rather than the worker threads. This waiting mechanism significantly restricts the replay speed.
 
 Finally, let's examine the problems related to MySQL secondary replay in a NUMA environment. The following figure shows the test results of MySQL secondary replay:
 
-<img src="media\image-20240829112700824.png" alt="image-20240829112700824" style="zoom:150%;" />
+<img src="media/image-20240829112700824.png" alt="image-20240829112700824" style="zoom:150%;" />
 
 Figure 10-11. Binding MySQL secondary to a single NUMA node improves replay speed.
 
@@ -297,7 +298,7 @@ const ulong mts_slave_worker_queue_len_max = 16384 << 6;
 
 Increasing the worker queue size by 64 times to 1,048,576 transaction events accommodates large transactions with many events, allowing MySQL secondary to fully utilize its capacity for replaying these large transactions. However, this increase may raise concerns about memory usage. The following figure illustrates the memory consumption of MySQL secondary processes with different worker queue sizes and varying numbers of workers. The horizontal axis represents the number of workers, while the vertical axis shows the actual memory usage of the MySQL secondary process.
 
-<img src="media\image-20240829112906641.png" alt="image-20240829112906641" style="zoom:150%;" />
+<img src="media/image-20240829112906641.png" alt="image-20240829112906641" style="zoom:150%;" />
 
 Figure 10-14. Memory consumption of MySQL secondary processes with different worker queue sizes and varying numbers of workers.
 
@@ -307,7 +308,7 @@ Currently, MySQL does not offer a configuration option to adjust the *worker_que
 
 ### 10.3.3 Optimizing the Scheduling Thread Mechanism
 
-If two transactions occurring close together in time modify the same data in MySQL, they can create dependencies during replay on the secondary. Specifically, the *last_committed* value of the latter transaction might match the *sequence_number* of the preceding one. During MySQL secondary replay, if a later transaction depends on a preceding one that hasn¡¯t finished replaying yet, the scheduling thread will block itself. This approach is inefficient because the worker replay thread should ideally handle such waits, not the scheduling thread. The scheduling thread itself has plenty of other tasks to handle, and there's no guarantee that the subsequent transaction couldn't be replayed promptly.
+If two transactions occurring close together in time modify the same data in MySQL, they can create dependencies during replay on the secondary. Specifically, the *last_committed* value of the latter transaction might match the *sequence_number* of the preceding one. During MySQL secondary replay, if a later transaction depends on a preceding one that hasn't finished replaying yet, the scheduling thread will block itself. This approach is inefficient because the worker replay thread should ideally handle such waits, not the scheduling thread. The scheduling thread itself has plenty of other tasks to handle, and there's no guarantee that the subsequent transaction couldn't be replayed promptly.
 
 To better understand this problem, consider the following case:
 
@@ -319,7 +320,7 @@ Assuming the MySQL secondary has completed transaction 12756 (*LWM*=12756), when
 
 The following figure illustrates TPC-C tests conducted with BenchmarkSQL at various concurrency levels to evaluate whether the MySQL secondary can match the MySQL primary's speed. The horizontal axis represents the concurrency level, and the vertical axis shows tpmC values. Light gray regions indicate that the MySQL secondary keeps pace with the MySQL primary, while Dark gray regions signify that it does not.
 
-<img src="media\image-20240829113049624.png" alt="image-20240829113049624" style="zoom:150%;" />
+<img src="media/image-20240829113049624.png" alt="image-20240829113049624" style="zoom:150%;" />
 
 Figure 10-16. If the processing speed of the MySQL primary exceeds the balanced replay speed, the secondaries may not keep up.
 
@@ -331,7 +332,7 @@ To address this, allowing workers to handle the waiting for **last_committed** t
 
 Utilizing advanced memory allocation tools can improve the replay speed of MySQL secondaries. The figure below shows the impact of two jemalloc versions on MySQL secondary replay performance under the x86 architecture.
 
-<img src="media\image-20240829113113252.png" alt="image-20240829113113252" style="zoom:150%;" />
+<img src="media/image-20240829113113252.png" alt="image-20240829113113252" style="zoom:150%;" />
 
 Figure 10-17. Achieve better replay speed with jemalloc 4.5.
 
@@ -341,7 +342,7 @@ From the figure, it is evident that using jemalloc 4.5 markedly improves the rep
 
 In a scenario where NUMA is disabled at the BIOS level, the efficiency of the MySQL secondary replay process is evaluated. Refer to the figure below for details.
 
-<img src="media\image-20240829113134905.png" alt="image-20240829113134905" style="zoom:150%;" />
+<img src="media/image-20240829113134905.png" alt="image-20240829113134905" style="zoom:150%;" />
 
 Figure 10-18. Comparison of balanced replay speed before and after disabling NUMA in the BIOS.
 
@@ -430,7 +431,7 @@ Frequent acquisition and release of latches cause context switches. In NUMA envi
 
 After addressing the latch bottleneck related to *pending_jobs_lock* and applying the configuration parameters of the online MySQL secondary, the focus shifts to evaluating whether disabling NUMA in the BIOS improves MySQL secondary replay performance. The following figure compares the balanced replay speeds of MySQL secondaries under different NUMA configurations.
 
-<img src="media\image-20240829113628989.png" alt="image-20240829113628989" style="zoom:150%;" />
+<img src="media/image-20240829113628989.png" alt="image-20240829113628989" style="zoom:150%;" />
 
 Figure 10-21. Disabling NUMA in the BIOS improves MySQL secondary replay speed by addressing the NUMA incompatibility bottleneck.
 
@@ -440,7 +441,7 @@ From the figure, it is evident that after addressing the NUMA incompatibility bo
 
 'Dual one' refers to the real-time disk flushing of binlog and redo logs, a critical technology for MySQL crash recovery. Testing revealed that 'dual one' significantly affects MySQL secondary replay speeds. The following figure shows that, under identical conditions, disabling 'dual one' increased the balanced replay speed to 810,000 tpmC, while enabling it reduced the replay speed to approximately 700,000 tpmC. Disabling 'dual one' thus led to a 15.7% improvement in replay speed.
 
-<img src="media\image-20240829113649785.png" alt="image-20240829113649785" style="zoom:150%;" />
+<img src="media/image-20240829113649785.png" alt="image-20240829113649785" style="zoom:150%;" />
 
 Figure 10-22. Achieve better replay speed with 'dual one' closed.
 
@@ -448,11 +449,11 @@ Figure 10-22. Achieve better replay speed with 'dual one' closed.
 
 Reducing the size of the binlog theoretically helps improve MySQL replay speed. The following figure shows the comparison between using *binlog_row_image=minimal* and *binlog_row_image=full* in terms of balanced replay speed:
 
-<img src="media\image-20240829113734608.png" alt="image-20240829113734608" style="zoom:150%;" />
+<img src="media/image-20240829113734608.png" alt="image-20240829113734608" style="zoom:150%;" />
 
 Figure 10-23. Achieve better replay speed with binlog_row_image=minimal.
 
-When using full mode for binlog, MySQL achieves a balanced replay speed of just over 790,000 tpmC. Switching to minimal mode, however, increases this speed to over 890,000 tpmC, representing a significant 13% improvement. This improvement highlights that setting *binlog_row_image=minimal*¡ªwhich substantially reduces the binlog size¡ªboosts the replay speed of MySQL secondaries. However, it's important to note that this setting may also pose a risk of incomplete data restoration in certain scenarios.
+When using full mode for binlog, MySQL achieves a balanced replay speed of just over 790,000 tpmC. Switching to minimal mode, however, increases this speed to over 890,000 tpmC, representing a significant 13% improvement. This improvement highlights that setting *binlog_row_image=minimal*—which substantially reduces the binlog size—boosts the replay speed of MySQL secondaries. However, it's important to note that this setting may also pose a risk of incomplete data restoration in certain scenarios.
 
 ### 10.3.8 Impact of Performance Schema on Replay Performance
 
@@ -468,7 +469,7 @@ From the graph, it is evident that the overhead associated with my_malloc callin
 
 Using the modified tpcc-mysql, high throughput tests can identify when Group Replication secondaries fall behind MySQL primary. The following figure presents detailed test results. The test setup includes: disabling 'dual one' using jemalloc 4.5, deploying MySQL secondaries and primary on separate machines, setting binlog row image format to minimal, and running the test for 300 seconds.
 
-<img src="media\image-20240829113824280.png" alt="image-20240829113824280" style="zoom:150%;" />
+<img src="media/image-20240829113824280.png" alt="image-20240829113824280" style="zoom:150%;" />
 
 Figure 10-25. Maximum replay speed in Group Replication.
 
