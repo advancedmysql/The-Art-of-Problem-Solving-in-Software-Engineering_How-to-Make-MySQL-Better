@@ -1,7 +1,7 @@
 ## The Art of Problem-Solving in Software Engineering:How to Make MySQL Better
 
 ###  Introduction
-This book delves into various MySQL low-level optimization techniques, including storage engines, binlog group commit, execution plans, Group Replication, and secondary server replay optimizations. By analyzing a wide range of complex cases, it uncovers the underlying causes of problems, applies logical reasoning for analysis, and employs data structures and algorithms for optimization, achieving significant improvements.
+This book delves into various low-level optimization techniques in MySQL, including storage engines, binlog group commit, execution plans, Group Replication, and secondary server replay optimizations. Through numerous complex performance cases, it demonstrates how to analyze performance issues using logical reasoning and optimize them using data structures and algorithms, achieving significant improvements.
 
 ### Table of Contents
 [Preface](Preface.md)

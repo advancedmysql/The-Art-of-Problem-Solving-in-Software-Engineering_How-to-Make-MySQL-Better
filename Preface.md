@@ -77,7 +77,7 @@ When deploying MySQL for testing, it is preferable to match the test environment
 6.  Improvements to MySQL are referred to as improved MySQL or modified MySQL.
 7.  The transaction isolation level in TPC-C tests is *Read Committed*.
 8.  The storage engine used for transactions is InnoDB.
-9.  The **binlog_format** parameter is set to row-based format.
+9.  The *binlog_format* parameter is set to row-based format.
 10. MySQL, whether primary or secondary, uses GTID (Global Transaction Identifier).
 11. Cluster settings include *replica_preserve_commit_order=on*.
 12. Unless stated otherwise, TPC-C tests are generally based on partitioned large tables.
