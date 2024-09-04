@@ -576,7 +576,7 @@ Figure 8-29. Significant alleviation of latch-related bottleneck.
 
 Even with higher concurrency, such as 3000, the bottlenecks are not pronounced. This suggests that the optimizations have effectively alleviated the latch-related performance problems, improving scalability under extreme conditions.
 
-Excluding the global latch before and after the *view_close* function call improves scalability, while including it severely degrades scalability under high concurrency. Although the *view_close* function operates efficiently within its critical section, frequent acquisition of the globally used trx-sys latch—employed throughout the trx-sys subsystem—leads to significant contention and head-of-line blocking, referred to as the 'double latch' problem. Notably, removing the latch from the final stage or using a new latch can significantly mitigate this problem.
+Excluding the global latch before and after the *view_close* function call improves scalability, while including it severely degrades scalability under high concurrency. Although the *view_close* function operates efficiently within its critical section, frequent acquisition of the globally used *trx-sys* latch—used throughout the *trx-sys* subsystem—causes significant contention and head-of-line blocking. This issue, known as the 'double latch' problem, arises from both *view_open* and *view_close* requiring the global *trx-sys* latch. Notably, removing the latch from the final stage or using a new latch can significantly mitigate this problem.
 
 ### 8.2.5 Explaining the Super-Linear Performance Phenomenon
 
