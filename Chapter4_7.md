@@ -176,7 +176,7 @@ Since retransmission is suspected, it's essential to understand its nature. Retr
 
 ![](media/6670e70b6d5f0f5152f643c153d13487.png)
 
-Figure 4-46. Packet capture screenshots with time information added.
+Figure 4-46. Packet capture screenshot with time information added.
 
 When analyzing network packets, timestamp information is crucial for accurate logical reasoning. A time difference in the microsecond range between two duplicate packets suggests either a timeout retransmission or duplicate packet capture. In a typical LAN environment with a Round-trip Time (RTT) of around 100 microseconds, where TCP retransmissions require at least one RTT, a retransmission occurring at just 1/100th of the RTT likely indicates duplicate packet capture rather than an actual timeout retransmission.
 
