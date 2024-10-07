@@ -40,9 +40,9 @@ Figure 2-4. Using PGO in higher versions of MySQL 8.0: a step-by-step guide.
 
 From the diagram, the Profile-Guided Optimization (PGO) mechanism involves several steps:
 
-1.  Initially, compile a specific version of MySQL with the compilation option *"-DFPROFILE_GENERATE=ON"*.
-2.  Start this MySQL version and capture training data by running performance tests such as TPC-C, which helps collect performance metrics.
-3.  After completing the training phase, perform a second compilation with the option *"-DFPROFILE_USE=ON"*. During this compilation, the compiler automatically utilizes the gathered statistical data to optimize conditional branches and related aspects, significantly improving the performance of the resulting MySQL executable.
+1. Initially, compile a specific version of MySQL with the compilation option *"-DFPROFILE_GENERATE=ON"*.
+2. Start this MySQL version and capture training data by running performance tests such as TPC-C, which helps collect performance metrics.
+3. After completing the training phase, perform a second compilation with the option *"-DFPROFILE_USE=ON"*. During this compilation, the compiler automatically utilizes the gathered statistical data to optimize conditional branches and related aspects, significantly improving the performance of the resulting MySQL executable.
 
 The following figure illustrates the relationship between throughput and concurrency before and after applying PGO to MySQL 8.0.27.
 
@@ -104,7 +104,7 @@ The following figure illustrates the throughput over time during long-term testi
 
 Figure 2-7. Performance degradation exposed during BenchmarkSQL testing of MySQL 8.0.27.
 
-This problem was identified during testing using BenchmarkSQL and may not necessarily occur with other TPC-C testing tools. As of the current version, MySQL 8.0.38, the problem of rapid throughput decline has not been fully solved. Subsequent chapters will delve into detailed explanations of the underlying causes of this problem.
+This problem was identified during testing using BenchmarkSQL and may not necessarily occur with other TPC-C testing tools. As of the current version, MySQL 8.0.39, the problem of rapid throughput decline has not been fully solved. Subsequent chapters will delve into detailed explanations of the underlying causes of this problem.
 
 ## 2.5 Repeatable Read Surprisingly Outperforms Read Committed
 
@@ -181,21 +181,21 @@ commit 1d259b87a63defa814e19a7534380cb43ee23c48
 Author: Jakub Łopuszański <jakub.lopuszanski@oracle.com>
 Date:   Wed Feb 5 14:12:22 2020 +0100
     WL#10314 - InnoDB: Lock-sys optimization: sharded lock_sys mutex
-    
+
     The Lock-sys orchestrates access to tables and rows. Each table, and each row,
     can be thought of as a resource, and a transaction may request access right for
     a resource. As two transactions operating on a single resource can lead to 
     problems if the two operations conflict with each other, Lock-sys remembers
     lists of already GRANTED lock requests and checks new requests for conflicts in
     which case they have to start WAITING for their turn.
-    
+
     Lock-sys stores both GRANTED and WAITING lock requests in lists known as queues.
     To allow concurrent operations on these queues, we need a mechanism to latch
     these queues in safe and quick fashion.
-    
+
     In the past a single latch protected access to all of these queues. 
     This scaled poorly, and the management of queues become a bottleneck.
-    
+
     In this WL, we introduce a more granular approach to latching.
 ```
 
