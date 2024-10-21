@@ -104,7 +104,7 @@ The following figure illustrates the throughput over time during long-term testi
 
 Figure 2-7. Performance degradation exposed during BenchmarkSQL testing of MySQL 8.0.27.
 
-This problem was identified during testing using BenchmarkSQL and may not necessarily occur with other TPC-C testing tools. As of the current version, MySQL 8.0.39, the problem of rapid throughput decline has not been fully solved. Subsequent chapters will delve into detailed explanations of the underlying causes of this problem.
+This problem was identified during testing using BenchmarkSQL and may not necessarily occur with other TPC-C testing tools. As of the current version, MySQL 8.0.40, the problem of rapid throughput decline has not been fully solved. Subsequent chapters will delve into detailed explanations of the underlying causes of this problem.
 
 ## 2.5 Repeatable Read Surprisingly Outperforms Read Committed
 

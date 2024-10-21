@@ -32,12 +32,12 @@ The MySQL 8.0.27 release version already had this problem, whereas the earlier M
 commit 9a13c1c6971f4bd56d143179ecfb34cca8ecc018
 Author: Steinar H. Gunderson <steinar.gunderson@oracle.com>
 Date:   Tue Jun 8 15:14:35 2021 +0200
-    
+
     Bug #32976857: REMOVE QEP_TAB_STANDALONE [range optimizer, noclose]
-    
+
     Remove the QEP_TAB dependency from test_quick_select() (ie., the range
     optimizer).
-    
+
     Change-Id: Ie0fcce71dfc813920711c43c3d62635dae0d7d20
 ```
 
@@ -145,7 +145,7 @@ From the figure, it is evident that after applying the patch, the rate of throug
 
 Addressing this problem directly presents considerable challenges, particularly for MySQL developers unfamiliar with query execution plans. Using logical reasoning and a systematic approach to identify and address code differences before and after the problem arose is a more elegant problem-solving method, though it is complex.
 
-It is noteworthy that no regression testing problems were encountered after applying the patch, demonstrating high stability and providing a solid foundation for future performance improvements. Currently, MySQL 8.0.39 still hasn't solved this problem, suggesting potential shortcomings in MySQL's testing system. Given the complexity of MySQL databases, users should exercise caution when upgrading and consider using tools like TCPCopy [60] to avoid potential regression testing problems.
+It is noteworthy that no regression testing problems were encountered after applying the patch, demonstrating high stability and providing a solid foundation for future performance improvements. Currently, MySQL 8.0.40 still hasn't solved this problem, suggesting potential shortcomings in MySQL's testing system. Given the complexity of MySQL databases, users should exercise caution when upgrading and consider using tools like TCPCopy [60] to avoid potential regression testing problems.
 
 ### 8.1.2 Improving Binlog Group Commit Scalability
 
@@ -614,8 +614,8 @@ To address scalability problems, traditional approaches use thread pools to rest
 
 In general, a thread pool in traditional MySQL serves two main purposes:
 
-1.  **Mitigating Short Connection Storms**: By managing and reusing threads, the thread pool helps prevent system overload during sudden spikes in short-lived connections.
-2.  **Enhancing Scalability**: Thread pools improve scalability, particularly in high-contention scenarios, by enabling MySQL to more effectively utilize available CPU cores.
+1. **Mitigating Short Connection Storms**: By managing and reusing threads, the thread pool helps prevent system overload during sudden spikes in short-lived connections.
+2. **Enhancing Scalability**: Thread pools improve scalability, particularly in high-contention scenarios, by enabling MySQL to more effectively utilize available CPU cores.
 
 Using Percona's thread pool as a case study, let's examine the cost-effectiveness of thread pools in improving MySQL scalability. The following figure compares throughput and concurrency before and after implementing a thread pool with the improved version of MySQL.
 
@@ -661,7 +661,7 @@ From the figure, it can be seen that throughput is more stable. This stability i
 
 However, transaction throttling is not a panacea and has its limitations:
 
--   When the maximum number of transactions are executing concurrently, new transactions must wait until existing transactions are completed. If all concurrent transactions consist of long-running queries, it may appear as if the MySQL system is stalled [31].
+- When the maximum number of transactions are executing concurrently, new transactions must wait until existing transactions are completed. If all concurrent transactions consist of long-running queries, it may appear as if the MySQL system is stalled [31].
 
 It's worth noting that the specifics of how transaction throttling is implemented, and its flexibility, are areas where AI can demonstrate its usefulness.
 
