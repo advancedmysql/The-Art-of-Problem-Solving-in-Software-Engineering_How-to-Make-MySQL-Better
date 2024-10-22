@@ -155,9 +155,9 @@ First, capture performance problems during the TPC-C test with 500 concurrency u
 
 ![](media/66a031ab14d56289d0987c65c73323af.png)
 
-Figure 8-14. *_pthread_mutex_con_lock* bottleneck reveals performance problems.
+Figure 8-14. *_pthread_mutex_cond_lock* bottleneck reveals performance problems.
 
-It is evident that *_pthread_mutex_con_lock* is a significant bottleneck, accounting for approximately 9.5% of the overhead. Although *perf* does not directly pinpoint the exact problem, it indicates the presence of this bottleneck.
+It is evident that *_pthread_mutex_cond_lock* is a significant bottleneck, accounting for approximately 9.5% of the overhead. Although *perf* does not directly pinpoint the exact problem, it indicates the presence of this bottleneck.
 
 To address the problem, an in-depth exploration of MySQL internals was conducted to uncover the factors contributing to this performance bottleneck. A conventional binary search approach with minimal logging was used to identify functions or code segments that incur significant overhead during execution. The minimal logging approach was chosen to reduce performance interference while diagnosing the root cause of the problem. Excessive logging can disrupt performance analysis, and while some may use MySQL's internal mechanisms for troubleshooting, these often introduce substantial performance overhead themselves.
 
@@ -275,11 +275,11 @@ Figure 8-17. Impact of group commit optimization using standard configurations.
 
 From the figure, it is clear that this optimization is less pronounced compared to the previous one, but it still shows overall improvement. Extensive testing indicates that the worse the scalability of MySQL, the more significant the effectiveness of binlog group commit optimization.
 
-At the same time, the previously identified bottleneck of *_pthread_mutex_con_lock* has been significantly alleviated after optimization, as shown in the following figure:
+At the same time, the previously identified bottleneck of *_pthread_mutex_cond_lock* has been significantly alleviated after optimization, as shown in the following figure:
 
 ![](media/8f9080ee71094d948ab7592b449954bb.png)
 
-Figure 8-18. Mitigation of *_pthread_mutex_con_lock* bottleneck.
+Figure 8-18. Mitigation of *_pthread_mutex_cond_lock* bottleneck.
 
 In summary, this optimization helps address scalability problems associated with binlog group commit.
 
