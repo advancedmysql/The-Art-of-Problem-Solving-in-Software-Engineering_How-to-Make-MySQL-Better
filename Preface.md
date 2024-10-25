@@ -10,15 +10,15 @@ This book uses MySQL challenges as case studies to explore problem analysis and 
 
 This book covers the following topics:
 
-1.  **Logical Reasoning for MySQL**: Techniques for analyzing complex MySQL problems using logical reasoning.
-2.  **Computer Science Fundamentals**: Fundamentals of computer science relevant to MySQL.
-3.  **MySQL Internals**: An introduction to the basics of MySQL core components.
-4.  **Performance Testing**: Methods for scientifically testing MySQL performance.
-5.  **MySQL 8.0 Improvements**: Key improvements in MySQL 8.0 compared to MySQL 5.7.
-6.  **MySQL Improvements**: Further optimizations in a standalone MySQL instance.
-7.  **Group Replication Advancements**: Notable enhancements in MySQL Group Replication.
-8.  **Secondary Replay improvements**: Optimizations in MySQL's secondary replay.
-9.  **Performance Optimization Techniques**: Strategies for optimizing MySQL applications.
+1. **Logical Reasoning for MySQL**: Techniques for analyzing complex MySQL problems using logical reasoning.
+2. **Computer Science Fundamentals**: Fundamentals of computer science relevant to MySQL.
+3. **MySQL Internals**: An introduction to the basics of MySQL core components.
+4. **Performance Testing**: Methods for scientifically testing MySQL performance.
+5. **MySQL 8.0 Improvements**: Key improvements in MySQL 8.0 compared to MySQL 5.7.
+6. **MySQL Improvements**: Further optimizations in a standalone MySQL instance.
+7. **Group Replication Advancements**: Notable enhancements in MySQL Group Replication.
+8. **Secondary Replay improvements**: Optimizations in MySQL's secondary replay.
+9. **Performance Optimization Techniques**: Strategies for optimizing MySQL applications.
 
 **Focus of the Book:**
 
@@ -26,14 +26,14 @@ Building on the goal of enhancing MySQL scalability, this book explores various 
 
 **Target Audience:**
 
-1.  **Quality-Focused Developers**: Individuals committed to high-quality software development.
-2.  **Problem Solvers**: Those interested in tackling complex software problems.
-3.  **MySQL Enthusiasts**: Readers looking to understand MySQL from the ground up.
-4.  **Testing Practitioners**: Users keen on mastering effective testing techniques.
-5.  **Software Architects**: Those designing large-scale software systems.
-6.  **Performance Engineers**: Engineers struggling with performance optimization.
-7.  **Computer Science Students**: Learners aiming to strengthen their foundational knowledge.
-8.  **MySQL Researchers**: Researchers conducting studies based on MySQL.
+1. **Quality-Focused Developers**: Individuals committed to high-quality software development.
+2. **Problem Solvers**: Those interested in tackling complex software problems.
+3. **MySQL Enthusiasts**: Readers looking to understand MySQL from the ground up.
+4. **Testing Practitioners**: Users keen on mastering effective testing techniques.
+5. **Software Architects**: Those designing large-scale software systems.
+6. **Performance Engineers**: Engineers struggling with performance optimization.
+7. **Computer Science Students**: Learners aiming to strengthen their foundational knowledge.
+8. **MySQL Researchers**: Researchers conducting studies based on MySQL.
 
 ## Outline of This Book
 
@@ -53,31 +53,31 @@ This book focuses on analyzing and solving MySQL problems, so a certain level of
 
 ## Special Terminology Explanation
 
-1.  **Balanced Replay Speed**
+1. **Balanced Replay Speed**
+   
+   For MySQL secondary replay, this defines balanced replay speed where the MySQL secondary matches the primary under normal circumstances. When the speed is at or below the balanced replay speed, there is no significant lag in transaction replay progress on the secondary. However, if the speed exceeds this threshold, the secondary begins to lag behind the primary in transaction replay progress.
 
-    For MySQL secondary replay, this defines balanced replay speed where the MySQL secondary matches the primary under normal circumstances. When the speed is at or below the balanced replay speed, there is no significant lag in transaction replay progress on the secondary. However, if the speed exceeds this threshold, the secondary begins to lag behind the primary in transaction replay progress.
+2. **Dual One**
+   
+   Specifically refers to two major configurations in MySQL: *sync_binlog=1* and *innodb_flush_log_at_trx_commit=1*.
 
-2.  **Dual One**
-
-    Specifically refers to two major configurations in MySQL: *sync_binlog=1* and *innodb_flush_log_at_trx_commit=1*.
-
-3.  **MySQL Secondary Replay**
-
-    This term represents the common replay process for asynchronous replication, semisynchronous replication, and Group Replication. In this book, 'MySQL primary' is consistently used to represent the MySQL source, and 'MySQL secondary' to represent the MySQL replica.
+3. **MySQL Secondary Replay**
+   
+   This term represents the common replay process for asynchronous replication, semisynchronous replication, and Group Replication. In this book, 'MySQL primary' is consistently used to represent the MySQL source, and 'MySQL secondary' to represent the MySQL replica.
 
 ## Deployment Supplementary Explanation
 
 When deploying MySQL for testing, it is preferable to match the test environment as closely as possible to the production environment, unless certain configurations significantly interfere with performance analysis. Below are specific declarations related to MySQL deployment during the testing process:
 
-1.  Mainstream servers used are all NUMA architecture servers.
-2.  Servers are generally x86 architecture.
-3.  SSD hardware disks are used.
-4.  All tests are conducted on the Linux operating system.
-5.  MySQL standalone tests typically use version 8.0.27, while MySQL cluster tests generally use version 8.0.32.
-6.  Improvements to MySQL are referred to as improved MySQL or modified MySQL.
-7.  The transaction isolation level in TPC-C tests is *Read Committed*.
-8.  The storage engine used for transactions is InnoDB.
-9.  The *binlog_format* parameter is set to row-based format.
+1. The mainstream servers in use all have a 4-way NUMA architecture.
+2. Servers are generally x86 architecture.
+3. SSD hardware disks are used.
+4. All tests are conducted on the Linux operating system.
+5. MySQL standalone tests typically use version 8.0.27, while MySQL cluster tests generally use version 8.0.32.
+6. Improvements to MySQL are referred to as improved MySQL or modified MySQL.
+7. The transaction isolation level in TPC-C tests is *Read Committed*.
+8. The storage engine used for transactions is InnoDB.
+9. The *binlog_format* parameter is set to row-based format.
 10. MySQL, whether primary or secondary, uses GTID (Global Transaction Identifier).
 11. Cluster settings include *replica_preserve_commit_order=on*.
 12. Unless stated otherwise, TPC-C tests are generally based on partitioned large tables.
