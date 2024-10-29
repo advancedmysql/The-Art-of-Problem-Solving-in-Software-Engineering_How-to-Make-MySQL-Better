@@ -100,7 +100,7 @@ From the above, it can be seen that there are 1000 warehouses, with a concurrenc
 
 The following figure illustrates the throughput over time during long-term testing. The TPC-C throughput shows a decline rate that significantly surpasses expectations, nearing a 50% decrease.
 
-<img src="media/image-20240829081832578.png" alt="image-20240829081832578" style="zoom:150%;" />
+<img src="media/image-degrade.png" alt="image-degrade" style="zoom:150%;" />
 
 Figure 2-7. Performance degradation exposed during BenchmarkSQL testing of MySQL 8.0.27.
 

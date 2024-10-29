@@ -26,18 +26,18 @@ Optimizing a DBMS for a specific workload is complex and often requires expertis
 
 For performance testing in this book, the following strategies are applied:
 
-1.  **Conduct Pre- and Post-Optimization Comparisons:** Where feasible, perform performance comparisons before and after optimization, aiming for minimal variation.
-2.  **Match Configuration Parameters:** Align configuration parameters as closely as possible with the production environment.
-3.  **Conduct Performance Comparisons on Identical Hardware**: Perform tests on the same x86 machine in a NUMA environment with identical configurations. Reinitialize MySQL data directories and clean SSDs (via TRIM) to avoid interference. Test across a range of concurrency levels to assess throughput and determine whether optimizations improve performance or scalability.
-4.  **Repeat Testing with NUMA Node Binding**: After binding to NUMA node 0, repeat the tests to compare performance in an SMP environment.
-5.  **Test on x86 Machines with NUMA Disabled**: Conduct comparative performance testing on x86 machines with identical hardware but with NUMA disabled (in the BIOS).
-6.  **Evaluate Performance on ARM Machines**: Test comparative performance on ARM machines in a NUMA environment with similar MySQL configurations.
-7.  **Verify Consistency with Different Tools**: Use various testing tools to compare results and ensure consistency. For example, employ BenchmarkSQL and modified versions of tpcc-mysql for TPC-C testing.
-8.  **Assess Performance Under Varying Network Latency**: Examine performance effects under different network latency conditions.
-9.  **Test Performance with Different "Thinking Time" Scenarios**: Evaluate how performance varies with different "thinking time" scenarios to gauge consistency.
-10.  **Perform Closed-Loop Testing**: Ensure no interference during testing by repeating the initial tests and comparing results with the first round. Small differences in test results indicate that the environment is relatively stable.
-11.  **Verify Bottleneck Interference**: Confirm whether interference from other bottlenecks under high concurrency has distorted the performance comparison.
-12.  **Analyze Theoretical Basis and Anomalies**: Evaluate whether the performance optimization has a theoretical basis and if any anomalies can be explained. Analyze the type of optimization, its general applicability, and which environments benefit most. Investigate anomalies to determine their causes.
+1. **Conduct Pre- and Post-Optimization Comparisons:** Where feasible, perform performance comparisons before and after optimization, aiming for minimal variation.
+2. **Match Configuration Parameters:** Align configuration parameters as closely as possible with the production environment.
+3. **Conduct Performance Comparisons on Identical Hardware**: Perform tests on the same x86 machine in a NUMA environment with identical configurations. Reinitialize MySQL data directories and clean SSDs (via TRIM) to avoid interference. Test across a range of concurrency levels to assess throughput and determine whether optimizations improve performance or scalability.
+4. **Repeat Testing with NUMA Node Binding**: After binding to NUMA node 0, repeat the tests to compare performance in an SMP environment.
+5. **Test on x86 Machines with NUMA Disabled**: Conduct comparative performance testing on x86 machines with identical hardware but with NUMA disabled (in the BIOS).
+6. **Evaluate Performance on ARM Machines**: Test comparative performance on ARM machines in a NUMA environment with similar MySQL configurations.
+7. **Verify Consistency with Different Tools**: Use various testing tools to compare results and ensure consistency. For example, employ BenchmarkSQL and modified versions of tpcc-mysql for TPC-C testing.
+8. **Assess Performance Under Varying Network Latency**: Examine performance effects under different network latency conditions.
+9. **Test Performance with Different "Thinking Time" Scenarios**: Evaluate how performance varies with different "thinking time" scenarios to gauge consistency.
+10. **Perform Closed-Loop Testing**: Ensure no interference during testing by repeating the initial tests and comparing results with the first round. Small differences in test results indicate that the environment is relatively stable.
+11. **Verify Bottleneck Interference**: Confirm whether interference from other bottlenecks under high concurrency has distorted the performance comparison.
+12. **Analyze Theoretical Basis and Anomalies**: Evaluate whether the performance optimization has a theoretical basis and if any anomalies can be explained. Analyze the type of optimization, its general applicability, and which environments benefit most. Investigate anomalies to determine their causes.
 
 ### 6.1.3 Overly-specific Tuning
 
@@ -45,9 +45,9 @@ These problems can be mitigated by conducting a range of experiments beyond stan
 
 To address these problems, MySQL configuration should meet the following criteria:
 
-1.  **Minimize Impact of Configuration Parameters**: Ensure parameters, like buffer pool size, do not hinder other optimizations.
-2.  **Use Default Configurations**: Apply default settings for uncertain parameters, such as spin delay.
-3.  **Match Production Configurations**: Align test settings with production configurations, e.g., sync_binlog=1 and innodb_flush_log_at_trx_commit=1.
+1. **Minimize Impact of Configuration Parameters**: Ensure parameters, like buffer pool size, do not hinder other optimizations.
+2. **Use Default Configurations**: Apply default settings for uncertain parameters, such as spin delay.
+3. **Match Production Configurations**: Align test settings with production configurations, e.g., sync_binlog=1 and innodb_flush_log_at_trx_commit=1.
 
 To overcome the limitations of single-type testing, employ a variety of test scenarios. For TPC-C, include tests with varying conflict severity, thinking time, and network latency. For SysBench, use tests with Pareto distributions, read/write, and write-only operations.
 
@@ -99,33 +99,33 @@ The TPC-C benchmark is the gold standard for database concurrency control in bot
 
 Experiment settings can significantly impact evaluation results. In TPC-C:
 
--   Introducing wait time makes experiments I/O intensive.
--   Removing wait time makes experiments CPU/memory intensive.
--   Reducing the number of warehouses makes experiments contention intensive.
+- Introducing wait time makes experiments I/O intensive.
+- Removing wait time makes experiments CPU/memory intensive.
+- Reducing the number of warehouses makes experiments contention intensive.
 
 TPC-C can stress test almost every key component of a computer system, but this versatility poses challenges for fair comparisons between different systems [8].
 
 At a high level, the following factors reduce contention:
 
--   More warehouses
--   Fewer cross-warehouse transactions
--   Fewer workers/users per warehouse
--   Adding wait time
--   Short or no I/Os within a critical section
+- More warehouses
+- Fewer cross-warehouse transactions
+- Fewer workers/users per warehouse
+- Adding wait time
+- Short or no I/Os within a critical section
 
 In low-contention settings, throughput is limited by the system's slowest component:
 
--   Disk I/O if data exceeds DRAM size
--   Network I/O if using traditional TCP stack and data fits in DRAM
--   Centralized sequencers or global dependency graphs may also cause scalability bottlenecks
+- Disk I/O if data exceeds DRAM size
+- Network I/O if using traditional TCP stack and data fits in DRAM
+- Centralized sequencers or global dependency graphs may also cause scalability bottlenecks
 
 Conversely, the following factors increase contention:
 
--   Fewer warehouses
--   More cross-warehouse transactions
--   More workers/users per warehouse
--   No wait time
--   Long I/Os within a critical section
+- Fewer warehouses
+- More cross-warehouse transactions
+- More workers/users per warehouse
+- No wait time
+- Long I/Os within a critical section
 
 In high-contention settings, throughput is determined by the concurrency control mechanism. Systems that can release locks earlier or reduce aborts will have advantages [8].
 
@@ -167,14 +167,14 @@ According to the TPC-C benchmark, the database must operate in a steady state fo
 
 To meet these stability requirements in MySQL testing, the following measures were implemented:
 
-1.  Regularly cleaning the binlog to prevent SSD performance degradation due to I/O space constraints.
-2.  Utilizing a larger number of warehouses.
-3.  Adding indexes.
-4.  Deploying multiple SSDs.
+1. Regularly cleaning the binlog to prevent SSD performance degradation due to I/O space constraints.
+2. Utilizing a larger number of warehouses.
+3. Adding indexes.
+4. Deploying multiple SSDs.
 
 Following these measures, TPC-C testing was performed using BenchmarkSQL. The figure below illustrates the stability test comparison between MySQL 8.0.27 and the improved MySQL 8.0.27.
 
-<img src="media/image-20240829093722953.png" alt="image-20240829093722953" style="zoom:150%;" />
+<img src="media/image-degrade2.png" alt="image-degrade2" style="zoom:150%;" />
 
 Figure 6-4. Comparison of stability tests: MySQL 8.0.27 vs. improved MySQL 8.0.27.
 
@@ -182,7 +182,7 @@ From the figure, it is evident that although MySQL and the improved MySQL start 
 
 Additionally, comparisons were made for the improved MySQL at different concurrency levels. The figure below shows the throughput over time: the deep blue curve represents 100 concurrency, while the deep red curve represents 200 concurrency.
 
-<img src="media/image-20240829093752930.png" alt="image-20240829093752930" style="zoom:150%;" />
+<img src="media/image-degrade3.png" alt="image-degrade3" style="zoom:150%;" />
 
 Figure 6-5. Stability test comparison: 100 vs. 200 concurrency.
 
