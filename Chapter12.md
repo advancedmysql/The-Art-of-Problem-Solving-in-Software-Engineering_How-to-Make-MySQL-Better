@@ -18,10 +18,10 @@ Currently, Group Replication faces challenging concurrent view change problems. 
 
 MySQL scalability can be further improved in the following areas:
 
-1.  Eliminating additional latch bottlenecks, particularly in non-partitioned environments.
-2.  Improving the stability of long-term performance testing.
-3.  Improving MySQL's NUMA-awareness in mainstream NUMA environments.
-4.  Addressing Performance Schema's adverse impact on NUMA environments during MySQL secondary replay processes.
+1. Eliminating additional latch bottlenecks, particularly in non-partitioned environments.
+2. Improving the stability of long-term performance testing.
+3. Improving MySQL's NUMA-awareness in mainstream NUMA environments.
+4. Addressing Performance Schema's adverse impact on NUMA environments during MySQL secondary replay processes.
 
 ## 12.5 Further Improving SQL Performance Under Low Concurrency
 
@@ -43,27 +43,31 @@ In mainstream NUMA environments, MySQL's primary server efficiency in handling l
 
 Currently, jemalloc 4.5 is the best-found memory allocation tool, but it has high memory consumption and instability on ARM architecture. A key future focus could be developing a more efficient and stable memory allocation tool.
 
-## 12.10 Introducing AI into MySQL Systems
+## 12.10 Integrating a High-Performance File System
+
+Enhancing MySQL with a better file system, especially improving the performance of MySQL secondary replay.
+
+## 12.11 Introducing AI into MySQL Systems
 
 Integrating AI with MySQL for automated knob tuning and learning-based database monitoring could be another key focus for the future.
 
-### 12.10.1 Knob Tuning
+### 12.11.1 Knob Tuning
 
 Integrating AI for parameter optimization can significantly reduce DBA workload. Key parameters suitable for AI-driven optimization include:
 
-1.  Buffer pool size
-2.  Spin delay settings
-3.  Dynamic transaction throttling limits based on environment
-4.  Dynamic XCom cache size adjustment
-5.  MySQL secondary worker max queue size
-6.  The number of Paxos pipelining instances and the size of batching
-7.  Automatic parameter adjustments under heavy load to improve processing capability
+1. Buffer pool size
+2. Spin delay settings
+3. Dynamic transaction throttling limits based on environment
+4. Dynamic XCom cache size adjustment
+5. MySQL secondary worker max queue size
+6. The number of Paxos pipelining instances and the size of batching
+7. Automatic parameter adjustments under heavy load to improve processing capability
 
-### 12.10.2 Learning-based Database Monitoring
+### 12.11.2 Learning-based Database Monitoring
 
 AI could optimize database monitoring by determining the optimal times and methods for tracking various database metrics.
 
-## 12.11 Summary
+## 12.12 Summary
 
 Programming demands strong logical reasoning skills, crucial for problem-solving, algorithm design, debugging, code comprehension, performance optimization, and testing. It helps in analyzing problems, creating solutions, correcting errors, and ensuring software reliability. Developing logical reasoning is essential for programmers to think systematically and build efficient, reliable software [56].
 

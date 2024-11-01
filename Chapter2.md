@@ -6,7 +6,7 @@ This chapter introduces nine puzzling MySQL problems or phenomena that serve as 
 
 ## 2.1 SysBench Read-Write Test Demonstrates Super-Linear Throughput Growth
 
-In the MySQL 8.0.27 release version, for example, in a NUMA environment on x86 architecture, using SysBench to remotely test MySQL's read-write capabilities. The MySQL transaction isolation level is set to Read Committed. MySQL instances 1 and 2 are deployed on the same machine, with a testing duration of 60 seconds. The results of separate SysBench tests for MySQL instance 1 and instance 2 are shown in the following figure.
+In the MySQL 8.0.27 release version, for example, in a 4-way NUMA environment on x86 architecture, using SysBench to remotely test MySQL's read-write capabilities. The MySQL transaction isolation level is set to Read Committed. MySQL instances 1 and 2 are deployed on the same machine, with a testing duration of 60 seconds. The results of separate SysBench tests for MySQL instance 1 and instance 2 are shown in the following figure.
 
 <img src="media/image-20240829081346732.png" alt="image-20240829081346732" style="zoom:150%;" />
 

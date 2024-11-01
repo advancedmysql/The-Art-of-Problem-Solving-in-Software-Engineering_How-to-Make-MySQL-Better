@@ -60,17 +60,17 @@ At the core of programming lies problem-solving. Logical reasoning empowers prog
 
 Deductive reasoning involves deriving conclusions from premises, often structured as syllogisms. A syllogism typically comprises a major premise, a minor premise, and a conclusion. For instance:
 
--   Major premise: All cluster databases cannot simultaneously meet the three requirements of CAP (consistency, availability, and partition tolerance).
--   Minor premise: Group Replication is a type of cluster database.
--   Conclusion: Therefore, Group Replication also cannot meet the three requirements of CAP.
+- Major premise: All cluster databases cannot simultaneously meet the three requirements of CAP (consistency, availability, and partition tolerance).
+- Minor premise: Group Replication is a type of cluster database.
+- Conclusion: Therefore, Group Replication also cannot meet the three requirements of CAP.
 
 Given Group Replication's inability to meet these requirements, it should be chosen based on user-specific needs rather than attempting to satisfy all criteria.
 
 Here's another example:
 
--   Major premise: Asynchronous network systems struggle to differentiate between slow response and system outage.
--   Minor premise: TCP communication relies on asynchronous networks.
--   Conclusion: Thus, TCP communication systems also encounter challenges in distinguishing between slow response and actual system failure.
+- Major premise: Asynchronous network systems struggle to differentiate between slow response and system outage.
+- Minor premise: TCP communication relies on asynchronous networks.
+- Conclusion: Thus, TCP communication systems also encounter challenges in distinguishing between slow response and actual system failure.
 
 Due to these challenges, TCP design must incorporate specific features such as robust timeout mechanisms and support for idempotency.
 
@@ -78,8 +78,8 @@ Due to these challenges, TCP design must incorporate specific features such as r
 
 Inductive reasoning extrapolates from specific instances to general conclusions. For instance:
 
--   On x86 NUMA platforms, native MySQL 8.0.32 shows poor scalability under the Read Committed isolation level.
--   On ARM NUMA platforms, native MySQL 8.0.32 similarly demonstrates poor scalability under the Read Committed isolation level.
+- On x86 NUMA platforms, native MySQL 8.0.32 shows poor scalability under the Read Committed isolation level.
+- On ARM NUMA platforms, native MySQL 8.0.32 similarly demonstrates poor scalability under the Read Committed isolation level.
 
 Therefore, on various NUMA platforms, native MySQL 8.0.32 consistently exhibits poor scalability under the Read Committed isolation level. Inductive reasoning is crucial for problem analysis and holds practical significance across diverse applications.
 
@@ -125,7 +125,11 @@ Figure 3-4. Requirements of the official worklog for redo log optimization.
 
 This involves latch-free concurrent writing to the log buffer, dedicated threads for handling write and flush processes, and so on.
 
-### 3.3.3 Seeking Theoretical Support
+### 3.3.3 Finding Solutions Through Exploration
+
+When confronted with unfamiliar problems or when overwhelmed by excessive details, it is essential to explore while simultaneously seeking solutions. This approach is particularly effective for resolving complex issues. For instance, during our optimization of the Paxos algorithm, we initially had only a basic concept of optimization, with many details yet to be considered. At this stage, we needed to test and refine our solutions through the challenges encountered, ultimately achieving our optimization goals step by step.
+
+### 3.3.4 Seeking Theoretical Support
 
 In the process of enhancing Group Replication, rooted in State Machine Replication (SMR) theory, it's crucial to begin by acquiring a substantial amount of theoretical knowledge through thorough paper reviews. This approach fosters a deeper understanding and maintains clarity throughout the enhancement process, ensuring a comprehensive grasp of the concepts and preventing deviation from the intended path.
 
@@ -135,13 +139,13 @@ The book "Designing Data-Intensive Applications" discusses theory very well, spe
 
 It is worth mentioning that this book includes a large amount of scholarly material as the basis for deductive reasoning and theoretical support.
 
-### 3.3.4 Logic-based Testing
+### 3.3.5 Logic-based Testing
 
 To assess the performance improvement potential of a new feature, rigorous iterative testing and validation across various perspectives and environments are essential. Reliable conclusions ensure predictable outcomes in subsequent tests. Any deviations observed during validation must be thoroughly investigated to identify potential interfering factors.
 
 For instance, consider the thread pool mechanism's impact on performance, particularly under high-concurrency testing conditions. Previous validations on MySQL 5.7 demonstrated significant throughput improvements with the thread pool. However, subsequent modifications in MySQL 8.0 have revealed a different scenario. Case studies in Chapter 2.3 indicate a negative scalability impact of the Percona thread pool. MySQL's official technical blog reports a decline in the thread pool's effectiveness over time [31].
 
-![](media/9f8e1c72f67be4bf28ad45beb271994a.png)
+<img src="media/image-thread-pool.png" alt="image-thread-pool" style="zoom:150%;" />
 
 When conducting performance comparison tests, it's crucial to eliminate human errors such as changes in the environment or configurations. To mitigate this problem, repeating the initial test and comparing its results with those of the first test can help identify significant changes. If there are no noticeable differences, it suggests that the intermediate tests are relatively reliable. For example, incorporating an additional test, depicted in the following figure, to compare its performance variance from the initial test.
 

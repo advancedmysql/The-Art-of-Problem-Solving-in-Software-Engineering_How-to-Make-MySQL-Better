@@ -71,16 +71,18 @@ When deploying MySQL for testing, it is preferable to match the test environment
 
 1. The mainstream servers in use all have a 4-way NUMA architecture.
 2. Servers are generally x86 architecture.
-3. SSD hardware disks are used.
-4. All tests are conducted on the Linux operating system.
-5. MySQL standalone tests typically use version 8.0.27, while MySQL cluster tests generally use version 8.0.32.
-6. Improvements to MySQL are referred to as improved MySQL or modified MySQL.
-7. The transaction isolation level in TPC-C tests is *Read Committed*.
-8. The storage engine used for transactions is InnoDB.
-9. The *binlog_format* parameter is set to row-based format.
-10. MySQL, whether primary or secondary, uses GTID (Global Transaction Identifier).
-11. Cluster settings include *replica_preserve_commit_order=on*.
-12. Unless stated otherwise, TPC-C tests are generally based on partitioned large tables.
+3. NVMe SSD hardware disks are used, and the I/O latency is very low.
+4. All tests were conducted on high-performance servers and only represent results for high-performance server configurations.
+5. All tests are conducted on the Linux operating system.
+6. MySQL standalone tests typically use version 8.0.27, while MySQL cluster tests generally use version 8.0.32.
+7. Improvements to MySQL are referred to as improved MySQL or modified MySQL.
+8. The transaction isolation level in TPC-C tests is *Read Committed*.
+9. The storage engine used for transactions is InnoDB.
+10. The *binlog_format* parameter is set to row-based format.
+11. MySQL, whether primary or secondary, uses GTID (Global Transaction Identifier).
+12. Cluster settings include *replica_preserve_commit_order=on*.
+13. Most tests are based on BenchmarkSQL TPC-C.
+14. Unless stated otherwise, TPC-C tests are generally based on partitioned large tables.
 
 ## How to Contact Us
 
@@ -94,6 +96,6 @@ This book meticulously organizes a wealth of ideas and knowledge contributed by 
 
 Several individuals have been crucial in the writing of this book by reviewing drafts and offering feedback. I am especially grateful for the contributions of Hongshen Wang, Jinrong Ye, Riyao Gao, and Haitao Gao. Naturally, I take full responsibility for any remaining errors or contentious opinions in this book.
 
-Finally, my deepest gratitude to my family, whose unwavering support has been indispensable throughout this nearly two-month writing journey. You are the best.
+Finally, my deepest gratitude to my family, whose unwavering support has been indispensable throughout this nearly three-month writing journey. You are the best.
 
 [Next](Part1.md)

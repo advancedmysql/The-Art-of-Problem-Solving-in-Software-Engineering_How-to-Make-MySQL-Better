@@ -108,8 +108,8 @@ struct lock_t {
 
 So, what distinguishes these two concepts? Consider this metaphor [19]:
 
--   A **latch** secures a door, gate, or window in place but does not offer protection against unauthorized access.
--   A **lock**, however, restricts entry to those without the key, ensuring security and control.
+- A **latch** secures a door, gate, or window in place but does not offer protection against unauthorized access.
+- A **lock**, however, restricts entry to those without the key, ensuring security and control.
 
 In MySQL, a global latch is employed to serialize specific processing procedures. For instance, the following is MySQL's description of the role of a global latch.
 
@@ -132,8 +132,8 @@ In MySQL, locks are integral to the transaction model, with common types includi
 
 Understanding locks is crucial for:
 
--   Implementing large-scale, busy, or highly reliable database applications
--   Tuning MySQL performance
+- Implementing large-scale, busy, or highly reliable database applications
+- Tuning MySQL performance
 
 Familiarity with InnoDB locking and the InnoDB transaction model is essential for these tasks.
 
@@ -162,8 +162,6 @@ static void lock_grant(lock_t *lock) {
   }
   ...
 ```
-
-
 
 **15 Maintaining Transaction Order with replica_preserve_commit_order**
 
@@ -229,9 +227,10 @@ In computer programming, a thread pool is a design pattern used to achieve concu
 
 Throughput measures the number of requests a system processes within a unit of time. Common statistical indicators include:
 
-1.  **Transactions Per Second (TPS):** The number of database transactions performed per second.
-2.  **Queries Per Second (QPS):** The number of database queries performed per second.
-3.  **tpmC for TPC-C:** The rate of New-Order transactions executed per minute in TPC-C benchmarks.
+1. **Transactions Per Second (TPS):** The number of database transactions performed per second.
+2. **Queries Per Second (QPS):** The number of database queries performed per second.
+3. **tpmC for TPC-C:** The rate of New-Order transactions executed per minute in TPC-C benchmarks.
+4. **tpmTOTAL for TPC-C:** The rate of total transactions executed per minute in TPC-C benchmarks.
 
 **31 Thundering Herd**
 
@@ -269,11 +268,11 @@ The TPC-C benchmark, defined by the Transaction Processing Council, is an OLTP t
 
 This schema is used by five different transactions, each creating varied access patterns:
 
-1.  **Item:** Read-only.
-2.  **Warehouse, District, Customer, Stock:** Read/write.
-3.  **New-Order:** Insert, read, and delete.
-4.  **Order and Order-Line:** Inserts with time-delayed updates, causing rows to become stale and infrequently read.
-5.  **History:** Insert-only.
+1. **Item:** Read-only.
+2. **Warehouse, District, Customer, Stock:** Read/write.
+3. **New-Order:** Insert, read, and delete.
+4. **Order and Order-Line:** Inserts with time-delayed updates, causing rows to become stale and infrequently read.
+5. **History:** Insert-only.
 
 The diverse access patterns of this small schema with a limited number of transactions contribute to TPC-C's ongoing significance as a major database benchmark. In this book, BenchmarkSQL is primarily employed to evaluate TPC-C performance in MySQL.
 
@@ -317,9 +316,9 @@ The preprocessor performs preliminary tasks such as verifying the existence of t
 
 The query optimizer determines the execution plan for the SQL query. This phase includes:
 
--   **Logical Query Rewrites:** Transforming queries into logically equivalent forms.
--   **Cost-Based Join Optimization:** Evaluating different join methods to minimize execution cost.
--   **Rule-Based Access Path Selection:** Choosing the best data access paths based on predefined rules.
+- **Logical Query Rewrites:** Transforming queries into logically equivalent forms.
+- **Cost-Based Join Optimization:** Evaluating different join methods to minimize execution cost.
+- **Rule-Based Access Path Selection:** Choosing the best data access paths based on predefined rules.
 
 The query optimizer generates the execution plan, which is then used by the query executor engine.
 
@@ -341,11 +340,11 @@ Since this query condition does not use an index, the optimizer chooses a full t
 
 The execution process for the executor and storage engine is as follows:
 
-1.  The Server layer calls the storage engine's full scan interface to start reading records from the table.
-2.  The executor checks if the age of the retrieved record exceeds 20. Records that meet this condition are dispatched to the network write buffer if there is available space.
-3.  The executor requests the next record from the storage engine in a loop. Each record is evaluated against the query conditions, and those that meet the criteria are sent to the network write buffer, provided the buffer is not full.
-4.  Once the storage engine has read all records from the table, it notifies the executor that reading is complete.
-5.  Upon receiving the completion signal, the executor exits the loop and flushes the query results to the client.
+1. The Server layer calls the storage engine's full scan interface to start reading records from the table.
+2. The executor checks if the age of the retrieved record exceeds 20. Records that meet this condition are dispatched to the network write buffer if there is available space.
+3. The executor requests the next record from the storage engine in a loop. Each record is evaluated against the query conditions, and those that meet the criteria are sent to the network write buffer, provided the buffer is not full.
+4. Once the storage engine has read all records from the table, it notifies the executor that reading is complete.
+5. Upon receiving the completion signal, the executor exits the loop and flushes the query results to the client.
 
 To optimize performance, MySQL minimizes frequent write system calls by checking if the network buffer is full before sending records to the client. Records are sent only when the buffer is full or when the completion signal is received.
 
@@ -374,7 +373,7 @@ The execution process with an index is as follows:
 2. The storage engine retrieves and returns the matching index record to the Server layer.
 
 3. The executor checks if the record meets the additional query conditions (e.g., id \< 3).
-
+   
    If conditions are met, the corresponding name is added to the network buffer, unless it is full. If conditions are not met, the executor skips the record and requests the next one from the storage engine.
 
 4. This cycle continues as the executor repeatedly requests and evaluates the next index record that matches the query condition until all relevant index records are processed.
@@ -393,23 +392,23 @@ MySQL follows the client-server architecture, which divides the system into two 
 
 ### 1 Client
 
-1.  The client is an application that interacts with the MySQL database server.
-2.  It can be a standalone application, a web application, or any program requiring a database.
-3.  The client sends SQL queries to the MySQL server for processing.
+1. The client is an application that interacts with the MySQL database server.
+2. It can be a standalone application, a web application, or any program requiring a database.
+3. The client sends SQL queries to the MySQL server for processing.
 
 ### 2 Server
 
-1.  The server is the MySQL database management system responsible for storing, managing, and processing data.
-2.  It receives SQL queries, processes them, and returns the result sets.
-3.  It manages data storage, security, and concurrent access for multiple clients.
+1. The server is the MySQL database management system responsible for storing, managing, and processing data.
+2. It receives SQL queries, processes them, and returns the result sets.
+3. It manages data storage, security, and concurrent access for multiple clients.
 
 The client communicates with the server over the network using the MySQL protocol, enabling multiple clients to interact concurrently. Applications use MySQL connectors to connect to the database server. MySQL also provides client tools, such as the terminal-based MySQL client, for direct interaction with the server.
 
 The MySQL database server includes several daemon processes:
 
-1.  **SQL Interface**: Provides a standardized interface for applications to interact with the database using SQL queries.
-2.  **Query Parser**: Analyzes SQL queries to understand their structure and syntax, breaking them down into components for further processing.
-3.  **Query Optimizer**: Evaluates various execution plans for a given query and selects the most efficient one to improve performance.
+1. **SQL Interface**: Provides a standardized interface for applications to interact with the database using SQL queries.
+2. **Query Parser**: Analyzes SQL queries to understand their structure and syntax, breaking them down into components for further processing.
+3. **Query Optimizer**: Evaluates various execution plans for a given query and selects the most efficient one to improve performance.
 
 In MySQL, a storage engine is responsible for storage, retrieval, and management of data. MySQL's pluggable storage engine architecture allows selecting different storage engines, such as InnoDB and MyISAM, to meet specific performance and scalability requirements while maintaining a consistent SQL interface.
 
@@ -423,9 +422,9 @@ The most common way to create a fault-tolerant system is to use redundant compon
 
 Replication in MySQL copies data from one server (primary) to one or more servers (secondaries), offering several advantages:
 
-1.  **Scale-out solutions**: Spreads the load among multiple secondaries to improve performance. All writes and updates occur on the primary server, while reads can occur on secondaries, enhancing read speed.
-2.  **Analytics**: Permits analysis on secondaries without impacting primary performance.
-3.  **Long-distance data distribution**: Creates local data copies for remote sites without needing constant access to the primary.
+1. **Scale-out solutions**: Spreads the load among multiple secondaries to improve performance. All writes and updates occur on the primary server, while reads can occur on secondaries, enhancing read speed.
+2. **Analytics**: Permits analysis on secondaries without impacting primary performance.
+3. **Long-distance data distribution**: Creates local data copies for remote sites without needing constant access to the primary.
 
 The original synchronization type is one-way asynchronous replication. The advantage of asynchronous replication is that user response time is unaffected by secondaries. However, there is a significant risk of data loss if the primary server fails and secondaries are not fully synchronized.
 
@@ -535,8 +534,6 @@ The testing command is as follows:
 ./tpcc_start -h127.0.0.1 -P 3306 -d tpcc200 -u xxx -p "yyy" -w 200 -c 100 -r 0 -l 60 -F 1
 ```
 
-
-
 ### 6 Configuration Parameters
 
 Due to numerous tests, only typical configurations are listed here. Special configurations require corresponding parameter modifications.
@@ -587,7 +584,9 @@ slave_parallel_type=LOGICAL_CLOCK
 slave_preserve_commit_order=on
 ```
 
-Regarding the improved Group Replication, the configuration parameters for the primary server are as follows:
+Regarding the improved Group Replication, since it is similar between MySQL 8.0.32 and MySQL 8.0.40, we have provided a version available for online use at the following address: https://github.com/advancedmysql/mysql-8.0.40.
+
+Accordingly, the configuration parameters for the primary server are as follows:
 
 ```
 # for mgr
@@ -600,16 +599,13 @@ loose-group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-baaaaaaaaaab"
 loose-group_replication_local_address=127.0.0.1:63318
 loose-group_replication_group_seeds= "127.0.0.1:63318,127.0.0.1:53318,127.0.0.1:43318"
 loose-group_replication_member_weight=50
-loose-group_replication_applier_batch_size_threshold=10000
-loose-group_replication_single_primary_fast_mode=1
-loose-group_replication_flow_control_mode=disabled
-loose-group_replication_broadcast_gtid_executed_period=1000
+
 slave_parallel_workers=256
 slave_parallel_type=LOGICAL_CLOCK
 slave_preserve_commit_order=on
 ```
 
-The parameter *group_replication_single_primary_fast_mode*=1 disables the traditional database certification mode. For the improved Group Replication, the configuration parameters for the secondary server are as follows:
+For the improved Group Replication, the configuration parameters for the secondary server are as follows:
 
 ```
 # for mgr
@@ -622,14 +618,13 @@ loose-group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-baaaaaaaaaab"
 loose-group_replication_local_address=127.0.0.1:53318
 loose-group_replication_group_seeds= "127.0.0.1:63318,127.0.0.1:53318,127.0.0.1:43318"
 loose-group_replication_member_weight=50
-loose-group_replication_applier_batch_size_threshold=10000
-loose-group_replication_single_primary_fast_mode=1
-loose-group_replication_flow_control_mode=disabled
-loose-group_replication_broadcast_gtid_executed_period=1000
+
 slave_parallel_workers=256
 slave_parallel_type=LOGICAL_CLOCK
 slave_preserve_commit_order=on
 ```
+
+Please note that we no longer provide the source code based on MySQL 8.0.32, but we do provide the source code based on MySQL 8.0.40.
 
 The details related to semisynchronous replication can be found at the following address:
 
@@ -637,13 +632,22 @@ https://github.com/advancedmysql/mysql_8.0.27/blob/main/semisynchronous.txt
 
 ### 7 Source Code Repository
 
-The patch address for "Percona Server for MySQL 8.0.27-18" is as follows:
+**Patch for "Percona Server for MySQL 8.0.27-18":**
 
+Patch Address:
 https://github.com/advancedmysql/mysql_8.0.27/blob/main/book_8.0.27_single.patch
 
-Please note that this patch focuses on optimizing a standalone MySQL instance. The cluster patch will be open-sourced on August 1, 2025.
+This patch specifically targets optimizations for standalone MySQL instances, including:
 
-For a MySQL standalone instance, the patch includes optimizations such as MVCC ReadView enhancements, binlog group commit improvements, and query execution plan optimizations. For cluster versions, the patch adds optimizations for Group Replication and MySQL secondary replay.
+- **MVCC ReadView** enhancements
+- **Binlog group commit** improvements
+- **Query execution plan** optimizations
+
+**Cluster Source Code:**
+
+The source code for MySQL cluster versions is available here: https://github.com/advancedmysql/mysql-8.0.40
+
+For MySQL clusters, the patch introduces further optimizations for **Group Replication** and **MySQL secondary replay**. 
 
 ## About the Author
 
