@@ -14,16 +14,16 @@ The FLP impossibility theorem is valuable in problem-solving as it highlights th
 
 The Mencius algorithm used in Group Replication addresses the FLP impossibility by using a failure detector oracle to bypass the result. Like Paxos, it relies on the failure detector only for liveness. Mencius requires that eventually, all and only faulty servers are suspected by the failure detector. This can be achieved by implementing failure detectors with exponentially increasing timeouts [32].
 
-To avoid the problems posed by the FLP impossibility, careful design is needed. TCP, for example, addresses this with timeout retransmission and idempotent design, ensuring that even if duplicate messages are received due to transmission errors, they can be safely discarded.
+To avoid problems caused by uncertainty, careful design is needed. TCP, for example, addresses this with timeout retransmission and idempotent design, ensuring that even if duplicate messages are received due to transmission errors, they can be safely discarded.
 
 ### 4.7.2 TCP/IP Protocol Stack
 
 The Internet protocol suite, commonly known as TCP/IP, organizes the set of communication protocols used in the Internet and similar computer networks [45]. It provides end-to-end data communication, specifying how data should be packetized, addressed, transmitted, routed, and received. The suite is divided into four abstraction layers, each classifying related protocols based on their networking scope:
 
-1.  **Link Layer**: Handles communication within a single network segment (link).
-2.  **Internet Layer**: Manages internetworking between independent networks.
-3.  **Transport Layer**: Facilitates host-to-host communication.
-4.  **Application Layer**: Enables process-to-process data exchange for applications.
+1. **Link Layer**: Handles communication within a single network segment (link).
+2. **Internet Layer**: Manages internetworking between independent networks.
+3. **Transport Layer**: Facilitates host-to-host communication.
+4. **Application Layer**: Enables process-to-process data exchange for applications.
 
 An implementation of these layers for a specific application forms a protocol stack. The TCP/IP protocol stack is one of the most widely used globally, having operated successfully for many years since its design. The following figure illustrates how a client program interacts with a MySQL Server using the TCP/IP protocol stack.
 
@@ -33,9 +33,9 @@ Figure 4-34. A client program interacts with a MySQL Server using the TCP/IP pro
 
 Due to the layered design of the TCP/IP protocol stack, a client program typically interacts only with the local TCP to access a remote MySQL server. This design is elegant in its simplicity:
 
-1.  **Client-Side TCP**: Handles sending SQL queries end-to-end to the remote MySQL server. It manages retransmission if packets are lost.
-2.  **Server-Side TCP**: Receives the SQL queries from the client-side TCP and forwards them to the MySQL server application. After processing, it sends the response back through its TCP stack.
-3.  **Routing and Forwarding**: TCP uses the IP layer for routing and forwarding, while the IP layer relies on the data link layer for physical transmission within the same network segment.
+1. **Client-Side TCP**: Handles sending SQL queries end-to-end to the remote MySQL server. It manages retransmission if packets are lost.
+2. **Server-Side TCP**: Receives the SQL queries from the client-side TCP and forwards them to the MySQL server application. After processing, it sends the response back through its TCP stack.
+3. **Routing and Forwarding**: TCP uses the IP layer for routing and forwarding, while the IP layer relies on the data link layer for physical transmission within the same network segment.
 
 Although TCP ensures reliable transmission, it cannot guarantee that messages will always reach their destination due to potential network anomalies. For example, SQL requests might be blocked by a network firewall, preventing them from reaching the MySQL server. In such cases, the client application might not receive a response, leading to uncertainty about whether the request was processed or still in transit.
 
@@ -51,8 +51,8 @@ Figure 4-35. Classic TCP state machine overview.
 
 A flexible understanding of state transitions is crucial for troubleshooting MySQL network problems. For example:
 
--   **CLOSE_WAIT State**: A large number of *CLOSE_WAIT* states on the server indicates that the application did not close connections promptly or failed to initiate the close process, causing connections to linger in this state.
--   **SYN_RCVD State**: Numerous *SYN_RCVD* states may suggest a SYN flood attack, where an excessive number of SYN requests overwhelm the server's capacity to handle them effectively.
+- **CLOSE_WAIT State**: A large number of *CLOSE_WAIT* states on the server indicates that the application did not close connections promptly or failed to initiate the close process, causing connections to linger in this state.
+- **SYN_RCVD State**: Numerous *SYN_RCVD* states may suggest a SYN flood attack, where an excessive number of SYN requests overwhelm the server's capacity to handle them effectively.
 
 Understanding these state transitions helps in diagnosing and addressing network-related problems more effectively.
 
@@ -108,7 +108,7 @@ Why does pure Paxos perform poorly in WAN environments? Refer to the packet capt
 
 Figure 4-41. Insights into the pure Paxos protocol from packet capture data.
 
-From the figure, it is evident that the delay between two Paxos instances is around 10ms, matching the network latency. The low throughput of pure Paxos stems from its serial interaction nature, where network latency primarily determines throughput.
+The figure clearly shows that when both pipelining and batching are disabled, referred to here as pure Paxos, throughput drops significantly to just 2833 tpmC. The low throughput of pure Paxos stems from its serial interaction nature, where network latency primarily determines throughput.
 
 In general, the test conclusions of pipelining and batching are consistent with the conclusions in the following paper [48]:
 
@@ -138,9 +138,9 @@ Figure 4-44. Network partitioning types.
 
 The figure categorizes network partitions into three types:
 
-1.  **Complete Network Partition (a)**: Two partitions are completely disconnected from each other, widely recognized as a complete network partition.
-2.  **Partial Network Partition (b)**: Group 1 and Group 2 are disconnected from each other, but Group 3 can still communicate with both. This is termed a partial network partition.
-3.  **Simplex Network Partition (c)**: Communication is possible in one direction but not the other, known as a simplex network partition.
+1. **Complete Network Partition (a)**: Two partitions are completely disconnected from each other, widely recognized as a complete network partition.
+2. **Partial Network Partition (b)**: Group 1 and Group 2 are disconnected from each other, but Group 3 can still communicate with both. This is termed a partial network partition.
+3. **Simplex Network Partition (c)**: Communication is possible in one direction but not the other, known as a simplex network partition.
 
 The most complex type is the partial network partition. Partial partitions isolate a set of nodes from some, but not all, nodes in the cluster, leading to a confusing system state where nodes disagree on whether a server is up or down. These disagreements are poorly understood and tested, even by expert developers [6].
 

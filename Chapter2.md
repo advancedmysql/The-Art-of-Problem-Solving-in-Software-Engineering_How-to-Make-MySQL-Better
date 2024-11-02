@@ -154,7 +154,7 @@ The root problem lies in the certification database mechanism used by Group Repl
 
 ## 2.7 Modified Group Replication Outperforms Semisynchronous Replication
 
-Group Replication has been extensively enhanced while addressing scalability problems in MySQL 8.0.32. To validate these improvements, simultaneous testing of semisynchronous replication and Group Replication with Paxos log persistence was conducted. The deployment setup included two-node configurations for both semisynchronous and Group Replication, hosted on the same machine with independent SSDs and NUMA binding to isolate each node. Specifically, the MySQL primary utilized NUMA nodes 0 to 2, while the MySQL secondary utilized NUMA node 3. All settings, except those directly related to semisynchronous or Group Replication configurations, remained identical.
+Group Replication has been extensively enhanced while addressing scalability problems in MySQL 8.0.32. To validate these improvements, simultaneous testing of semisynchronous replication and Group Replication with Paxos log persistence was conducted. The deployment setup included two-node configurations for both semisynchronous and Group Replication, hosted on the same machine with independent NVMe SSDs and NUMA binding to isolate each node. Specifically, the MySQL primary utilized NUMA nodes 0 to 2, while the MySQL secondary utilized NUMA node 3. All settings, except those directly related to semisynchronous or Group Replication configurations, remained identical.
 
 The following figure shows the throughput comparison of semisynchronous replication and Group Replication with Paxos log persistence under different concurrency levels.
 

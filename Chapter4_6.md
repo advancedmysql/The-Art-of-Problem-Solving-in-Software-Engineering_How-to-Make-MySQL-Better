@@ -8,13 +8,13 @@ The following figure depicts a scenario where MySQL primary and MySQL secondary 
 
 ![](media/4daa989affba4bd90fadec0d4236343a.png)
 
-Figure 4-23. Testing architecture for Group Replication with pure Paxos protocol
+Figure 4-23. Testing architecture for Group Replication with modified Mencius protocol.
 
 The cluster's Paxos algorithm employs a modified Mencius approach, removing batching and pipelining, making it similar to pure Paxos. Tests were conducted at various concurrency levels under a network latency of 10ms, as illustrated in the following figure:
 
 <img src="media/image-20240830114557281.png" alt="image-20240830114557281" style="zoom:150%;" />
 
-Figure 4-24. Results of testing Group Replication with pure Paxos protocol
+Figure 4-24. Results of testing Group Replication with modified Mencius protocol.
 
 In a WAN testing scenario, the throughput remains nearly constant across different concurrency levels—50, 100, or 150—because the time MySQL takes to process TPC-C transactions is negligible compared to the network latency of 10ms. This network latency dominates the overall transaction time, making the impact of concurrency changes relatively insignificant.
 
@@ -26,9 +26,9 @@ This closely matches the test results above, where 0.45 is an empirical factor d
 
 ![](media/484244432e5e53aff18ece6ad75eb616.png)
 
-Figure 4-25. Insights into the pure Paxos protocol from packet capture data.
+Figure 4-25. Insights into the modified Mencius protocol from packet capture data.
 
-In the figure, the network latency between the two Paxos instances is approximately 10ms, matching the exact network delay. Numerous examples suggest that pure Paxos communication is inherently serial. In scenarios where network latency is the predominant factor, it acts as a single queue bottleneck. Consequently, regardless of concurrency levels, the throughput of pure Paxos is limited by this network latency.
+In the figure, the network latency between the two Paxos instances is approximately 10ms, matching the exact network delay. Numerous examples suggest that Paxos communication is inherently serial. In scenarios where network latency is the predominant factor, it acts as a single queue bottleneck. Consequently, regardless of concurrency levels, the throughput of modified Mencius is limited by this network latency.
 
 ### 4.6.2 Multiple Queue Bottlenecks
 
@@ -100,10 +100,10 @@ To prevent performance degradation, controlling resource usage is crucial. For M
 
 A practical transaction throttling mechanism for MySQL is as follows:
 
-1.  Before entering the transaction system, check if the number of concurrent processing threads exceeds the limit.
-2.  If the limit is exceeded, block the user thread until other threads activate this thread.
-3.  If the limit is not exceeded, allow the thread to proceed with processing within the transaction system.
-4.  Upon transaction completion, activate the first transaction in the waiting queue.
+1. Before entering the transaction system, check if the number of concurrent processing threads exceeds the limit.
+2. If the limit is exceeded, block the user thread until other threads activate this thread.
+3. If the limit is not exceeded, allow the thread to proceed with processing within the transaction system.
+4. Upon transaction completion, activate the first transaction in the waiting queue.
 
 This approach helps maintain performance by controlling concurrency and managing resource usage effectively. The following figure illustrates the relationship between TPC-C throughput and concurrency under transaction throttling conditions, with 1000 warehouses.
 
