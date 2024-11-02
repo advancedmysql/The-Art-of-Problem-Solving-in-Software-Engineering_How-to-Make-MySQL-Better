@@ -26,14 +26,14 @@ MySQL asynchronous replication, semisynchronous replication, and Group Replicati
 
 In a Group Replication multi-primary architecture, although transactions can be executed on any node, there are several known shortcomings:
 
-1.  Lack of a global transaction manager.
-2.  Limited transaction isolation levels.
-3.  Potential for traffic skew under heavy write pressure.
+1. Lack of a global transaction manager.
+2. Limited transaction isolation levels.
+3. Potential for traffic skew under heavy write pressure.
 
 According to user feedback, users often utilize Group Replication multi-primary in the following ways:
 
-1.  They require that transactions between nodes do not conflict with each other.
-2.  Despite being multi-primary, transactions are executed on only one node to avoid the overhead of switching primaries.
+1. They require that transactions between nodes do not conflict with each other.
+2. Despite being multi-primary, transactions are executed on only one node to avoid the overhead of switching primaries.
 
 The following figure shows SysBench's read-write performance over time, where each node accesses the same database and handles both read and write tasks.
 
@@ -67,7 +67,7 @@ The tests indicate that the scalability of the Group Replication multi-primary a
 
 Based on event-driven architecture, common in web servers like Nginx, Percona's thread pool can be seen as a rough approximation of event-driven systems. However, event-driven architecture isn't free—it incurs overhead from system calls, and this additional overhead constitutes the cost of using a thread pool.
 
-MySQL's underlying Paxos communication can also be viewed as asynchronous event-driven. This communication operates in a single-threaded mode, requiring the avoidance of any synchronous communication processes. Unfortunately, MySQL has gradually violated these principles in its ongoing feature expansion, leading to throughput problems in certain scenarios due to prolonged synchronous processes dropping to zero. For problems related to Group Replication synchronization, refer to the highlighted code snippet below.
+MySQL's underlying Paxos communication can also be viewed as asynchronous event-driven. This communication operates in a single-threaded mode, requiring the avoidance of any synchronous communication processes. Unfortunately, MySQL has gradually violated these principles in its ongoing feature expansion, leading to throughput problems in certain scenarios due to prolonged synchronous processes dropping to zero. For problems related to Group Replication synchronization, see the code snippet below.
 
 ```c++
 /* Try to connect to another node */
