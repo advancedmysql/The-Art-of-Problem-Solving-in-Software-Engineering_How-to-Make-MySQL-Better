@@ -26,18 +26,18 @@ The ACID model outlines key database design principles essential for business da
 
 To implement a transaction, the following ACID properties must be satisfied:
 
-1.  **Atomicity**: Ensures "all or nothing" semantics, meaning either all operations of a transaction are completed, or none are. This aspect mainly involves InnoDB transactions.
-2.  **Consistency**: Requires every transaction to maintain the predetermined integrity rules of the database, transforming it from one consistent state to another. Consistency is ensured by the DBMS and involves internal InnoDB processing to protect data from crashes.
-3.  **Isolation**: Prevents transactions from interfering with each other, ensuring incomplete transactions are not visible to others. Isolation is primarily managed through InnoDB transactions and the isolation level applied to each transaction.
-4.  **Durability**: Guarantees that once a transaction is committed, it remains so, even in the event of a crash. This aspect involves MySQL software features and the hardware configuration, and it is the most complex to provide specific guidelines for.
+1. **Atomicity**: Ensures "all or nothing" semantics, meaning either all operations of a transaction are completed, or none are. This aspect mainly involves InnoDB transactions.
+2. **Consistency**: Requires every transaction to maintain the predetermined integrity rules of the database, transforming it from one consistent state to another. Consistency is ensured by the DBMS and involves internal InnoDB processing to protect data from crashes.
+3. **Isolation**: Prevents transactions from interfering with each other, ensuring incomplete transactions are not visible to others. Isolation is primarily managed through InnoDB transactions and the isolation level applied to each transaction.
+4. **Durability**: Guarantees that once a transaction is committed, it remains so, even in the event of a crash. This aspect involves MySQL software features and the hardware configuration, and it is the most complex to provide specific guidelines for.
 
 In the InnoDB storage engine:
 
--   **Transaction Layer**:
-    -   **Atomicity, Consistency, and Isolation**: Achieved through locks and ReadView.
-    -   **Cross-Engine Atomic Commits**: Implemented using XA Two-Phase Commit (2PC), ensuring atomicity between SQL layer binlogs and InnoDB redo logs, forming the basis for crash recovery.
--   **Mini-Transaction Layer**:
-    -   **Atomic, Consistent, and Durable Modifications**: Managed through interactions with redo/undo logs across multiple pages, supporting crash recovery.
+- **Transaction Layer**:
+  - **Atomicity, Consistency, and Isolation**: Achieved through locks and ReadView.
+  - **Cross-Engine Atomic Commits**: Implemented using XA Two-Phase Commit (2PC), ensuring atomicity between SQL layer binlogs and InnoDB redo logs, forming the basis for crash recovery.
+- **Mini-Transaction Layer**:
+  - **Atomic, Consistent, and Durable Modifications**: Managed through interactions with redo/undo logs across multiple pages, supporting crash recovery.
 
 Overall, atomicity, consistency, and durability are jointly achieved through both the mini-transaction and transaction layers, while isolation is mainly managed at the transaction layer.
 
@@ -85,29 +85,29 @@ Figure 5-3. InnoDB Architecture borrowed from the official MySQL documentation.
 
 **In-Memory Structures**
 
-1.  **Buffer Pool**:
-    -   Caches table and index data in main memory, allowing frequently accessed data to be read directly from memory, speeding up processing.
-    -   Divided into pages to hold multiple rows, managed using a linked list and a variation of the least recently used (LRU) algorithm.
-    -   Key aspect of MySQL tuning for efficient high-volume read operations.
-2.  **Log Buffer**:
-    -   Holds data to be written to the log files on disk, periodically flushed to disk.
-    -   A larger log buffer allows large transactions to run without writing redo log data to disk before committing, reducing disk I/O.
-    -   Controlled by the **innodb_flush_log_at_trx_commit** variable.
+1. **Buffer Pool**:
+   - Caches table and index data in main memory, allowing frequently accessed data to be read directly from memory, speeding up processing.
+   - Divided into pages to hold multiple rows, managed using a linked list and a variation of the least recently used (LRU) algorithm.
+   - Key aspect of MySQL tuning for efficient high-volume read operations.
+2. **Log Buffer**:
+   - Holds data to be written to the log files on disk, periodically flushed to disk.
+   - A larger log buffer allows large transactions to run without writing redo log data to disk before committing, reducing disk I/O.
+   - Controlled by the **innodb_flush_log_at_trx_commit** variable.
 
 **On-Disk Structures**
 
-1.  **Doublewrite Buffer**:
-    -   An intermediate storage area where pages from the buffer pool are written before their final position in InnoDB data files.
-    -   Ensures recovery from partial writes due to system crashes or unexpected shutdowns.
-    -   Efficient as it doesn't double the I/O overhead despite data being written twice.
-2.  **Redo Log**:
-    -   Disk-based structure used for crash recovery, correcting data from incomplete transactions.
-    -   Encodes changes from SQL statements or low-level API calls; replayed automatically during initialization after a crash.
-    -   Optimizes random writes into sequential log writes (ARIES algorithm) [2], improving performance.
-    -   Redo log files are crucial for acknowledging transaction completion.
-3.  **Undo Log**:
-    -   Part of undo log segments within rollback segments, residing in undo tablespaces and the global temporary tablespace.
-    -   Essential for transaction rollbacks and MVCC (Multi-Version Concurrency Control) reads.
+1. **Doublewrite Buffer**:
+   - An intermediate storage area where pages from the buffer pool are written before their final position in InnoDB data files.
+   - Ensures recovery from partial writes due to system crashes or unexpected shutdowns.
+   - Efficient as it doesn't double the I/O overhead despite data being written twice.
+2. **Redo Log**:
+   - Disk-based structure used for crash recovery, correcting data from incomplete transactions.
+   - Encodes changes from SQL statements or low-level API calls; replayed automatically during initialization after a crash.
+   - Optimizes random writes into sequential log writes (ARIES algorithm) [2], improving performance.
+   - Redo log files are crucial for acknowledging transaction completion.
+3. **Undo Log**:
+   - Part of undo log segments within rollback segments, residing in undo tablespaces and the global temporary tablespace.
+   - Essential for transaction rollbacks and MVCC (Multi-Version Concurrency Control) reads.
 
 By effectively managing these structures, InnoDB achieves a balance of high reliability and performance.
 
@@ -171,9 +171,9 @@ Partitioning allows you to distribute table data across a file system based on r
 
 The benefits of using partitioning are as follows:
 
-1.  Enabling storage of more data than a single disk or file system partition can hold.
-2.  Simplifying data management by allowing easy removal of obsolete data through dropping partitions, and facilitating the addition of new data by adding partitions.
-3.  Optimizing queries by limiting searches to specific partitions that contain relevant data.
+1. Enabling storage of more data than a single disk or file system partition can hold.
+2. Simplifying data management by allowing easy removal of obsolete data through dropping partitions, and facilitating the addition of new data by adding partitions.
+3. Optimizing queries by limiting searches to specific partitions that contain relevant data.
 
 MySQL partitioning not only offers these benefits but also reduces latch contention for large tables under high concurrency. The following figure shows the impact on TPC-C throughput after partitioning a large table in BenchmarkSQL.
 
@@ -323,9 +323,9 @@ Mencius is a multi-leader state machine replication protocol derived from Paxos 
 
 The single leader Multi-Paxos algorithm has the following characteristics [13]:
 
--   It relies on a single leader to choose the request sequence.
--   This simplicity results in high throughput and low latency for clients near the leader but higher latency for clients further away.
--   The leader becomes a bottleneck, limiting throughput and creating an unbalanced communication pattern that underutilizes available network bandwidth.
+- It relies on a single leader to choose the request sequence.
+- This simplicity results in high throughput and low latency for clients near the leader but higher latency for clients further away.
+- The leader becomes a bottleneck, limiting throughput and creating an unbalanced communication pattern that underutilizes available network bandwidth.
 
 MySQL introduced the single leader Multi-Paxos algorithm to improve performance and resilience in single-primary mode, especially when some secondary members are unreachable [13].
 
@@ -403,9 +403,9 @@ Asynchronous and semisynchronous replication both utilize an IO thread to read a
 
 For MySQL secondary replay, the SQL thread acts not only as the scheduler but also reads and parses transaction events from the relay log files. When the relay log volume is small, the SQL thread can manage, but as the relay log grows, the SQL thread becomes the primary bottleneck. It struggles to keep up with the workload of parsing events and managing scheduling tasks. Moreover, the SQL thread encounters waiting situations under the following conditions:
 
-1.  Each worker queue has a fixed size with no adjustable parameters. If a transaction contains numerous events (e.g., large transactions), the worker queue quickly fills up, causing the SQL thread to wait.
-2.  If there aren't enough workers available, the SQL thread waits.
-3.  If the SQL thread finds a new transaction with a last committed value greater than the minimum logical timestamp (low-water-mark) of committed transactions (LWM value), it also needs to wait.
+1. Each worker queue has a fixed size with no adjustable parameters. If a transaction contains numerous events (e.g., large transactions), the worker queue quickly fills up, causing the SQL thread to wait.
+2. If there aren't enough workers available, the SQL thread waits.
+3. If the SQL thread finds a new transaction with a last committed value greater than the minimum logical timestamp (low-water-mark) of committed transactions (LWM value), it also needs to wait.
 
 For example, the following code snippet illustrates how the SQL thread enters a waiting state when the worker queue is full.
 
@@ -469,38 +469,38 @@ Traditional database design relies on empirical methods and specifications, requ
 ### 5.20.1 Learning-based Database Configuration
 
 1. **Knob Tuning**
-
+   
    Databases have numerous knobs that need to be tuned by DBAs for different scenarios. This approach is not scalable for millions of cloud database instances. Recently, learning-based techniques have been used to automatically tune these knobs, exploring more combinations and recommending high-quality settings, often outperforming DBAs.
 
 2. **Index/View Advisor**
-
+   
    Indexes and views are essential for high performance, traditionally managed by DBAs. Given the vast number of column/table combinations, recommending and building appropriate indexes/views is costly. Recently, learning-based approaches have emerged to automate the recommendation and maintenance of indexes and views.
 
 3. **SQL Rewriter**
-
+   
    Many SQL programmers struggle to write high-quality queries, necessitating rewrites for performance improvement. For example, nested queries may be rewritten as joins for optimization. Existing methods use rule-based strategies, relying on predefined rules, which are limited by the quality and scalability of the rules. Deep reinforcement learning can be used to select and apply rules effectively.
 
 ### 5.20.2 Learning-based Database Optimization
 
 1. **Cardinality/Cost Estimation**
-
+   
    Traditional database optimizers struggle to capture correlations between different columns/tables, leading to suboptimal cost and cardinality estimations. Recently, deep learning techniques have been proposed to improve these estimations by using neural networks to better capture correlations.
 
 2. **Join Order Selection**
-
+   
    SQL queries can have millions or even billions of possible execution plans. Efficiently finding a good plan is crucial, but traditional optimizers struggle with large tables due to the high cost of exploring vast plan spaces. Deep reinforcement learning methods have been developed to automatically select efficient plans.
 
 3. **End-to-End Optimizer**
-
+   
    A comprehensive optimizer must consider cost/cardinality estimation, join order, indexes, and views. Learning-based optimizers use deep neural networks to optimize SQL queries holistically, improving overall query performance.
 
 ### 5.20.3 Learning-based Database Design
 
 Traditional databases are designed by architects based on experience, which limits the exploration of design spaces. Recently, learning-based self-design techniques have emerged [55]:
 
-1.  **Learned indexes**: These reduce index size and improve performance.
-2.  **Learned data structure design**: Different data structures suit different environments (e.g., hardware, read/write applications). Data structure alchemy creates an inference engine to recommend and design suitable structures.
-3.  **Learning-based Transaction Management**: Traditional techniques focus on protocols like OCC, PCC, MVCC, 2PC. New studies use AI to predict and schedule transactions, balancing conflict rates and concurrency by learning from data patterns and predicting future workload trends.
+1. **Learned indexes**: These reduce index size and improve performance.
+2. **Learned data structure design**: Different data structures suit different environments (e.g., hardware, read/write applications). Data structure alchemy creates an inference engine to recommend and design suitable structures.
+3. **Learning-based Transaction Management**: Traditional techniques focus on protocols like OCC, PCC, MVCC, 2PC. New studies use AI to predict and schedule transactions, balancing conflict rates and concurrency by learning from data patterns and predicting future workload trends.
 
 ### 5.20.4 Learning-based Database Monitoring
 
@@ -510,10 +510,10 @@ Database monitoring captures runtime metrics such as read/write latency and CPU/
 
 Traditional database security techniques, such as data masking and auditing, rely on user-defined rules and cannot automatically detect unknown vulnerabilities. AI-based algorithms address this by:
 
-1.  **Sensitive Data Discovery**: Automatically identifying sensitive data using machine learning.
-2.  **Anomaly Detection**: Monitoring database activities to detect vulnerabilities.
-3.  **Access Control**: Automatically estimating data access actions to prevent data leaks.
-4.  **SQL Injection Prevention**: Using deep learning to analyze user behavior and identify SQL injection attacks.
+1. **Sensitive Data Discovery**: Automatically identifying sensitive data using machine learning.
+2. **Anomaly Detection**: Monitoring database activities to detect vulnerabilities.
+3. **Access Control**: Automatically estimating data access actions to prevent data leaks.
+4. **SQL Injection Prevention**: Using deep learning to analyze user behavior and identify SQL injection attacks.
 
 ### 5.20.6 Performance Prediction
 
@@ -529,10 +529,10 @@ AI models require large-scale, high-quality, diversified training data for optim
 
 Adaptability is a major challenge, including adapting to dynamic data updates, different datasets, new hardware environments, and other database systems [55]. Key questions include:
 
--   How to adapt a trained model (e.g., optimizer, cost estimation) to other datasets?
--   How to adapt a model to different hardware environments?
--   How to adapt a model across different databases?
--   How to support dynamic data updates?
+- How to adapt a trained model (e.g., optimizer, cost estimation) to other datasets?
+- How to adapt a model to different hardware environments?
+- How to adapt a model across different databases?
+- How to support dynamic data updates?
 
 Model convergence is crucial. If a model doesn't converge, alternative solutions are needed to avoid delays and inaccuracies, such as in knob tuning where non-converged models can't provide reliable online suggestions.
 
@@ -542,7 +542,7 @@ Transaction modeling and scheduling are critical for OLTP systems due to potenti
 
 ### 5.20.8 AI Summary
 
-Integrating AI into MySQL offers many impactful opportunities and is a primary focus for future development.
+Integrating AI into MySQL offers many impactful opportunities and is one of the main focuses for future development.
 
 ## 5.21 How MySQL Internals Work in a Pipeline Fashion?
 
@@ -568,7 +568,7 @@ Subsequently, the significance of supporting high concurrency specifically for T
 
 <img src="media/image-20240829092027870.png" alt="image-20240829092027870" style="zoom:150%;" />
 
-Figure 5-15. MySQL 5.7.39 pool scalability with 1ms thinking time.
+Figure 5-15. MySQL 5.7.39 poor scalability with 1ms thinking time.
 
 From the figure, it can be observed that under a 1ms thinking time scenario, the throughput of MySQL 5.7.39 increases linearly at low concurrency levels. However, once it reaches 250 concurrency, the throughput sharply declines.
 
