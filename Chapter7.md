@@ -79,7 +79,7 @@ A test comparing TPC-C throughput with different levels of concurrency before an
 
 Figure 7-1. Impact of redo log optimization under different concurrency levels.
 
-The results in the figure show a significant improvement in throughput at low concurrency levels but a decrease at high concurrency levels. This decrease can be attributed to two potential reasons:
+The results in the figure show a significant improvement in throughput at a concurrency level of 100 but a decrease at high concurrency levels. This decrease can be attributed to two potential reasons:
 
 1. **Unsolved Foundational Flaws:** During the transformation process, foundational problems may not have been fully addressed.
 2. **Interference from Multiple Queue Bottlenecks:** Problems similar to multi-queue bottlenecks interfering with each other may arise. Although performance in some areas has improved, other bottlenecks have worsened under high concurrency.
@@ -148,7 +148,7 @@ Figure 7-6. Side effects of redo log optimization at low concurrency: more I/O f
 
 From the figure, it can be observed that with 3 concurrent read-write operations, each transaction averages over 9 flushes, while at 200 concurrency, it decreases to around 1 flush per transaction. These average flush counts can be further optimized, but it requires finding a balance: timely flushing activates user threads more quickly but incurs higher I/O overhead, whereas delaying flushing reduces I/O costs but may increase user response times.
 
-It is important to note that the Redo log improvements are primarily focused on enhancing overall performance in high-concurrency environments, but they perform poorly in scenarios with fewer than 50 concurrent connections. Many users have complained that MySQL 8.0's performance falls short of expectations, and this is the root cause. The next version will provide a detailed explanation of this issue.
+It is important to note that the Redo log improvements are primarily focused on enhancing overall performance in high-concurrency environments, but they perform poorly in scenarios with fewer than 50 concurrent connections. Many users have complained that MySQL 8.0's performance falls short of expectations, and this is the root cause.
 
 ### 7.1.2 Optimizing Lock-Sys Through Latch Sharding
 
