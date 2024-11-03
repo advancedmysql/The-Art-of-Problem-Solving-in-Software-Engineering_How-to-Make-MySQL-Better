@@ -376,7 +376,7 @@ Given this context, several considerations emerge:
 1. **Impact on Performance Testing:** The extensive error logs and the resulting disruptions could potentially skew the performance evaluation, leading to inaccurate assessments of the system's capabilities.
 2. **Effectiveness of the CATS Algorithm:** The performance improvement of the CATS algorithm may need re-evaluation. If the extensive output of error logs significantly impacts performance, its actual effectiveness may not be as high as initially believed.
 
-Remove all logs from the **Deadlock_notifier::notify** function, recompile MySQL, and perform SysBench read-write tests under Pareto distribution. Details are provided in the following figure:
+Set `innodb_print_all_deadlocks=OFF` or remove all logging from the `Deadlock_notifier::notify` function, recompile MySQL, and run SysBench read-write tests with a Pareto distribution. Details are provided in the following figure:
 
 <img src="media/image-20240829101534550.png" alt="image-20240829101534550" style="zoom:150%;" />
 
@@ -390,7 +390,7 @@ Let's conduct performance comparison tests on the improved MySQL 8.0.32, with de
 
 Figure 7-18. Impact of CATS on throughput at various concurrency levels for improved MySQL 8.0.32 after eliminating interference.
 
-From the figure, it is evident that removing the interference results in only a slight performance difference. This small variation makes it understandable why the severity of FIFO scheduling problems may be difficult to notice. The perceived bias from CATS authors and MySQL officials likely stems from the extensive log output interference caused by deadlocks.
+From the figure, it is evident that removing the interference results in only a slight performance difference. This small variation makes it understandable why the severity of FIFO scheduling problems may be difficult to notice. The perceived bias from the CATS author and MySQL officials is likely due to interference from extensive deadlock log output.
 
 Using the same 32 warehouses as in the CATS algorithm paper, TPC-C tests were conducted at various concurrency levels. MySQL was based on the improved MySQL 8.0.27, and BenchmarkSQL was modified to support 100 concurrent transactions per warehouse.
 
@@ -419,7 +419,7 @@ Figure 7-21. Impact of CATS on BenchmarkSQL throughput after eliminating interfe
 
 From the figure, it is evident that there is little difference between the two algorithms in low-conflict scenarios. In other words, the CATS algorithm does not offer significant benefits in situations with fewer conflicts.
 
-Overall, while CATS shows some improvement in Pareto testing, it is less pronounced than expected. The interference from deadlock log outputs during performance testing impacted the results. The CATS algorithm significantly reduces transaction deadlocks, leading to fewer log outputs and less performance degradation compared to the FIFO algorithm. When deadlock logs are suppressed, the difference between these algorithms is minimal, clarifying the confusion surrounding the CATS algorithm's performance.
+Overall, while CATS shows some improvement in Pareto testing, it is less pronounced than expected. The CATS algorithm significantly reduces transaction deadlocks, potentially resulting in less performance degradation than the FIFO algorithm. When deadlock logs are suppressed, the difference between these algorithms is minimal, clarifying the confusion surrounding the CATS algorithm's performance.
 
 Database performance testing is inherently complex and error-prone [9]. It cannot be judged by data alone and requires thorough investigation to ensure logical consistency.
 
