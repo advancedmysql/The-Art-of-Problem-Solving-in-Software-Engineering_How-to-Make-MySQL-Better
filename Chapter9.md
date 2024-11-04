@@ -415,7 +415,7 @@ The batch write mechanism, tested with TPC-C benchmarks, initially improved disk
 
 ### 9.4.5 Comparing Performance with Traditional Group Replication
 
-The figure below compares TPC-C throughput against concurrency levels in different modes. The deployment setup is as follows: Both MySQL primary and secondary are deployed on the same machine, with NUMA binding isolation to prevent computational interference. Separate SSDs are used for the primary and secondary to ensure no I/O operation interference.
+The figure below compares TPC-C throughput against concurrency levels in different modes. The deployment setup is as follows: Both MySQL primary and secondary are deployed on the same machine, with NUMA binding isolation to prevent computational interference. Separate NVMe SSDs are used for the primary and secondary to ensure no I/O operation interference.
 
 <img src="media/image-20240829110334937.png" alt="image-20240829110334937" style="zoom:150%;" />
 
@@ -675,7 +675,7 @@ Figure 9-25. Overhead of 250,000 memory allocation calls on a typical machine.
 
 The 250,000 memory allocation calls took 112ms. Additionally, the XCom cache experiences batch memory release problems, which can also cause performance delays. While the duration of these delays varies with machine performance, delays of tens of milliseconds are typical. Such fluctuations can lead to unexpected blocking of many user commits for tens of milliseconds, significantly impacting the user experience.
 
-To address this problem, various configuration options�high-end, mid-range, and low-end�have been provided. These options involve selecting appropriate sizes for fixed static arrays, which eliminate the problems associated with batch memory allocation and release. The benefits of this new mechanism include:
+To address this problem, various configuration options—high-end, mid-range, and low-end—have been provided. These options involve selecting appropriate sizes for fixed static arrays, which eliminate the problems associated with batch memory allocation and release. The benefits of this new mechanism include:
 
 1. Cache-friendly with high performance.
 2. Elimination of performance fluctuations on the XCom cache side.
