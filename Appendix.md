@@ -635,9 +635,10 @@ https://github.com/advancedmysql/mysql_8.0.27/blob/main/semisynchronous.txt
 **Patch for "Percona Server for MySQL 8.0.27-18":**
 
 Patch Address:
+
 https://github.com/advancedmysql/mysql_8.0.27/blob/main/book_8.0.27_single.patch
 
-This patch specifically targets optimizations for standalone MySQL instances, including:
+This patch specifically targets optimizations for a standalone MySQL instance, including:
 
 - **MVCC ReadView** enhancements
 - **Binlog group commit** improvements
@@ -653,4 +654,4 @@ For MySQL clusters, the patch introduces further optimizations for **Group Repli
 
 In earlier years, Bin Wang worked at an internet company focused on developing high-performance computing and high-concurrency systems. He also contributed to open-source projects like TCPCopy [60] and MySQL Proxy [61], gaining valuable experience in problem-solving, particularly in logical thinking.
 
-After leaving the internet company, he concentrated on MySQL-related development, successfully contributing to projects such as Group Replication, secondary replay, InnoDB storage engines, and query optimization. He has accumulated extensive experience in problem-solving within the MySQL domain.
+After leaving the internet company, he concentrated on MySQL-related development, successfully contributing to projects such as Group Replication, secondary replay, InnoDB storage engines, and query optimization [64]. He has accumulated extensive experience in problem-solving within the MySQL domain.

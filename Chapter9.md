@@ -771,7 +771,7 @@ In a single-primary group, in the event of a primary failover when a secondary i
 
 Consistency during failover includes:
 
-- **RW Transactions**: Wait for all preceding transactions to complete before being applied, ensuring synchronization only affects RO transactions.
+- **RW Transactions**: Wait for all preceding transactions to complete before being applied.
 - **RO Transactions**: Wait for preceding transactions to complete before execution, ensuring they read the latest data.
 
 New transactions on a newly elected primary are held until the backlog is applied, guaranteeing that clients see the latest values. This approach prioritizes consistency but may introduce delays depending on the backlog size.
