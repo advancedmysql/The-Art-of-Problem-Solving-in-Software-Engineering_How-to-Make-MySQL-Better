@@ -23,10 +23,10 @@ The main problem with Group Replication, as outlined in the above content, is th
 1. Suboptimal SSD hardware performance.
 
 2. Paxos log persistence not meeting the requirements for Group Replication with multiple primaries.
+   
+   Without persistent storage in certification databases, Group Replication with multiple primaries cannot use Paxos message persistence for crash recovery. After MySQL restarts, there is no corresponding certification database, making continued processing of persisted Paxos messages prone to inconsistent states.
 
-   Without persistent storage in certification databases, Group Replication cannot use Paxos message persistence for crash recovery. After MySQL restarts, there is no corresponding certification database, making continued processing of persisted Paxos messages prone to inconsistent states.
-
-Based on Group Replication single-primary mode using SSDs, SysBench write-only tests were used to examine the impact of adding Paxos persistence on throughput. Please refer to the specific figure below:
+Based on Group Replication single-primary mode using NVMe SSDs, SysBench write-only tests were used to examine the impact of adding Paxos persistence on throughput. Please refer to the specific figure below:
 
 <img src="media/image-20240829105418671.png" alt="image-20240829105418671" style="zoom:150%;" />
 
@@ -157,8 +157,8 @@ Based on extensive testing, placing certification messages into the applier queu
 
 Group Replication can face collective failure scenarios in the following situations:
 
-1.  If the I/O space of a MySQL secondary becomes full, causing replay to block, it can trigger a cascade effect across the cluster.
-2.  If replay stops on a MySQL secondary for any reason, effectively reducing its throughput to zero, the overall throughput of the cluster eventually drops to zero, according to the barrel principle.
+1. If the I/O space of a MySQL secondary becomes full, causing replay to block, it can trigger a cascade effect across the cluster.
+2. If replay stops on a MySQL secondary for any reason, effectively reducing its throughput to zero, the overall throughput of the cluster eventually drops to zero, according to the barrel principle.
 
 Group Replication is designed for high availability, but these problems can make the entire cluster system unavailable. Therefore, addressing the high availability problems inherent to Group Replication is essential to provide users with better high availability.
 
@@ -190,9 +190,9 @@ It can be inferred that the Mencius algorithm performs well even under severe le
 
 When there are no theoretical problems with the Mencius algorithm, introducing a new Multi-Paxos algorithm is not an elegant solution and brings several challenges:
 
-1.  **High Maintenance Cost**: Maintaining and testing two sets of codebases doubles the workload for this part.
-2.  **Regression Testing Challenges**: In practice, the new algorithm has led to several regression problems, some of which are difficult to address.
-3.  **Partial Problem-Solving**: The new algorithm may only partially address the requirements. In Group Replication's single-primary mode, it might not be universally applicable, as consistent read and write operations require all nodes to continuously communicate information.
+1. **High Maintenance Cost**: Maintaining and testing two sets of codebases doubles the workload for this part.
+2. **Regression Testing Challenges**: In practice, the new algorithm has led to several regression problems, some of which are difficult to address.
+3. **Partial Problem-Solving**: The new algorithm may only partially address the requirements. In Group Replication's single-primary mode, it might not be universally applicable, as consistent read and write operations require all nodes to continuously communicate information.
 
 ## 9.3 The Specific Implementation of Paxos Skip Optimization
 
@@ -258,8 +258,8 @@ After MySQL secondaries calculate last_committed, the next step is to write tran
 
 Enhancing replay speed is crucial for:
 
--   **Rapid Failover**: Faster replay ensures quicker failover.
--   **Improved Data Freshness**: Faster replay increases the chances of accessing the most current data.
+- **Rapid Failover**: Faster replay ensures quicker failover.
+- **Improved Data Freshness**: Faster replay increases the chances of accessing the most current data.
 
 With these aspects addressed, the design for Group Replication in single-primary mode is complete, laying the groundwork for a high-performance, highly available system with rapid failover and efficient state machine replication.
 
@@ -277,8 +277,8 @@ Traditional certification databases use a lot of memory, especially when there i
 
 In Group Replication single-primary mode, it is feasible to bypass conflict detection in the certification database. Conflict detection is mainly used in:
 
-1.  Group Replication multi-primary mode.
-2.  During a Group Replication single-primary switchover when the new primary is still replaying transactions while receiving new user requests.
+1. Group Replication multi-primary mode.
+2. During a Group Replication single-primary switchover when the new primary is still replaying transactions while receiving new user requests.
 
 For Group Replication in single-primary mode, only the second scenario needs to be considered, while mechanisms like 'before on primary failover' ensure the new primary completes transaction replay before accepting new requests. Accelerating the replay process on MySQL secondaries can help reduce user wait times.
 
@@ -286,27 +286,27 @@ For Group Replication in single-primary mode, only the second scenario needs to 
 
 First, let's clarify the terms "*sequence_number*" and "*last_committed*":
 
--   **sequence_number**: This is an automatically incremented value used to track the order of transactions during Group Replication operation. Each transaction is assigned a unique *sequence_number* during operation.
--   **last_committed**: This value indicates the sequence number of the last committed transaction that a new transaction depends on. For a transaction to proceed during replay on a MySQL secondary, the transaction must wait until the one with a *sequence_number* equal to *last_committed* has been fully replayed.
+- **sequence_number**: This is an automatically incremented value used to track the order of transactions during Group Replication operation. Each transaction is assigned a unique *sequence_number* during operation.
+- **last_committed**: This value indicates the sequence number of the last committed transaction that a new transaction depends on. For a transaction to proceed during replay on a MySQL secondary, the transaction must wait until the one with a *sequence_number* equal to *last_committed* has been fully replayed.
 
 For example, in the transaction highlighted in the green box below, with *sequence_number=12759* and *last_committed=12757*, the *last_committed=12757* indicates that the transaction with *sequence_number=12759* must wait until the transaction with *sequence_number=12757* has been fully replayed before it can proceed.
 
-![](media/9aa41ee1e12bb8a72dd240dc42b44ba5.png)
+![](media/9aa41ee1e12bb8a72dd240dc42b44ba5.gif)
 
 Figure 9-11. Typical examples of *sequence_number* and *last_committed*.
 
 Once *sequence_number* and *last_committed* are understood, the calculation of the *last_committed* value can be explored. Typically, this value is derived from the transaction's writeset, which details the rows modified by the transaction. Each row in the writeset is represented by a key corresponding to a table row. In the writeset:
 
--   For update operations, there are two elements with the same key.
--   For insert and delete operations, there is one element.
--   The writeset for DDL transactions is empty, indicating that DDL operations must be replayed serially.
+- For update operations, there are two elements with the same key.
+- For insert and delete operations, there is one element.
+- The writeset for DDL transactions is empty, indicating that DDL operations must be replayed serially.
 
 In Group Replication, when processing a transaction's writeset, the applier thread examines the certification database for transactions that have modified the same records as those in the writeset. If such transactions are found, the applier thread determines the latest *sequence_number* that is smaller than the current transaction's *sequence_number*, which becomes the transaction's *last_committed* value. This ensures transactions are replayed in the correct order to maintain data consistency.
 
 Before diving deeper into the analysis, let's review what the applier thread does:
 
-1.  Calculating *last_committed* based on the certification database.
-2.  Writing transaction events to the relay log file.
+1. Calculating *last_committed* based on the certification database.
+2. Writing transaction events to the relay log file.
 
 Below is a flame graph generated from capturing performance data of the applier thread:
 
@@ -340,14 +340,14 @@ class Certifier : public Certifier_interface {
 
 To store the information necessary for calculating *last_committed*, a static array named *replayed_cal_array* is used. This array contains 65,536 elements, each representing a bucket slot with a *replay_cal_hash_item*. The *replay_cal_hash_item* structure includes:
 
--   **number**: Indicates the current count of elements within the *replay_cal_hash_item*, tracking how many elements are in use.
--   **size**: Specifies the maximum capacity of the *replay_cal_hash_item*, defining the upper limit of elements it can accommodate.
--   **values**: An array of 4,088 unsigned char elements that stores data.
+- **number**: Indicates the current count of elements within the *replay_cal_hash_item*, tracking how many elements are in use.
+- **size**: Specifies the maximum capacity of the *replay_cal_hash_item*, defining the upper limit of elements it can accommodate.
+- **values**: An array of 4,088 unsigned char elements that stores data.
 
 The **values** member is used to store 511 entries, with each entry occupying 8 bytes. Each entry consists of:
 
--   **Key Value**: 6 byte.
--   **Relative Sequence Number**: 2 bytes.
+- **Key Value**: 6 byte.
+- **Relative Sequence Number**: 2 bytes.
 
 For specific details, refer to the figure below:
 
@@ -357,22 +357,22 @@ Figure 9-13. A new data structure suitable for calculating last_committed.
 
 The *key* undergoes base64 conversion into an 8-byte integer. This 8-byte integer is divided as follows:
 
--   **Index for replayed_cal_array**: The first two bytes serve as an index for the *replayed_cal_array*.
--   **Value**: The remaining six bytes are stored in the first six bytes of each 8-byte entry.
+- **Index for replayed_cal_array**: The first two bytes serve as an index for the *replayed_cal_array*.
+- **Value**: The remaining six bytes are stored in the first six bytes of each 8-byte entry.
 
 Regarding the storage of *sequence_number*:
 
--   Only the relative value of the *sequence_number* is stored, calculated as the current *sequence_number* minus a base sequence value.
--   Instead of requiring 8 bytes, this relative *sequence_number* needs only 2 bytes.
--   This 2-byte relative *sequence_number* is stored in the last two bytes of each 8-byte entry.
+- Only the relative value of the *sequence_number* is stored, calculated as the current *sequence_number* minus a base sequence value.
+- Instead of requiring 8 bytes, this relative *sequence_number* needs only 2 bytes.
+- This 2-byte relative *sequence_number* is stored in the last two bytes of each 8-byte entry.
 
 This setup optimizes storage by using a compact representation of the *key* and storing only the necessary relative *sequence_number*, ensuring efficient memory use within the *replay_cal_hash_item* structure.
 
 The algorithm based on the new data structure is illustrated in the figure below, highlighting the following key points:
 
-1.  Fully utilizes the characteristics of *keys* and the monotonic increase of *sequence* numbers, compressing storage space effectively, resulting in very high memory usage efficiency for the new data structure.
-2.  Sets an upper limit on the stored information. Once the threshold is exceeded, a process similar to checkpointing is triggered, and the current transaction is set for serial replay.
-3.  The content of the new data structure is relatively small, with a high cache hit rate. Moreover, within *replay_cal_hash_item*, the *values* are stored contiguously, making it very cache-friendly.
+1. Fully utilizes the characteristics of *keys* and the monotonic increase of *sequence* numbers, compressing storage space effectively, resulting in very high memory usage efficiency for the new data structure.
+2. Sets an upper limit on the stored information. Once the threshold is exceeded, a process similar to checkpointing is triggered, and the current transaction is set for serial replay.
+3. The content of the new data structure is relatively small, with a high cache hit rate. Moreover, within *replay_cal_hash_item*, the *values* are stored contiguously, making it very cache-friendly.
 
 ![](media/b5a20f07b4812ea9f34ffb8e8783b73a.png)
 
@@ -394,10 +394,10 @@ This improvement not only enhances the overall processing capability of the appl
 
 From this case study, the reasons for performance improvement can be summarized as follows:
 
-1.  **Static Array for Values**: Using a static array for *values* in *replay_cal_hash_item* enhances search efficiency due to contiguous memory access, making it very cache-friendly.
-2.  **Reduced Data Storage**: The amount of stored data has been significantly reduced. Previously, it might have required gigabytes of storage, whereas now it only requires 256MB. Smaller memory footprints generally lead to higher efficiency.
-3.  **Fixed Memory Space**: The allocated memory space is fixed and does not require dynamic allocation. Previous frequent memory allocations and deallocations were detrimental to high performance due to the synchronous nature of memory operations.
-4.  **Efficient Certification Cleanup**: Certification cleanup can achieve millisecond-level performance. During certification cleanup, only zeroing operations are needed for the *number* values among the 65,536 *replay_cal_hash_item* items.
+1. **Static Array for Values**: Using a static array for *values* in *replay_cal_hash_item* enhances search efficiency due to contiguous memory access, making it very cache-friendly.
+2. **Reduced Data Storage**: The amount of stored data has been significantly reduced. Previously, it might have required gigabytes of storage, whereas now it only requires 256MB. Smaller memory footprints generally lead to higher efficiency.
+3. **Fixed Memory Space**: The allocated memory space is fixed and does not require dynamic allocation. Previous frequent memory allocations and deallocations were detrimental to high performance due to the synchronous nature of memory operations.
+4. **Efficient Certification Cleanup**: Certification cleanup can achieve millisecond-level performance. During certification cleanup, only zeroing operations are needed for the *number* values among the 65,536 *replay_cal_hash_item* items.
 
 By implementing a better data structure based on Group Replication's single-primary mode to achieve the same last_committed calculation functionality, the applier thread's maximum processing capability can be significantly enhanced, and performance fluctuations can be eliminated.
 
@@ -440,19 +440,19 @@ Group Replication's failure detection mechanism identifies and expels non-commun
 After understanding the above content, let's analyze common types of view change events:
 
 1. **Node is Killed**
-
+   
    In a Linux system, when a node is killed, the TCP layer typically sends a reset (RST) packet to notify other nodes of the connection problem. Paxos communication can use this RST packet to identify the node's termination. However, MySQL does not handle this specifically and relies on the standard timeout mechanism.
 
 2. **Node is Network-Partitioned**
-
+   
    Detecting whether a node is network-partitioned or simply slow is challenging. In such cases, timeout mechanisms are used, as it is difficult to definitively distinguish between these situations.
 
 3. **Node is Gracefully Taken Offline**
-
+   
    Normally, informing other nodes by sending a command should be straightforward. However, MySQL has not managed this aspect well.
 
 4. **Adding a new node to the cluster**
-
+   
    Adding a new node requires consensus and involves a final installation view synchronization. Although some performance fluctuations are expected, severe fluctuations indicate poor handling of the node addition process.
 
 Whenever a change that needs replication occurs, the group must achieve consensus. This applies to regular transactions, group membership changes, and certain internal messaging to maintain group consistency. Consensus requires a majority of group members to agree on a decision. Without a majority, the group cannot progress and blocks because it cannot secure a quorum.
@@ -492,15 +492,15 @@ To address these problems in Group Replication, improving the probing mechanism 
 Regarding the probe mechanism, the following improvements have been made.
 
 1. **Ensure Fair Execution for Probe Coroutines**
-
+   
    During the processing of large transactions, the Paxos protocol handles substantial writeset data, monopolizing the processing resources of the single-threaded coroutine model. This leaves limited opportunities for the probe detection coroutine to update critical information. As a result, outdated probe data can lead to incorrect judgments, as observed in section 1.2.5.
-
+   
    To address this, the solution is to amortize data processing by splitting large transactions into multiple stages. This approach ensures that the probe detection coroutine gets more equitable opportunities to execute and update information promptly, enhancing the accuracy of fault detection.
 
 2. **Improved Wakeup Delay Function**
-
+   
    Check the **wakeup_delay** function in MySQL, as shown in the code below:
-
+   
    ```c++
    static double wakeup_delay(double old) {
      double const minimum_threshold = 0.1;
@@ -530,22 +530,22 @@ Regarding the probe mechanism, the following improvements have been made.
      return retval;
    }
    ```
-
+   
    From the code, it is evident that the calculated delay time is too rigid. This inflexibility is a key reason for performance fluctuations, as the primary may wait too long after a node exits. To address this, adjusting the relevant constants based on the environment is essential for adapting to complex and variable network conditions.
 
 3. **Split the wakeup_delay function to adapt to different environments**
-
+   
    For example, when checking if propose messages have been accepted, utilize the original *wakeup_delay* function, as shown in the code below:
-
+   
    ```c++
          while (!finished(ep->p)) { /* Try to get a value accepted */
            /* We will wake up periodically, and whenever a message arrives */
            TIMED_TASK_WAIT(&ep->p->rv, ep->delay = wakeup_delay(ep->delay));
            ...
    ```
-
+   
    In the function *get_xcom_message*, the *wakeup_delay_for_perf* function is used, as shown in the code below:
-
+   
    ```c++
      DECL_ENV
      ...
@@ -567,15 +567,15 @@ Regarding the probe mechanism, the following improvements have been made.
      TASK_END;
    }
    ```
-
+   
    In the *wakeup_delay_for_perf* function, a more aggressive strategy can be employed, such as reducing the waiting time further.
 
 4. Incorporate the Round-trip time (RTT) from the network into the wakeup_delay.
-
+   
    The purpose of this is to enhance the accuracy of network probing activities.
 
 5. Distinguish between node being killed and network partition.
-
+   
    In Linux systems, when a node is killed, TCP sends reset packets to the other nodes in the cluster, helping distinguish between node terminations and network partition faults. Integrating information about abnormal node terminations into Paxos' decision-making logic allows for more accurate judgments, addressing the problem of prolonged throughput drops experienced during abrupt node terminations.
 
 With the implementation of the above mechanism, probing accuracy has been significantly enhanced. Combined with the forthcoming degradation mechanism, this ensures relatively stable throughput even under abnormal conditions.
@@ -677,8 +677,8 @@ The 250,000 memory allocation calls took 112ms. Additionally, the XCom cache exp
 
 To address this problem, various configuration options�high-end, mid-range, and low-end�have been provided. These options involve selecting appropriate sizes for fixed static arrays, which eliminate the problems associated with batch memory allocation and release. The benefits of this new mechanism include:
 
-1.  Cache-friendly with high performance.
-2.  Elimination of performance fluctuations on the XCom cache side.
+1. Cache-friendly with high performance.
+2. Elimination of performance fluctuations on the XCom cache side.
 
 ### 9.5.4  A New Strategy for Multi-Primary Certification Database cleanup
 
@@ -696,9 +696,9 @@ The certification database consumes significant memory, and prolonged cleaning p
 
 Based on extensive practice and experience, addressing the problem effectively involves:
 
-1.  **Strict Adherence to State Machine Replication**: Following the state machine replication mechanism closely, as outlined in section 9.1.3, ensures consistency in handling transactions.
-2.  **Reducing GTID Broadcast Interval**: Decreasing the interval of GTID (Global Transaction Identifier) broadcast to sub-second levels.
-3.  **Enhancing Transaction Parallel Replay**: Improving the efficiency of parallel transaction replay on MySQL secondaries, especially for large transactions, reduces memory consumption and mitigates the effects of the 'barrel principle,' leading to better performance and reduced impact of performance fluctuations.
+1. **Strict Adherence to State Machine Replication**: Following the state machine replication mechanism closely, as outlined in section 9.1.3, ensures consistency in handling transactions.
+2. **Reducing GTID Broadcast Interval**: Decreasing the interval of GTID (Global Transaction Identifier) broadcast to sub-second levels.
+3. **Enhancing Transaction Parallel Replay**: Improving the efficiency of parallel transaction replay on MySQL secondaries, especially for large transactions, reduces memory consumption and mitigates the effects of the 'barrel principle,' leading to better performance and reduced impact of performance fluctuations.
 
 By implementing these steps, it becomes feasible to reduce the cleaning cycle from 60 seconds to sub-second intervals. This approach enables each cleaning operation to manage smaller data volumes, thereby reducing sudden performance drops and stabilizing throughput. The following figure shows the relationship between SysBench read/write test throughput over time after applying the amortization approach.
 
@@ -714,8 +714,8 @@ In Group Replication, the flow control mechanism synchronizes MySQL secondaries 
 
 To avoid the impact of Group Replication flow control in a single-primary setup, consider the following strategies:
 
-1.  **Accelerate MySQL Secondary Replay Speed**: Improve the replay speed of transactions on MySQL secondaries, especially for large transactions. This helps ensure that secondaries can keep up with the primary node, reducing the need for flow control interventions.
-2.  **Increase Relay Log Writing Speed**: Speed up the process of writing to the relay log to prevent the applier queue from growing excessively due to delays in writing to disk. This prevents a surge in memory usage, which can trigger flow control mechanisms.
+1. **Accelerate MySQL Secondary Replay Speed**: Improve the replay speed of transactions on MySQL secondaries, especially for large transactions. This helps ensure that secondaries can keep up with the primary node, reducing the need for flow control interventions.
+2. **Increase Relay Log Writing Speed**: Speed up the process of writing to the relay log to prevent the applier queue from growing excessively due to delays in writing to disk. This prevents a surge in memory usage, which can trigger flow control mechanisms.
 
 By implementing these two strategies in a single-primary Group Replication setup, the flow control mechanism imposed by Group Replication can be effectively avoided.
 
@@ -743,17 +743,17 @@ Network partitions can be categorized into complete, partial, and simplex types.
 
 Here are some common concurrent view change problems:
 
-1.  **force_members Command**: This command is incompatible with view changes triggered by network jitter. Use it cautiously, especially during severe network instability.
-2.  **Rapid Node Restarts**: Nodes restarting too quickly can cause view confusion if they rejoin before being fully removed. Group Replication attempts to address this, but the problem persists.
-3.  **Simultaneous Node Additions**: Adding multiple nodes at once can lead to view problems.
-4.  **Install View Process Failures**: New failures during the Install view process can freeze the entire cluster.
+1. **force_members Command**: This command is incompatible with view changes triggered by network jitter. Use it cautiously, especially during severe network instability.
+2. **Rapid Node Restarts**: Nodes restarting too quickly can cause view confusion if they rejoin before being fully removed. Group Replication attempts to address this, but the problem persists.
+3. **Simultaneous Node Additions**: Adding multiple nodes at once can lead to view problems.
+4. **Install View Process Failures**: New failures during the Install view process can freeze the entire cluster.
 
 Some view change problems are challenging to mitigate and require significant effort to solve, especially due to the lack of theoretical support in this area.
 
 For the problem where a MySQL node attempts to rejoin the Group Replication cluster before its information is fully removed, potentially causing view inconsistencies, a solution involves measures similar to TCP's timewait mechanism:
 
-1.  When the Group Replication cluster detects that a node is about to be removed (using remove_node_type), it informs the Paxos layer to temporarily prevent the node from rejoining.
-2.  After the node removal process is complete, typically following the install view operation, the Paxos layer is notified that the node can proceed with reapplying to join the cluster.
+1. When the Group Replication cluster detects that a node is about to be removed (using remove_node_type), it informs the Paxos layer to temporarily prevent the node from rejoining.
+2. After the node removal process is complete, typically following the install view operation, the Paxos layer is notified that the node can proceed with reapplying to join the cluster.
 
 This careful process helps minimize view-related problems from premature node reentry.
 
@@ -771,22 +771,22 @@ In a single-primary group, in the event of a primary failover when a secondary i
 
 Consistency during failover includes:
 
--   **RW Transactions**: Wait for all preceding transactions to complete before being applied, ensuring synchronization only affects RO transactions.
--   **RO Transactions**: Wait for preceding transactions to complete before execution, ensuring they read the latest data.
+- **RW Transactions**: Wait for all preceding transactions to complete before being applied, ensuring synchronization only affects RO transactions.
+- **RO Transactions**: Wait for preceding transactions to complete before execution, ensuring they read the latest data.
 
 New transactions on a newly elected primary are held until the backlog is applied, guaranteeing that clients see the latest values. This approach prioritizes consistency but may introduce delays depending on the backlog size.
 
 To elegantly solve the problem of reading dirty data during the primary switch process, the following measures can be implemented:
 
-1.  **Accelerate Replay Speed**: Enhance the replay speed of MySQL secondaries to ensure they catch up with the primary as quickly as possible. This minimizes the window during which stale data might be read.
-2.  **Optimized Leader Election**: During leader election, choose the node with the fastest replay progress among MySQL secondaries. This reduces the waiting time for the primary switch, ensuring a quicker transition and more up-to-date data availability.
+1. **Accelerate Replay Speed**: Enhance the replay speed of MySQL secondaries to ensure they catch up with the primary as quickly as possible. This minimizes the window during which stale data might be read.
+2. **Optimized Leader Election**: During leader election, choose the node with the fastest replay progress among MySQL secondaries. This reduces the waiting time for the primary switch, ensuring a quicker transition and more up-to-date data availability.
 
 ### 9.7.2 Consistency Problems in Write Operations
 
 The 'after' mechanism in Group Replication aims for near-complete synchronization between the MySQL primary and secondaries, achieving strong synchronization. This requires synchronization at both the Paxos and replay levels, leading to longer user response times. Users opting for this strong synchronization should be aware of the following risks:
 
-1.  Performance fluctuations.
-2.  User commit response times may not meet performance requirements.
+1. Performance fluctuations.
+2. User commit response times may not meet performance requirements.
 
 The 'after' mechanism is currently immature; during testing, many instances have shown MySQL nodes remaining in a recovering state for extended periods. The root cause lies in the adoption of a new ticket mechanism to address the 'after' problem, which is overly complex and insufficiently effective.
 
