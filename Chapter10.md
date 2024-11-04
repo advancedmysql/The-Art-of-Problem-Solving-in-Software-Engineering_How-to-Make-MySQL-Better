@@ -48,9 +48,9 @@ Besides establishing the replay relationship between different transactions and 
 
 To ensure consistency when reading from a MySQL secondary, consider the following:
 
-1.  **Optimize Replay Speed**: Accelerate transaction replay on the MySQL secondary to reduce the lag behind the primary.
-2.  **Preserve Commit Order**: To maintain causality, MySQL secondary commits transactions in the order they are written to the relay log. This is controlled by setting the parameter *replica_preserve_commit_order=on*.
-3.  **Read Your Writes Consistency**: To meet the 'read your writes' consistency requirement, check if the GTID of the most recently replayed transaction has reached the specified GTID value. If not, wait until it does. This ensures that reads reflect the most recent writes.
+1. **Optimize Replay Speed**: Accelerate transaction replay on the MySQL secondary to reduce the lag behind the primary.
+2. **Preserve Commit Order**: To maintain causality, MySQL secondary commits transactions in the order they are written to the relay log. This is controlled by setting the parameter *replica_preserve_commit_order=on*.
+3. **Read Your Writes Consistency**: To meet the 'read your writes' consistency requirement, check if the GTID of the most recently replayed transaction has reached the specified GTID value. If not, wait until it does. This ensures that reads reflect the most recent writes.
 
 ### 10.1.3 Efficiency of MySQL Secondary Replay
 
@@ -65,16 +65,15 @@ Figure 10-1. Secondary CPU consumption significantly lower than primary.
 Based on the figure, the following conclusions can be drawn:
 
 1. **CPU Consumption Comparison**:
-
+   
    MySQL secondary replay consistently consumes significantly less CPU compared to MySQL primary, regardless of concurrency levels. This is due to:
-
-   -   MySQL secondary replay involves only write operations, avoiding read operations.
-   -   Event-based replay enhances execution efficiency.
+   
+   - MySQL secondary replay involves only write operations, avoiding read operations.
+   - Event-based replay generally improves execution efficiency.
 
 2. **Concurrency Impact**:
-
+   
    The CPU consumption difference between the primary and secondary is smaller at low concurrency but becomes more pronounced at high concurrency. 
-
 
 The above statistics are based on standard TPC-C test results and do not include large transactions. The following figure compares time consumption during the TPC-C data loading process.
 
@@ -94,8 +93,8 @@ From the figure, it can be inferred that there is considerable potential for imp
 
 Based on the series of comparative tests, the following conclusions can be drawn:
 
-1.  The efficiency of MySQL secondary replay significantly surpasses that of MySQL primary in handling user transactions.
-2.  MySQL primary shows NUMA compatibility problems when handling large transactions.
+1. The efficiency of MySQL secondary replay significantly surpasses that of MySQL primary in handling user transactions.
+2. MySQL primary shows NUMA compatibility problems when handling large transactions.
 
 ### 10.1.4 The Theoretical Maximum Replay Speed of MySQL Secondary
 
@@ -105,8 +104,8 @@ A big challenge is that the secondary ensures consistency with the primary by re
 
 The transaction replay process on a MySQL secondary consists of two main stages:
 
-1.  **Replay of Transaction Events:** This involves executing the transaction events received from the primary.
-2.  **Commit:** This stage completes the transaction by committing the changes.
+1. **Replay of Transaction Events:** This involves executing the transaction events received from the primary.
+2. **Commit:** This stage completes the transaction by committing the changes.
 
 Please refer to the figure below for more details.
 
@@ -116,8 +115,8 @@ Figure 10-4. The transaction replay process on a MySQL secondary.
 
 To ensure read consistency, it is crucial that commit operations on MySQL secondaries are executed sequentially. Specifically:
 
--   **Parallel Replay:** Concurrent transactions can be replayed in parallel if they do not conflict with each other.
--   **Sequential Commit:** During the commit phase, transactions must be committed in the order they were originally executed.
+- **Parallel Replay:** Concurrent transactions can be replayed in parallel if they do not conflict with each other.
+- **Sequential Commit:** During the commit phase, transactions must be committed in the order they were originally executed.
 
 In terms of performance, the queue model for MySQL secondary replay can be simplified as shown in the figure below.
 
@@ -151,7 +150,7 @@ In terms of commit operations during MySQL secondary replay, committing accordin
 
 ### 10.2.2 Bottleneck Analysis
 
-In MySQL asynchronous replication, the secondary has two threads: the IO thread reads log entries from the primary and stores them on local disk, while the SQL thread reads the log from the local disk and replays the events. A single thread parses and executes the log, executing log events consecutively. When a row event is parsed, it includes operation types and row images, which are stored as raw bytes. The SQL thread must "unpack" these bytes into fields, requiring knowledge of the table schema before performing operations. This unpacking and examination of log events before sending them to multiple threads for replay is expensive and can become a bottleneck if handled by a single thread [18]. Specifically, unpacking row images consumes a significant amount of CPU resources for the SQL thread, severely constraining MySQL secondary replay performance.
+In MySQL asynchronous replication, the secondary has two threads: the IO thread reads log entries from the primary and stores them on local disk, while the SQL thread reads the log from the local disk and replays the events. A single thread parses and executes log events sequentially. When a row event is parsed, it includes operation types and row images, which are stored as raw bytes. The SQL thread must "unpack" these bytes into fields, requiring knowledge of the table schema before performing operations. This unpacking and examination of log events before sending them to multiple threads for replay is expensive and can become a bottleneck if handled by a single thread [18]. Specifically, unpacking row images consumes a significant amount of CPU resources for the SQL thread, severely constraining MySQL secondary replay performance.
 
 For example, during Group Replication secondary replay, one of the main bottlenecks captured is the SQL thread, specifically seen in the *rpl_rca_sql-0* thread as shown in the figure below.
 
@@ -213,7 +212,7 @@ It's clear that the worker queue can hold a maximum of 16,384 events. While this
   }
 ```
 
-Large transactions can quickly fill up the worker queue, causing the SQL thread to remain idle and miss the opportunity to replay other transactions efficiently.
+Large transactions can quickly fill up the worker queue, causing the SQL thread to remain idle and miss the opportunity to distribute other transactions.
 
 Not only does the SQL thread block when the worker queue is full, but it also waits if a transaction pending replay depends on a prior transaction that hasn't finished replaying. For details, see the specific code below:
 
@@ -302,7 +301,7 @@ Increasing the worker queue size by 64 times to 1,048,576 transaction events acc
 
 Figure 10-14. Memory consumption of MySQL secondary processes with different worker queue sizes and varying numbers of workers.
 
-From the figure, it's evident that the actual memory consumption of MySQL secondary is influenced both by the *worker_queue_len_max* and the number of workers. On high-end machines, the additional memory usage may not be a major concern. However, on lower-end machines, reducing the number of workers can help manage memory consumption more effectively.
+From the figure, it's evident that the actual memory consumption of MySQL secondary is influenced both by the *worker_queue_len_max* and the number of workers. On high-end machines, the additional memory usage may not be a major concern. However, on lower-end machines, reducing the number of workers can help manage memory consumption more effectively. Keep in mind that different hardware and software systems may produce varying results, so the data above is for reference only. Specific environments should undergo tailored testing.
 
 Currently, MySQL does not offer a configuration option to adjust the *worker_queue_len_max* parameter. Nonetheless, on high-end machines, this parameter plays a crucial role in improving the replay speed of large transactions.
 
@@ -318,7 +317,7 @@ Figure 10-15. Typical examples of *sequence_number* and *last_committed*.
 
 Assuming the MySQL secondary has completed transaction 12756 (*LWM*=12756), when the scheduling thread schedules transaction 12759 (highlighted in the green box in the figure), it finds that the dependent transaction 12757 has not yet completed replay. As a result, the scheduling thread blocks itself until transaction 12757 finishes. Meanwhile, transactions 12760, 12761, 12762, 12763, and 12764 could be allocated to workers for replay. The waiting for transaction 12757 could be handled by the worker replay thread, allowing the scheduling thread to continue with other tasks. This presents an opportunity for optimization.
 
-The following figure illustrates TPC-C tests conducted with BenchmarkSQL at various concurrency levels to evaluate whether the MySQL secondary can match the MySQL primary's speed. The horizontal axis represents the concurrency level, and the vertical axis shows tpmC values. Light gray regions indicate that the MySQL secondary keeps pace with the MySQL primary, while Dark gray regions signify that it does not.
+The following figure illustrates TPC-C tests conducted with BenchmarkSQL at various concurrency levels to evaluate whether the MySQL secondary can match the MySQL primary's speed. The horizontal axis represents the concurrency level, and the vertical axis shows tpmC values. Light gray regions indicate that the MySQL secondary keeps pace with the MySQL primary, while dark gray regions signify that it does not.
 
 <img src="media/image-20240829113049624.png" alt="image-20240829113049624" style="zoom:150%;" />
 
