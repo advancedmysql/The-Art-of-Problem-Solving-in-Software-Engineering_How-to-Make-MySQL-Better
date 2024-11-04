@@ -50,9 +50,9 @@ From the figure, it can be observed that the performance improvement from PGO in
 
 In conclusion, PGO can be summarized as follows:
 
-1.  For MySQL, PGO is a worthwhile optimization that theoretically improves performance comprehensively, especially in SMP environments.
-2.  In NUMA environments, addressing scalability problems is necessary to achieve significant benefits from PGO.
-3.  PGO is less effective in a Group Replication cluster compared to a standalone MySQL instance.
+1. For MySQL, PGO is a worthwhile optimization that theoretically improves performance comprehensively, especially in SMP environments.
+2. In NUMA environments, addressing scalability problems is necessary to achieve significant benefits from PGO.
+3. PGO is less effective in a Group Replication cluster compared to a standalone MySQL instance.
 
 ## 11.2 Minimize Network Interactions
 
@@ -181,6 +181,8 @@ Figure 11-11. Achieve better replay speed with 'dual one' closed.
 
 Under equivalent conditions, disabling  'dual one' achieved a balanced replay speed of 810,000 tpmC for MySQL secondaries, while enabling 'dual one' reduced this speed to approximately 700,000 tpmC. Thus, disabling 'dual one' significantly improves the replay speed of MySQL secondaries.
 
+Note that the above test results were obtained in a high-performance SSD environment, and differences in SSD hardware performance can lead to varying results.
+
 ### 11.5.2 Performance Effects of Disabling Binlog
 
 With binary logging enabled, the server logs all statements that modify data to the binary log, which is utilized for backup and replication purposes. Disabling binlog can theoretically eliminate queue wait times, thereby improving throughput and reducing response times.
@@ -199,11 +201,11 @@ Contending threads must wait for a lock when it's unavailable. Several waiting p
 
 **Advantages of Spinning:**
 
--   In an unloaded system, spinning offers high performance with minimal overhead, as it avoids OS coordination and incurs only a few cache miss latencies per lock handoff. On chip multiprocessors with shared caches, lock acquisition and release latencies can be as low as 150 ns.
+- In an unloaded system, spinning offers high performance with minimal overhead, as it avoids OS coordination and incurs only a few cache miss latencies per lock handoff. On chip multiprocessors with shared caches, lock acquisition and release latencies can be as low as 150 ns.
 
 **Disadvantages of Spinning:**
 
--   When the system is loaded, spinning can degrade performance as it reduces the number of processors available for useful work, leading to suboptimal performance when runnable threads exceed hardware contexts. Additionally, since spinning isn't coordinated with the OS, it doesn't account for lock holders or spinners in scheduling decisions.
+- When the system is loaded, spinning can degrade performance as it reduces the number of processors available for useful work, leading to suboptimal performance when runnable threads exceed hardware contexts. Additionally, since spinning isn't coordinated with the OS, it doesn't account for lock holders or spinners in scheduling decisions.
 
 The spin delay parameter helps address NUMA (Non-Uniform Memory Access) compatibility problems. Generally, better MySQL scalability reduces the impact of the spin delay parameter. Conversely, in cases of poor scalability, the spin delay parameter noticeably affects performance, although its effectiveness has an upper limit.
 
