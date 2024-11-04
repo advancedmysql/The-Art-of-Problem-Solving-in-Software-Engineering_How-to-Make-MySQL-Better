@@ -4,7 +4,7 @@ A solid foundation is essential for advancing MySQL towards more complex objecti
 
 ## 12.1 Improvements to Hypergraph Algorithms
 
-The goal is to make hypergraph algorithms practical while also improving their performance, including exploring parallel approaches for classical dynamic programming algorithms.
+The goal is to make hypergraph algorithms practical and enhance their performance, with a focus on exploring parallel approaches.
 
 ## 12.2 Practical Implementation of Paxos Log Persistence Functionality
 
@@ -71,7 +71,7 @@ AI could optimize database monitoring by determining the optimal times and metho
 
 Programming demands strong logical reasoning skills, crucial for problem-solving, algorithm design, debugging, code comprehension, performance optimization, and testing. It helps in analyzing problems, creating solutions, correcting errors, and ensuring software reliability. Developing logical reasoning is essential for programmers to think systematically and build efficient, reliable software [56].
 
-MySQL development often focuses primarily on simple tests using testing tools, which can miss opportunities to discover many problems. Testing MySQL itself is a monumental task, and relying solely on testing tools is insufficient to expose all problems. Optimization varies across different projects, and using real online traffic for optimization is more targeted and meaningful. Therefore, MySQL optimization based on live traffic is highly significant.
+MySQL development often focuses primarily on simple tests using testing tools, which can miss opportunities to discover many problems. Testing MySQL itself is a monumental task, and relying solely on testing tools is insufficient to expose all problems. Optimization differs across projects and environments, and using real online traffic makes it more targeted and effective. Thus, MySQL optimization based on live traffic is highly valuable.
 
 MySQL performance optimization heavily relies on mitigating scalability problems. Enhanced versions of MySQL have addressed most scalability problems, establishing a solid foundation for further optimizations. Profile-guided optimization (PGO) is crucial for MySQL, and as scalability problems improve, its importance will continue to grow. Utilizing better memory allocation tools can significantly improve the performance of both the MySQL primary and secondary replay.
 
