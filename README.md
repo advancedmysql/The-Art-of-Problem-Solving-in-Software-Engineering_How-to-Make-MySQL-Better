@@ -1,9 +1,11 @@
 ## The Art of Problem-Solving in Software Engineering:How to Make MySQL Better
 
-###  Introduction
+### Introduction
+
 This book uses MySQL challenges as case studies to explore problem analysis and resolution strategies. Readers will gain a deeper appreciation for logical reasoning, data structures, algorithms, and more through practical examples and insightful discussions.
 
 ### Table of Contents
+
 [Preface](Preface.md)
 
 [Part1 Problems](Part1.md)
@@ -45,13 +47,13 @@ This book uses MySQL challenges as case studies to explore problem analysis and 
 [Appendix](Appendix.md)
 
 ### Errata
-If you find any errata in the book, [please open a new issue](https://github.com/advancedmysql/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/issues).
+
+If you find any errata in the book, [please open a new issue](https://github.com/enhancedformysql/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/issues).
 
 ### Access the Book on GitHub Pages
 
-[Online URL](https://advancedmysql.github.io/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/)
+[Online URL](https://enhancedformysql.github.io/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/)
 
-### Copyright 
+### Copyright
 
 Copyright © wangbin579 2024. All rights reserved.
-
