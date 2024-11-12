@@ -86,7 +86,7 @@ When deploying MySQL for testing, it is preferable to match the test environment
 
 ## How to Contact Us
 
-For configurations, patches, and additional information related to this book, please visit our webpage: <https://github.com/advancedmysql/>.
+For configurations, patches, and additional information related to this book, please visit our webpage: <https://github.com/enhancedformysql/>.
 
 Email [wangbin579@gmail.com](mailto:wangbin579@gmail.com) to comment or ask technical questions about this book.
 

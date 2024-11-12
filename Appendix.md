@@ -470,11 +470,11 @@ The operating system kernel version is Linux 5.19.8.
 
 The script for creating TPC-C tables can be found at the following address:
 
-https://github.com/advancedmysql/mysql_8.0.27/blob/main/tableCreates.sql_base_for_test
+https://github.com/enhancedformysql/mysql_8.0.27/blob/main/tableCreates.sql_base_for_test
 
 The script for creating relevant indexes can be found at the following address:
 
-https://github.com/advancedmysql/mysql_8.0.27/blob/main/indexCreates.sql_base_for_test
+https://github.com/enhancedformysql/mysql_8.0.27/blob/main/indexCreates.sql_base_for_test
 
 The main configuration script for BenchmarkSQL testing is as follows:
 
@@ -540,7 +540,7 @@ Due to numerous tests, only typical configurations are listed here. Special conf
 
 For specific details on the typical configuration parameters for a standalone MySQL instance, please refer to the following address:
 
-https://github.com/advancedmysql/mysql_8.0.27/blob/main/my.cnf_base_for_test
+https://github.com/enhancedformysql/mysql_8.0.27/blob/main/my.cnf_base_for_test
 
 It should be noted that by default, the tests are conducted under the *Read Committed* transaction isolation level, with *binary logging* enabled, *'dual one'* configuration, and *doublewrite* enabled.
 
@@ -584,7 +584,7 @@ slave_parallel_type=LOGICAL_CLOCK
 slave_preserve_commit_order=on
 ```
 
-Regarding the improved Group Replication, since it is similar between MySQL 8.0.32 and MySQL 8.0.40, we have provided a version available for online use at the following address: https://github.com/advancedmysql/mysql-8.0.40.
+Regarding the improved Group Replication, since it is similar between MySQL 8.0.32 and MySQL 8.0.40, we have provided a version available for online use at the following address: https://github.com/enhancedformysql/mysql-8.0.40.
 
 Accordingly, the configuration parameters for the primary server are as follows:
 
@@ -628,7 +628,7 @@ Please note that we no longer provide the source code based on MySQL 8.0.32, but
 
 The details related to semisynchronous replication can be found at the following address:
 
-https://github.com/advancedmysql/mysql_8.0.27/blob/main/semisynchronous.txt
+https://github.com/enhancedformysql/mysql_8.0.27/blob/main/semisynchronous.txt
 
 ### 7 Source Code Repository
 
@@ -636,7 +636,7 @@ https://github.com/advancedmysql/mysql_8.0.27/blob/main/semisynchronous.txt
 
 Patch Address:
 
-https://github.com/advancedmysql/mysql_8.0.27/blob/main/book_8.0.27_single.patch
+https://github.com/enhancedformysql/mysql_8.0.27/blob/main/book_8.0.27_single.patch
 
 This patch specifically targets optimizations for a standalone MySQL instance, including:
 
@@ -646,7 +646,7 @@ This patch specifically targets optimizations for a standalone MySQL instance, i
 
 **Cluster Source Code:**
 
-The source code for MySQL cluster versions is available here: https://github.com/advancedmysql/mysql-8.0.40
+The source code for MySQL cluster versions is available here: https://github.com/enhancedformysql/mysql-8.0.40
 
 For MySQL clusters, the patch introduces further optimizations for **Group Replication** and **MySQL secondary replay**. 
 
