@@ -26,8 +26,8 @@ Throughput and response time have a generally reciprocal but subtly complex rela
 
 In performance optimization, two main goals are:
 
-1.  **Optimal response time:** Minimize waiting for task completion.
-2.  **Maximal throughput:** Handle as many simultaneous tasks as possible.
+1. **Optimal response time:** Minimize waiting for task completion.
+2. **Maximal throughput:** Handle as many simultaneous tasks as possible.
 
 These goals are contradictory: optimizing for response time requires minimizing system load, while optimizing for throughput requires maximizing it. Balancing these conflicting objectives is key to effective performance optimization.
 
@@ -87,9 +87,9 @@ Based on extensive testing, it is concluded that the root cause of discrepancies
 
 MySQL's complexity makes performance modeling challenging, but focusing on specific subsystems can offer valuable insights into performance problems. For instance, when modeling the performance of major latches in MySQL 5.7, it's found that executing a transaction (with a transaction isolation level of Read Committed) involves certain operations:
 
--   **Read Operations:** Pass through the trx-sys subsystem, potentially involving global latch queueing.
--   **Write Operations:** Go through the lock-sys subsystem, which involves global latch queueing for lock scheduling.
--   **Redo Log Operations:** Write operations require updates to the redo log subsystem, which also involves global latch queueing.
+- **Read Operations:** Pass through the trx-sys subsystem, potentially involving global latch queueing.
+- **Write Operations:** Go through the lock-sys subsystem, which involves global latch queueing for lock scheduling.
+- **Redo Log Operations:** Write operations require updates to the redo log subsystem, which also involves global latch queueing.
 
 ![](media/197c7662d3b25ebbc2870a1cee917e3f.png)
 
@@ -117,12 +117,12 @@ Saturated latches degrade multithreaded application performance, causing scalabi
 
 To address these scalability problems, consider the following measures:
 
--   Improve critical resource access speed.
--   Use latch sharding to reduce conflicts.
--   Minimize unnecessary wake-up processes.
--   Implement latch-free mechanisms.
--   Design the architecture thoughtfully.
--   Implement transaction throttling Mechanism.
+- Improve critical resource access speed.
+- Use latch sharding to reduce conflicts.
+- Minimize unnecessary wake-up processes.
+- Implement latch-free mechanisms.
+- Design the architecture thoughtfully.
+- Implement transaction throttling Mechanism.
 
 #### 4.8.6.1 Improve Critical Resource Access Speed
 
@@ -180,8 +180,9 @@ Regarding algorithms, optimization opportunities are generally hard to find in m
 
 Cache has a significant impact on performance, and maintaining cache-friendliness primarily involves the following principles:
 
-1.  **Sequential Memory Access:** Access memory data sequentially whenever possible. Sequential access benefits cache efficiency. For example, algorithms like direct insertion sort, which operate on small data sets, are highly cache-friendly.
-2.  **Avoid False Sharing:** False sharing occurs when different threads modify parts of the same cache line simultaneously, leading to frequent cache invalidations and performance degradation. This often happens when different members of the same struct are modified by different threads concurrently.
+1. **Sequential Memory Access:** Access memory data sequentially whenever possible. Sequential access benefits cache efficiency. For example, algorithms like direct insertion sort, which operate on small data sets, are highly cache-friendly.
+2. **Ensuring Cache-Friendly Code**: Whether frequently accessed functions are inlined, if there is code that hinders inlining, and if switch statements are used appropriately—all these factors can affect the cache friendliness of the code.
+3. **Avoid False Sharing:** False sharing occurs when different threads modify parts of the same cache line simultaneously, leading to frequent cache invalidations and performance degradation. This often happens when different members of the same struct are modified by different threads concurrently.
 
 False sharing is a well-known problem in multiprocessor systems, causing performance degradation in multi-threaded programs running in such environments. The figure below shows an example of false sharing.
 
@@ -206,7 +207,7 @@ Date:   Fri Nov 8 20:58:48 2013 +0100
     ...
     Added missing PFS_cacheline_uint32 to atomic counters,
     to enforce no false sharing happens.
-    
+
     This is a performance improvement.
 ```
 
