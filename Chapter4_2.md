@@ -94,7 +94,7 @@ A linked list (or simply "list") is a linear collection of data elements, called
 
 MySQL commonly uses the list from the standard library, which typically implements a doubly linked list to facilitate easy insertion and deletion, though it often suffers from poor query performance. In mainstream NUMA architectures, linked lists are generally inefficient for querying due to non-contiguous memory access patterns. Consequently, linked lists are best suited as auxiliary data structures or for scenarios involving smaller data volumes.
 
-Below is the list data structure used by *undo*. As the *undo* list grows longer, MVCC efficiency is significantly reduced.
+In large-scale projects, to avoid the unpredictability of memory allocation in linked lists, a memory pool can be used for better management. Below is the list data structure used by *undo*. As the *undo* list grows longer, MVCC efficiency is significantly reduced.
 
 ```c++
   using Recs = std::list<rec_t, mem_heap_allocator<rec_t>>;
@@ -102,8 +102,6 @@ Below is the list data structure used by *undo*. As the *undo* list grows longer
   /** Undo recs to purge */
   Recs *recs;
 ```
-
-To address this problem, some databases adopt centralized storage for undo history versions, which significantly reduces the cost of garbage collection.
 
 ### 4.2.3 Queue
 
@@ -135,8 +133,6 @@ Double-ended queues are commonly used in various applications. For instance, MyS
 template <class Element_type>
 class mem_root_deque {
 ```
-
-
 
 ### 4.2.4 Heap
 
@@ -301,8 +297,8 @@ The active transaction list length is 17, with each transaction ID requiring 8 b
 
 Regarding query efficiency, the hybrid data structure offers substantial improvements. For instance, to check if transaction ID=24 is in the active transaction list:
 
--   In the original approach, a binary search is needed, with a time complexity of O(log n).
--   With the hybrid structure, using the minimum short transaction ID as a baseline allows direct querying through the static data, achieving a time complexity of O(1).
+- In the original approach, a binary search is needed, with a time complexity of O(log n).
+- With the hybrid structure, using the minimum short transaction ID as a baseline allows direct querying through the static data, achieving a time complexity of O(1).
 
 In NUMA environments, as shown in the figure below, it can be seen that simply changing the data structure can significantly increase the throughput of TPC-C under high-concurrency conditions, greatly alleviating scalability problems related to MVCC ReadView.
 
