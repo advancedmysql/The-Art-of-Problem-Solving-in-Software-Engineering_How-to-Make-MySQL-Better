@@ -772,8 +772,7 @@ Insertion or removal of elements - linear O(n).
 As shown in the above description, in extreme cases, retaining a single element requires allocating the entire array, resulting in very low memory efficiency. For example, in bulk inserts, where a large number of records need to be inserted, the official implementation stores each record in a separate deque. Even if the record content is minimal, a deque must still be allocated. The MySQL deque implementation allocates 1KB of memory for each deque to support fast lookups.
 
 ```
-The implementation is the same as classic std::deque: Elements are 
-held in blocks of about 1 kB each.
+The implementation is the same as classic std::deque: Elements are held in blocks of about 1 kB each.
 ```
 
 The official implementation uses 1KB of memory to store index information, and even if the record length is not large but there are many records, the memory access addresses may become non-contiguous, leading to poor cache friendliness. This design was intended to improve cache friendliness, but it has not been fully effective.
