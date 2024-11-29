@@ -893,7 +893,7 @@ rec_init_offsets_comp_ordinary(
     const dict_col_t* col
       = dict_field_get_col(field);
     ulint     len;
-   …
+  ...
 ```
 
 The ***rec_init_offsets_comp_ordinary*** function in MySQL 8.0.40 is as follows:
@@ -965,11 +965,11 @@ inline void rec_init_offsets_comp_ordinary(const rec_t *rec, bool temp,
         [[fallthrough]];
       case INSERTED_AFTER_UPGRADE_BEFORE_INSTANT_ADD_NEW_IMPLEMENTATION
       case INSERTED_AFTER_INSTANT_ADD_NEW_IMPLEMENTATION: {
-              …
+        ...
       } break;
       case INSERTED_BEFORE_INSTANT_ADD_OLD_IMPLEMENTATION:
       case INSERTED_AFTER_INSTANT_ADD_OLD_IMPLEMENTATION: {
-              …
+        ...
       } break;
 
       default:
@@ -1027,7 +1027,7 @@ Next, let's look at a similar issue. The ***row_sel_store_mysql_field function**
     const ulint *offsets, ulint field_no, const mysql_row_templ_t *templ,
     ulint sec_field_no, lob::undo_vers_t *lob_undo, mem_heap_t *&blob_heap) {
   DBUG_TRACE;
-  …
+  ...
     } else {
     /* Field is stored in the row. */
 
@@ -1068,7 +1068,7 @@ Next, let's look at a similar issue. The ***row_sel_store_mysql_field function**
     row_sel_field_store_in_mysql_format(mysql_rec + templ->mysql_col_offset,
                                         templ, rec_index, field_no, data, len,
                                         sec_field_no);
-    …
+    ...
 ```
 
 The ***row_sel_field_store_in_mysql_format*** function ultimately calls ***row_sel_field_store_in_mysql_format_func***.
