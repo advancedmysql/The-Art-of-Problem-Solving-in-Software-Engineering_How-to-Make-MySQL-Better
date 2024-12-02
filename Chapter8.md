@@ -669,12 +669,11 @@ It's worth noting that the specifics of how transaction throttling is implemente
 
 Users tend to notice a decline in low-concurrency performance more easily, while improvements in high-concurrency performance are often harder to perceive. Therefore, maintaining low-concurrency performance is crucial, as it directly affects user experience and the willingness to upgrade.
 
-According to extensive user feedback, after upgrading to MySQL 8.0, users have generally perceived a decline in performance, particularly in batch insert and join operations. This downward trend has become more evident with each version update. Additionally, some MySQL enthusiasts and testers have reported performance degradation in multiple sysbench tests after upgrading.
+According to extensive user feedback, after upgrading to MySQL 8.0, users have generally perceived a decline in performance, particularly in batch insert and join operations. This downward trend has become more evident in higher versions of MySQL. Additionally, some MySQL enthusiasts and testers have reported performance degradation in multiple sysbench tests after upgrading.
 
 Can these performance issues be avoided? Or, more specifically, how should we scientifically assess the ongoing trend of performance decline? These are important questions to consider.
 
-Although the official team continues to optimize, the gradual deterioration of performance cannot be overlooked. In certain scenarios, there may appear to be improvements, but this does not mean that performance in all scenarios is equally optimized. Performance optimization is a very complex task that can easily lead to
-generalizations. Moreover, it's also easy to optimize performance for specific scenarios at the cost of degrading performance in other areas.
+Although the official team continues to optimize, the gradual deterioration of performance cannot be overlooked. In certain scenarios, there may appear to be improvements, but this does not mean that performance in all scenarios is equally optimized. Moreover, it's also easy to optimize performance for specific scenarios at the cost of degrading performance in other areas.
 
 ### 8.4.1 The Root Causes of MySQL Performance Decline
 
@@ -743,25 +742,19 @@ Unfortunately, many times it is precisely the motivations behind these code impr
 documentation:
 
 ```
-std::deque (double-ended queue) is an indexed sequence container that
-allows fast insertion and deletion at both its beginning and its end.
-In addition, insertion and deletion at either end of a deque never
-invalidates pointers or references to the rest of the elements.
+std::deque (double-ended queue) is an indexed sequence container that allows fast insertion and deletion at both its 
+beginning and its end. In addition, insertion and deletion at either end of a deque never invalidates pointers or 
+references to the rest of the elements.
 
-As opposed to std::vector, the elements of a deque are not stored
-contiguously: typical implementations use a sequence of individually
-allocated fixed-size arrays, with additional bookkeeping, which means
-indexed access to deque must perform two pointer dereferences,
-compared to vector's indexed access which performs only one.
+As opposed to std::vector, the elements of a deque are not stored contiguously: typical implementations use a sequence 
+of individually allocated fixed-size arrays, with additional bookkeeping, which means indexed access to deque must 
+perform two pointer dereferences, compared to vector's indexed access which performs only one.
 
-The storage of a deque is automatically expanded and contracted as
-needed. Expansion of a deque is cheaper than the expansion of a
-std::vector because it does not involve copying of the existing
-elements to a new memory location. On the other hand, deques typically
-have large minimal memory cost; a deque holding just one element has
-to allocate its full internal array (e.g. 8 times the object size on
-64-bit libstdc++; 16 times the object size or 4096 bytes, whichever is
-larger, on 64-bit libc++).
+The storage of a deque is automatically expanded and contracted as needed. Expansion of a deque is cheaper than the 
+expansion of a std::vector because it does not involve copying of the existing elements to a new memory location. On 
+the other hand, deques typically have large minimal memory cost; a deque holding just one element has to allocate its 
+full internal array (e.g. 8 times the object size on 64-bit libstdc++; 16 times the object size or 4096 bytes, 
+whichever is larger, on 64-bit libc++).
 
 The complexity (efficiency) of common operations on deques is as follows:
 Random access - constant O(1).
@@ -975,6 +968,7 @@ inline void rec_init_offsets_comp_ordinary(const rec_t *rec, bool temp,
       default:
         ut_ad(false);
     }
+    ...
 ```
 
 From the above code, it is clear that with the introduction of the instant add/drop column feature, the ***rec_init_offsets_comp_ordinary*** function has become noticeably more complex, introducing more function calls and adding a switch statement that severely impacts cache optimization. Since this function is called frequently, it directly impacts the performance of update index, batch inserts, and joins, resulting in a major performance hit.
@@ -1156,7 +1150,13 @@ The so-called 'premature optimization' is the root of all evil, and it does not 
 
 The main reasons for the decline in write performance are related to MTR commit issues, instant add/drop column, and several other factors. These are difficult to optimize in traditional ways. However, users can compensate for the performance drop through PGO optimization. With a proper strategy, the performance can generally be kept stable.
 
-For batch insert performance degradation, our open-source version [64] replaces the official deque with an improved list implementation. This primarily addresses memory efficiency issues and can partially alleviate performance decline. By combining PGO optimization with our open-source version, batch insert performance can approach that of MySQL 5.7. Users can also leverage multiple threads for concurrent batch processing, fully utilizing the improved concurrency of the redo log, which can significantly boost batch insert performance.
+For batch insert performance degradation, our open-source version [64] replaces the official deque with an improved list implementation. This primarily addresses memory efficiency issues and can partially alleviate performance decline. By combining PGO optimization with our open-source version, batch insert performance can approach that of MySQL 5.7.
+
+<img src="media/image-bulk-insert-optimize.png" alt="image-bulk-insert-optimize.png" style="zoom:150%;" />
+
+Figure 8-39. Optimized MySQL 8.0.40 with PGO performs roughly on par with version 5.7.
+
+Users can also leverage multiple threads for concurrent batch processing, fully utilizing the improved concurrency of the redo log, which can significantly boost batch insert performance.
 
 Regarding update index issues, due to the inevitable addition of new code, PGO optimization can help mitigate this problem. Our PGO version [64] can significantly alleviate this issue.
 
@@ -1164,7 +1164,7 @@ For read performance, particularly join performance, we have made substantial im
 
 <img src="media/image-join-improve.png" alt="image-join-improve.png" style="zoom:150%;" />
 
-Figure 8-39. Join performance optimization with PGO leads to significant
+Figure 8-40. Join performance optimization with PGO leads to significant
 improvements.
 
 We will continue to invest time in optimizing low-concurrency performance. This process is long but involves numerous areas that need improvement.
